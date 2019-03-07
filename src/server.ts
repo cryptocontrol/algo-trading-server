@@ -15,7 +15,7 @@ interface IAppRequest extends Request {
 }
 
 
-const jwtSecret = process.env.JWT_SECRET || 'secret_keyboard_cat'
+const jwtSecret = process.env.SERVER_SECRET || 'secret_keyboard_cat'
 
 
 const app = express()

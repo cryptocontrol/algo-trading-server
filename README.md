@@ -11,7 +11,7 @@ docker-compose up
 ```
 or via docker
 ```
-docker run -p 8080:8080 cryptocontrol-trading-server
+docker run -p 8080:8080 -e SERVER_SECRET=set_random_password_here cryptocontrol-trading-server
 ```
 
 ## Disclaimer
