@@ -15,8 +15,7 @@ COPY . .
 
 # Copy sensitive files
 # COPY .env .
-# COPY firebase.json .
 
 # Final configuration and then run!
-EXPOSE 6999
+EXPOSE 8080
 CMD [ "npm", "start" ]
