@@ -8,6 +8,3 @@ services:
       - SERVER_SECRET=secret_keyboard_cat
     volumes:
       - ./storage_prod:/app/storage
-
-volumes:
-  trading_server_creds:
