@@ -5,6 +5,7 @@ import * as _ from 'underscore'
 import * as jwt from 'jsonwebtoken'
 
 import * as Database from './database'
+const packageJson = require('../package.json')
 
 
 interface IAppRequest extends Request {
@@ -30,6 +31,18 @@ app.use((req:IAppRequest, _res, next) => {
     if (!decoded.id) return next(new Error('invalid user id'))
     req.uid = decoded.id
     next()
+  })
+})
+
+
+/**
+ * Gets the status of the server. A great way for the terminal to check if the
+ * trading server is of the latest version or not.
+ */
+app.get('/status', (req: IAppRequest, res) => {
+  res.json({
+    version: packageJson.version,
+    uptime: process.uptime()
   })
 })
 
