@@ -7,20 +7,26 @@ const apiKeysDB = new DB('./storage/apikeys', true, false)
 const triggersDB = new DB('./storage/triggers', true, false)
 
 
-export interface IAPIKey {
-  exchange: string
-  uid: string
-  params: {
-    [key: string]: string
-  }
-}
+/**
+ * Adds the api key for the given user and exchange
+ *
+ * @param uid the uid of the user
+ * @param ex the exchange
+ * @param params the api key details
+ */
+export const addApiKeys = async (uid, ex, params) => apiKeysDB.push(`/${ex}/${uid}`, params, true)
 
 
-// todo: check for params
-export const addApiKeys = async (uid, exchange, params) => apiKeysDB.push(`/${exchange}/${uid}`, params, true)
-
-
-export const addTrigger = async (uid: string, symbol: string, exchange: string, strategy: string, params: string[]) => {
+/**
+ * Adds a new trigger into the DB
+ *
+ * @param uid the uid of the user
+ * @param sym the symbol being traded
+ * @param ex the exchange
+ * @param strategy the strategy (stop-loss, trailing-stop-loss etc...)
+ * @param params the params for the strategy
+ */
+export const addTrigger = async (uid: string, sym: string, ex: string, strategy: string, params: string[]) => {
   const trigger = {
     strategy,
     params,
@@ -29,13 +35,9 @@ export const addTrigger = async (uid: string, symbol: string, exchange: string, 
     active: true
   }
 
-  triggersDB.push(`/${exchange}/${symbol}/${hat()}`, trigger, false)
+  triggersDB.push(`/${ex}/${sym}/${hat()}`, trigger, false)
   return trigger
 }
-
-
-export const deleteTriggers = async (uid: string) => await triggersDB.delete(`/${uid}`)
-export const getSpecificTriggers = async (uid: string) =>  await triggersDB.getData(`/${uid}`)
 
 
 /**
@@ -83,17 +85,37 @@ export const getKeysForUser = async (uid: string) => {
 
 
 /**
- * Get the API keys for the given exchange
- * @param exchange the exchange id
+ * Gets a specific trigger
+ *
+ * @param ex the exchange id
+ * @param sym the symbol
+ * @param id the id of the trigger
  */
-export const getKeysForExchange = async (exchange: string): Promise<IAPIKey[]> => {
-  return await apiKeysDB.getData(`/${exchange}`)
-}
+export const getTrigger = async (ex: string, sym: string, id: string) => await triggersDB.getData(`/${ex}/${sym}/${id}`)
 
 
 /**
- * Delete the API keys for the given exchange
- * @param uid the user id
- * @param exchange the exchange id
+ * Get the API keys for the given exchange
+ *
+ * @param ex the exchange id
  */
-export const deleteApiKeys = async (uid: string, exchange: string) => await apiKeysDB.delete(`/${exchange}/${uid}`)
+export const getKeysForExchange = async (ex: string) => await apiKeysDB.getData(`/${ex}`)
+
+
+/**
+ * Delete the API keys for the given exchange, for the given user
+ *
+ * @param uid the user id
+ * @param ex the exchange id
+ */
+export const deleteApiKey = async (uid: string, ex: string) => await apiKeysDB.delete(`/${ex}/${uid}`)
+
+
+/**
+ * Delete the trigger with the given id
+ *
+ * @param ex the exchange id
+ * @param sym the symbol
+ * @param id the id of the trigger
+ */
+export const deleteTrigger = async (ex: string, sym: string, id: string) => await triggersDB.delete(`/${ex}/${sym}/${id}`)

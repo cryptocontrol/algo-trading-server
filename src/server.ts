@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }))
 
 
 // authenticate the user
-app.use((req:IAppRequest,  res, next) => {
+app.use((req:IAppRequest, _res, next) => {
   const token = req.header('x-jwt')
 
   // verify the jwt token
@@ -65,51 +65,48 @@ app.get('/keys', async (req: IAppRequest, res) => {
  * Delete the API keys for the given exchange for the currently logged in user
  */
 app.delete('/:exchange/key', (req: IAppRequest, res) => {
-  Database.deleteApiKeys(req.uid, req.params.exchange)
+  Database.deleteApiKey(req.uid, req.params.exchange)
   res.json({ success: true })
 })
 
 
-interface ITrigger {
-  userId: string
-  symbol: string
-  exchangeId: string // from ccxt
-  strategy: 'stop-loss' | 'take-profit'
-  params: any[]
-}
-
-
-// create a new trigger for a user
+/**
+ * create a new trigger for a user
+ */
 app.post('/triggers/:exchange/:symbol/:strategy', async (req: IAppRequest, res) => {
-  const userId = req.uid
+  const uid = req.uid
   const symbol = req.params.symbol
   const exchange = req.params.exchange
   const strategy = req.params.strategy
   const params = req.body
 
-  const trigger = await Database.addTrigger(userId, symbol, exchange, strategy, params)
+  const trigger = await Database.addTrigger(uid, symbol, exchange, strategy, params)
   res.json({ trigger, success: true })
 })
 
 
-// get all existing triggers for a user
-app.get('/triggers', async (req: IAppRequest, res) => {
-  res.json(await Database.getTriggersForUser(req.uid))
-})
+/**
+ * get all existing triggers for a user
+ */
+app.get('/triggers', async (req: IAppRequest, res) => res.json(await Database.getTriggersForUser(req.uid)))
 
 
-// app.get('/trigger', async function ( req, res ){
-//   const userId = req.query.userId
-//   const triggerDetails = await Controller.getSpecificTriggers(userId)
-//   res.send(triggerDetails)
-// })
+/**
+ * Delete a specific trigger
+ */
+app.delete('/triggers/:exchange/:symbol/:id', async (req: IAppRequest, res) => {
+  const uid = req.uid
+  const symbol = req.params.symbol
+  const exchange = req.params.exchange
+  const id = req.params.id
 
+  const trigger = await Database.getTrigger(exchange, symbol, id)
 
-// deconste a trigger for a user
-app.get('/deconsteTriggers', async (req: IAppRequest, res) => {
-  const userId = req.query.userId
-  const deconsteTriggers = await Database.deleteTriggers(userId)
-  res.send('deconsted successfully')
+  if (!trigger) throw new Error('no such trigger')
+  if (trigger.uid !== uid) throw new Error('not your trigger')
+
+  await Database.deleteTrigger(exchange, symbol, id)
+  res.json({ success: true })
 })
 
 
