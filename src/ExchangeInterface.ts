@@ -1,7 +1,7 @@
 import * as ccxt from 'ccxt'
 import * as logger from 'logger'
 
-import * as Controller from './controllers/handlers'
+import * as Controller from './controllers/database'
 
 const debug = logger('app:exchange')
 

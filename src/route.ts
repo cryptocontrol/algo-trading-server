@@ -1,4 +1,4 @@
-import * as Controller from './controllers/handlers'
+import * as Controller from './controllers/database'
 import * as express from 'express'
 
 const app = express()
