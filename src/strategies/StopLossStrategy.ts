@@ -1,7 +1,7 @@
-import Strategy from "./Strategy"
+import BaseStrategy from "./BaseStrategy"
 
 
-export default class StopLossStrategy extends Strategy {
+export default class StopLossStrategy extends BaseStrategy {
   static create (id: string, trigger: any) {
     console.log(id, trigger)
     return new StopLossStrategy

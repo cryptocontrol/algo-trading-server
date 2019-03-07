@@ -1,10 +1,10 @@
 import * as ccxt from 'ccxt'
-import Binance from 'binance-api-node'
+import BinanceApi from 'binance-api-node'
 
-import ExchangeInterface from './ExchangeInterface'
+import BaseExchange from './BaseExchange'
 
 
-export default class BinanceInterface extends ExchangeInterface {
+export default class Binance extends BaseExchange {
   constructor () {
     const binance = new ccxt.binance()
     super(binance)
@@ -12,7 +12,7 @@ export default class BinanceInterface extends ExchangeInterface {
 
 
   startListening(): void {
-    const client = Binance()
+    const client = BinanceApi()
     client.ws.trades(['BTCUSDT'], trade => this.onPriceUpdate('BTCUSDT', Number(trade.price)))
   }
 }

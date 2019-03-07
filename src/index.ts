@@ -1,8 +1,8 @@
 import server from './server'
-import BinanceInterface from './exchanges/BinanceInterface'
+import Binance from './exchanges/Binance'
 
 
-const binance = new BinanceInterface()
+const binance = new Binance()
 binance.startListening()
 
 const port = process.env.PORT || 8080

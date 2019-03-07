@@ -3,15 +3,15 @@ import * as debug from 'debug'
 import * as _ from 'underscore'
 
 import * as Controller from '../database'
-import Strategy from '../strategies/Strategy'
+import BaseStrategy from '../strategies/BaseStrategy'
 import StopLossStrategy from '../strategies/StopLossStrategy'
 
 const logger = debug('app:exchange')
 
 
-export default abstract class ExchangeInterface {
+export default abstract class BaseExchange {
   private exchange: ccxt.Exchange
-  private strategies: Strategy[] = []
+  private strategies: BaseStrategy[] = []
 
 
   constructor (exchange: ccxt.Exchange) {
