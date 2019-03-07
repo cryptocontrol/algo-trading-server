@@ -7,7 +7,7 @@ In the screenshot below, users have the ability to execute stop-loss and take-pr
 
 ![Stop Loss Screenshot](./screenshot-stoploss.png)
 
-The CryptoControl Terminal allows users to also specifiy and execute advanced orders from their own trading servers for better security. By doing so, users never expose their API keys to CryptoControl.
+The CryptoControl Terminal allows users to host their own trading servers to that can execute advanced orders within the terminal itself but never expose their API keys to CryptoControl.
 
 For a quick start with docker-compose run
 ```
@@ -28,6 +28,12 @@ Host this server in your own machine and enter in the server's ip and password i
 ![Insert Server Details](./screenshot.png)
 
 Once set, you'll be able to execute advanced orders straight from your terminal.
+
+
+<!-- ## How advanced orders work
+To execute advanced orders, a server needs to be running 24x7 monitoring the price feeds of various exchanges and executing trades automatically when certain conditions are met.
+
+Some exchanges have a real-time api (websocket or FIX) for trades which allow  -->
 
 ## Authentication
 The trading server uses [JWT](https://jwt.io/) to authenticate users. The JWT's secret key is taken from the environment variable `SERVER_PASSWORD`. The JWT token must be passed via the `x-jwt` header and is automatically sent from the CryptoControl terminal.
