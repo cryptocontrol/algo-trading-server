@@ -3,6 +3,8 @@ Trading Server for Advanced Orders
 
 This server is meant to be used by the CryptoControl Terminal to execute advanced orders like stop-losses, trailing stop-losses, take profit (and more) on exchanges that don't support advanced orders.
 
+![Stop Loss Screenshot](./screenshot-stoploss.png)
+
 The CryptoControl Terminal allows users to also specifiy to execute advanced orders from their own trading servers for better security. By doing so, users don't ever expose their API keys to any of CryptoControl's servers.
 
 For a quick start with docker-compose run
