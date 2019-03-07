@@ -62,3 +62,11 @@ export const getKeysForUser = async (uid: string) => {
 export const getKeysForExchange = async (exchange: string): Promise<IAPIKey[]> => {
   return await apiKeysDB.getData(`/${exchange}`)
 }
+
+
+/**
+ * Delete the API keys for the given exchange
+ * @param uid the user id
+ * @param exchange the exchange id
+ */
+export const deleteApiKeys = async (uid: string, exchange: string) => await apiKeysDB.delete(`/${exchange}/${uid}`)

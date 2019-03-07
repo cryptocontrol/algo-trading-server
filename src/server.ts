@@ -6,6 +6,7 @@ import * as jwt from 'jsonwebtoken'
 
 import * as Database from './database'
 
+
 interface IAppRequest extends Request {
   uid: string
 }
@@ -17,7 +18,6 @@ const jwtSecret = process.env.JWT_SECRET || 'secret_keyboard_cat'
 const app = express()
 app.use(bodyParser.json({ limit: '2mb' }))
 app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }))
-
 
 
 // authenticate the user
@@ -58,6 +58,15 @@ app.get('/keys', async (req: IAppRequest, res) => {
   })
 
   res.json(parsedKeys)
+})
+
+
+/**
+ * Delete the API keys for the given exchange for the currently logged in user
+ */
+app.delete('/:exchange/key', (req: IAppRequest, res) => {
+  Database.deleteApiKeys(req.uid, req.params.exchange)
+  res.json({ success: true })
 })
 
 
