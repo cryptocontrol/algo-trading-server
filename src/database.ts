@@ -1,9 +1,11 @@
-import * as _ from 'underscore'
 const DB = require('node-json-db')
+import * as _ from 'underscore'
+import * as hat from 'hat'
 
 
-const apiKeysDB = new DB("./storage/apikeys", true, false)
-const triggersDB = new DB("./storage/triggers", true, false)
+const apiKeysDB = new DB('./storage/apikeys', true, false)
+const triggersDB = new DB('./storage/triggers', true, false)
+
 
 export interface IAPIKey {
   exchange: string
@@ -18,24 +20,49 @@ export interface IAPIKey {
 export const addApiKeys = async (uid, exchange, params) => apiKeysDB.push(`/${exchange}/${uid}`, params, true)
 
 
-
-export const addTriggers = async (uid: string, symbol: string, exchange: string, strategy: string, params: string[]) => {
+export const addTrigger = async (uid: string, symbol: string, exchange: string, strategy: string, params: string[]) => {
   const trigger = {
-    [uid]: [{ exchange, symbol, strategy, params }]
+    strategy,
+    params,
+    uid,
+    addedAt: (new Date()).getTime(),
+    active: true
   }
 
-  triggersDB.push("triggers", trigger, false)
+  triggersDB.push(`/${exchange}/${symbol}/${hat()}`, trigger, false)
+  return trigger
 }
 
 
 export const deleteTriggers = async (uid: string) => await triggersDB.delete(`/${uid}`)
 export const getSpecificTriggers = async (uid: string) =>  await triggersDB.getData(`/${uid}`)
-export const getTriggers = async () => await triggersDB.getData("/binance")
+
+
+/**
+ * Get all the active triggers for the given user
+ * @param uid the user id
+ */
+export const getTriggersForUser = async (uid: string) => {
+  const data = await triggersDB.getData('/')
+
+  const results = []
+
+  _.mapObject(data, (symbols, exchange) => {
+    _.mapObject(symbols, (triggerIds, symbol) => {
+      _.mapObject(triggerIds, (trigger, id) => {
+        if (trigger.uid !== uid) return
+        results.push({ id, trigger, symbol, exchange })
+      })
+    })
+  })
+
+  return results
+}
 
 
 /**
  * Get the API keys for the given user
- * @param uid2 the user id
+ * @param uid the user id
  */
 export const getKeysForUser = async (uid: string) => {
   const data = await apiKeysDB.getData('/')

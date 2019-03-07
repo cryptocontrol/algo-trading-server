@@ -80,21 +80,22 @@ interface ITrigger {
 
 
 // create a new trigger for a user
-app.post('/trigger', (req: IAppRequest, res) => {
-  const userId = req.query.userId
-  const symbol = req.query.symbol
-  const exchangeId = req.query.exchangeId
-  const strategy = req.query.strategy
-  const stopLossPrice = req.query.stopLossPrice
-  const takeProfitPrice = req.query.takeProfitPrice
+app.post('/triggers/:exchange/:symbol/:strategy', async (req: IAppRequest, res) => {
+  const userId = req.uid
+  const symbol = req.params.symbol
+  const exchange = req.params.exchange
+  const strategy = req.params.strategy
+  const params = req.body
 
-  Database.addTriggers( userId, symbol, exchangeId, strategy, [stopLossPrice, takeProfitPrice])
-  res.json({ success: true })
+  const trigger = await Database.addTrigger(userId, symbol, exchange, strategy, params)
+  res.json({ trigger, success: true })
 })
 
 
 // get all existing triggers for a user
-app.get('/triggers', async (req: IAppRequest, res) => res.json(await Database.getTriggers()))
+app.get('/triggers', async (req: IAppRequest, res) => {
+  res.json(await Database.getTriggersForUser(req.uid))
+})
 
 
 // app.get('/trigger', async function ( req, res ){
