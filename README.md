@@ -19,9 +19,11 @@ docker run -p 8080:8080 -e SERVER_SECRET=set_random_password_here cryptocontrol-
 **THE AUTHORS AND ALL AFFILIATES ASSUME NO RESPONSIBILITY FOR YOUR TRADING RESULTS.**
 
 ## Usage
-Host this server in your own machine and enter in the server's ip and password in the CryptoControl's trading's settings screen. (See screenshot below)
+Host this server in your own machine and enter in the server's ip and password in the CryptoControl's trading's settings screen as shown below.
 
 ![Insert Server Details](./screenshot.png)
+
+Once set, you'll be able to execute advanced orders straight from your terminal.
 
 ## Authentication
 The trading server uses [JWT](https://jwt.io/) to authenticate users. The JWT's secret key is taken from the environment variable `SERVER_PASSWORD`. The JWT token must be passed via the `x-jwt` header and is automatically sent from the CryptoControl terminal.
