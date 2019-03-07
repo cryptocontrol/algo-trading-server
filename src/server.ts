@@ -1,6 +1,7 @@
 import { Request } from 'express'
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
+import * as _ from 'underscore'
 import * as jwt from 'jsonwebtoken'
 
 import * as Database from './database'
@@ -39,7 +40,22 @@ app.post('/:exchange/key', (req: IAppRequest, res) => {
 })
 
 
-app.get('/keys', async (req: IAppRequest, res) => res.json(await Database.getKeys(req.uid)))
+app.get('/keys', async (req: IAppRequest, res) => {
+  const keys = await Database.getKeysForUser(req.uid)
+
+  // encrypt the secret keys
+  const parsedKeys = keys.map(key => {
+    return {
+      ...key,
+      params: _.mapObject(key.params, (val, key) => {
+        if (key === 'key') return val
+        else return val.replace(/./gi, '*')
+      })
+    }
+  })
+
+  res.json(parsedKeys)
+})
 
 
 interface ITrigger {
@@ -81,6 +97,13 @@ app.get('/deconsteTriggers', async (req: IAppRequest, res) => {
   const userId = req.query.userId
   const deconsteTriggers = await Database.deleteTriggers(userId)
   res.send('deconsted successfully')
+})
+
+
+app.use((err, req, res, next) => {
+  console.log(err)
+  res.status(500)
+  res.json({ error: err.message })
 })
 
 
