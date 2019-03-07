@@ -1,39 +1,45 @@
+import { Request } from 'express'
+import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as jwt from 'jsonwebtoken'
 
 import * as Database from './database'
 
-const app = express()
+interface IAppRequest extends Request {
+  uid: string
+}
+
 
 const jwtSecret = process.env.JWT_SECRET || 'secret_keyboard_cat'
 
-app.use((req, res, next) => {
-  const token = jwt.sign({ id: '123456' }, jwtSecret)
-  console.log(token)
-  next()
 
+const app = express()
+app.use(bodyParser.json({ limit: '2mb' }))
+app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }))
+
+
+
+// authenticate the user
+app.use((req:IAppRequest,  res, next) => {
+  const token = req.header('x-jwt')
+
+  // verify the jwt token
   jwt.verify(token, jwtSecret, (err, decoded) => {
-    if (err) return next(err)
-    console.log(decoded)
+    if (err) return next(new Error('invalid jwt token'))
+    if (!decoded.id) return next(new Error('invalid user id'))
+    req.uid = decoded.id
     next()
   })
 })
 
 
-app.post('/:exchange/key', function(req, res) {
-  const apiKey = req.query.apiKey;
-  const secret = req.query.secret;
-  const exchange = req.params.exchange
-
-  Database.writeApiKeys(apiKey, secret, exchange)
+app.post('/:exchange/key', (req: IAppRequest, res) => {
+  Database.addApiKeys(req.uid, req.params.exchange, req.body)
   res.json({ success: true })
 })
 
 
-app.get('/getData', async function(req, res) {
-  const localStorage = await Database.readDetails()
-  res.json(localStorage)
-})
+app.get('/keys', async (req: IAppRequest, res) => res.json(await Database.getKeys(req.uid)))
 
 
 interface ITrigger {
@@ -46,7 +52,7 @@ interface ITrigger {
 
 
 // create a new trigger for a user
-app.post('/trigger', function ( req, res) {
+app.post('/trigger', (req: IAppRequest, res) => {
   const userId = req.query.userId
   const symbol = req.query.symbol
   const exchangeId = req.query.exchangeId
@@ -60,7 +66,7 @@ app.post('/trigger', function ( req, res) {
 
 
 // get all existing triggers for a user
-app.get('/triggers', async (req, res) => res.json(await Database.getTriggers()))
+app.get('/triggers', async (req: IAppRequest, res) => res.json(await Database.getTriggers()))
 
 
 // app.get('/trigger', async function ( req, res ){
@@ -71,7 +77,7 @@ app.get('/triggers', async (req, res) => res.json(await Database.getTriggers()))
 
 
 // deconste a trigger for a user
-app.get('/deconsteTriggers', async function ( req, res ) {
+app.get('/deconsteTriggers', async (req: IAppRequest, res) => {
   const userId = req.query.userId
   const deconsteTriggers = await Database.deleteTriggers(userId)
   res.send('deconsted successfully')
