@@ -18,11 +18,16 @@ docker run -p 8080:8080 cryptocontrol-trading-server
 **USE THE SOFTWARE AT YOUR OWN RISK. YOU ARE RESPONSIBLE FOR YOUR OWN MONEY. PAST PERFORMANCE IS NOT NECESSARILY INDICATIVE OF FUTURE RESULTS.**
 **THE AUTHORS AND ALL AFFILIATES ASSUME NO RESPONSIBILITY FOR YOUR TRADING RESULTS.**
 
+## Usage
+Host this server in your own machine and enter in the server's ip and password in the CryptoControl's trading's settings screen. (See screenshot below)
+
+![Insert Server Details](./screenshot.png)
+
 ## Authentication
-The trading server uses [JWT](https://jwt.io/) to authenticate users. The JWT's secret key is taken from the environment variable `SERVER_SECRET`. The JWT token must be passed via the `x-jwt` header and is automatically sent from the CryptoControl terminal.
+The trading server uses [JWT](https://jwt.io/) to authenticate users. The JWT's secret key is taken from the environment variable `SERVER_PASSWORD`. The JWT token must be passed via the `x-jwt` header and is automatically sent from the CryptoControl terminal.
 
 ## Storage of API keys
-All API keys are stored in a json file in the `./storage` folder which is encrypted with the `SERVER_SECRET` environment variable. If you change the secret, you'll have to re-enter your API keys. API keys once uploaded cannot be viewed again by the client.
+All API keys are stored in a json file in the `./storage` folder which is encrypted with the `SERVER_PASSWORD` environment variable. If you change the secret, you'll have to re-enter your API keys. API keys once uploaded cannot be viewed again by the client.
 
 ## Supported Strategies
 As of now, the trading server supports
