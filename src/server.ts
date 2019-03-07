@@ -5,6 +5,8 @@ import * as _ from 'underscore'
 import * as jwt from 'jsonwebtoken'
 
 import * as Database from './database'
+import InvalidJWTError from './errors/InvalidJWTError';
+import NotAuthorizedError from './errors/NotAuthorizedError';
 const packageJson = require('../package.json')
 
 
@@ -21,14 +23,20 @@ app.use(bodyParser.json({ limit: '2mb' }))
 app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }))
 
 
+/**
+ * Redirect to the github page
+ */
+app.get('/', (_req, res) => res.redirect('https://github.com/cryptocontrol/adv-trading-server'))
+
+
 // authenticate the user
 app.use((req:IAppRequest, _res, next) => {
   const token = req.header('x-jwt')
 
   // verify the jwt token
   jwt.verify(token, jwtSecret, (err, decoded) => {
-    if (err) return next(new Error('invalid jwt token'))
-    if (!decoded.id) return next(new Error('invalid user id'))
+    if (err) return next(new InvalidJWTError)
+    if (!decoded.id) return next(new NotAuthorizedError)
     req.uid = decoded.id
     next()
   })
@@ -123,9 +131,12 @@ app.delete('/triggers/:exchange/:symbol/:id', async (req: IAppRequest, res) => {
 })
 
 
-app.use((err, req, res, next) => {
+/**
+ * Error handler
+ */
+app.use((err, _req, res, _next) => {
   console.log(err)
-  res.status(500)
+  res.status(err.status || 500)
   res.json({ error: err.message })
 })
 
