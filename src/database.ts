@@ -15,7 +15,7 @@ export interface IAPIKey {
 
 
 // todo: check for params
-export const addApiKeys = async (uid, exchange, params) => apiKeysDB.push(`/keys[]`, { exchange, uid, params }, true)
+export const addApiKeys = async (uid, exchange, params) => apiKeysDB.push(`/${exchange}/${uid}`, params, true)
 
 
 
@@ -35,11 +35,23 @@ export const getTriggers = async () => await triggersDB.getData("/binance")
 
 /**
  * Get the API keys for the given user
- * @param uid the user id
+ * @param uid2 the user id
  */
-export const getKeysForUser = async (uid: string): Promise<IAPIKey[]> => {
-  const keys = await apiKeysDB.getData('/keys') || []
-  return _.filter(keys, (val: IAPIKey) => val.uid === uid)
+export const getKeysForUser = async (uid: string) => {
+  const data = await apiKeysDB.getData('/')
+
+  const results = {}
+
+  _.mapObject(data, (val, exchange) => {
+    for (let uid2 of _.keys(val)) {
+      if (uid2 === uid) {
+        results[exchange] = val[uid2]
+        return
+      }
+    }
+  })
+
+  return results
 }
 
 
@@ -48,6 +60,5 @@ export const getKeysForUser = async (uid: string): Promise<IAPIKey[]> => {
  * @param exchange the exchange id
  */
 export const getKeysForExchange = async (exchange: string): Promise<IAPIKey[]> => {
-  const keys = await apiKeysDB.getData('/keys') || []
-  return _.filter(keys, (val: IAPIKey) => val.exchange === exchange)
+  return await apiKeysDB.getData(`/${exchange}`)
 }

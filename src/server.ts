@@ -34,24 +34,27 @@ app.use((req:IAppRequest,  res, next) => {
 })
 
 
+/**
+ * Set the API key for an exchange for the logged in user
+ */
 app.post('/:exchange/key', (req: IAppRequest, res) => {
   Database.addApiKeys(req.uid, req.params.exchange, req.body)
   res.json({ success: true })
 })
 
 
+/**
+ * Get all the API keys saved for the logged in user
+ */
 app.get('/keys', async (req: IAppRequest, res) => {
-  const keys = await Database.getKeysForUser(req.uid)
+  const exchanges = await Database.getKeysForUser(req.uid)
 
-  // encrypt the secret keys
-  const parsedKeys = keys.map(key => {
-    return {
-      ...key,
-      params: _.mapObject(key.params, (val, key) => {
-        if (key === 'key') return val
-        else return val.replace(/./gi, '*')
-      })
-    }
+  // hide the secret keys
+  const parsedKeys = _.mapObject(exchanges, params => {
+    return _.mapObject(params, (val, key) => {
+      if (key === 'key') return val
+      return val.replace(/./gi, '*')
+    })
   })
 
   res.json(parsedKeys)
