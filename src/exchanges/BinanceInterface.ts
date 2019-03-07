@@ -13,6 +13,6 @@ export default class BinanceInterface extends ExchangeInterface {
 
   startListening(): void {
     const client = Binance()
-    client.ws.trades(['BTCUSDT'], trade => this.onPriceUpdate('BTC/USDT', Number(trade.price)))
+    client.ws.trades(['BTCUSDT'], trade => this.onPriceUpdate('BTCUSDT', Number(trade.price)))
   }
 }

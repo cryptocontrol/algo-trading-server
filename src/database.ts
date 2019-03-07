@@ -95,6 +95,14 @@ export const getTrigger = async (ex: string, sym: string, id: string) => await t
 
 
 /**
+ * Gets the triggers for the given symbol and exchange
+ * @param ex the exchange id
+ * @param sym the symbol
+ */
+export const getTriggersForSymbol = async (ex: string, sym: string) => await triggersDB.getData(`/${ex}/${sym}`)
+
+
+/**
  * Get the API keys for the given exchange
  *
  * @param ex the exchange id
