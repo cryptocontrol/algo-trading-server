@@ -1,7 +1,8 @@
 {
-  "name": "ccxt-auto-trader",
+  "name": "adv-trading-server",
+  "private": true,
   "version": "1.0.0",
-  "description": "Bot to enable execution of buy/sell orders",
+  "description": "Trading Server for Advanced Orders",
   "main": "index.js",
   "dependencies": {
     "binance-api-node": "^0.8.18",
@@ -27,16 +28,16 @@
   },
   "scripts": {
     "start": "DEBUG=app* ts-node index.js",
-    "start:prod": "NODE_ENV-production;node index.js"
+    "start:prod": "NODE_ENV-production; node index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/cryptocontrol/ccxt-auto-trader.git"
+    "url": "git+ssh://git@github.com/cryptocontrol/adv-trading-server.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/cryptocontrol/ccxt-auto-trader/issues"
+    "url": "https://github.com/cryptocontrol/adv-trading-server/issues"
   },
-  "homepage": "https://gitlab.com/cryptocontrol/ccxt-auto-trader#README"
+  "homepage": "https://github.com/cryptocontrol/adv-trading-server#README"
 }
