@@ -3,11 +3,11 @@ Trading Server for Advanced Orders
 
 This server is meant to be used by the CryptoControl Terminal to execute advanced orders like stop-losses, trailing stop-losses, take profit (and more) on exchanges that don't support advanced orders.
 
-In the screenshot below, users have the ability to execute stop-loss and take-profit orders from the trading screen within the CryptoControl Terminal, on an exchange that doesn't support these orders.
+In the screenshot below, users have the ability to execute stop-loss and take-profit orders from the trading screen within the CryptoControl Terminal, on an exchange that doesn't support these kinds of orders.
 
 ![Stop Loss Screenshot](./screenshot-stoploss.png)
 
-The CryptoControl Terminal allows users to host their own trading servers to that can execute advanced orders within the terminal itself but never expose their API keys to CryptoControl.
+The CryptoControl Terminal allows users to host their own trading servers so that they can execute advanced orders from within the terminal itself but never expose their API keys to CryptoControl. Since the trading server is open-source, everything is transparent.
 
 For a quick start with docker-compose run
 ```
@@ -19,8 +19,8 @@ docker run -p 8080:8080 -e SERVER_SECRET=set_random_password_here cryptocontrol-
 ```
 
 ## Disclaimer
-**USE THE SOFTWARE AT YOUR OWN RISK. YOU ARE RESPONSIBLE FOR YOUR OWN MONEY. PAST PERFORMANCE IS NOT NECESSARILY INDICATIVE OF FUTURE RESULTS.**
-**THE AUTHORS AND ALL AFFILIATES ASSUME NO RESPONSIBILITY FOR YOUR TRADING RESULTS.**
+**USE THE SOFTWARE AT YOUR OWN RISK. YOU ARE RESPONSIBLE FOR YOUR OWN MONEY.**
+**THE AUTHORS AND ALL AFFILIATES ASSUME NO RESPONSIBILITY FOR YOUR USE OF THIS SOFTWARE.**
 
 ## Usage
 Host this server in your own machine and enter in the server's ip and password in the CryptoControl's trading's settings screen as shown below.
@@ -52,6 +52,8 @@ The following exchanges are supported: Binance, Bittrex
 
 ## Upcoming Features
 For any suggestions on features that you'd like to see, let us know by either submitting an issue or writing to us at contact@cryptocontrol.io
+
+Some of the upcoming features that we're working on include:
 
 - AI Integration
 - HFT (High Frequency Trading)
