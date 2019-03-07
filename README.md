@@ -37,3 +37,10 @@ As of now, the trading server supports
 
 ## Supported Exchanges
 The following exchanges are supported: Binance, Bittrex
+
+## Upcoming Features
+For any suggestions on features that you'd like to see, let us know by either submitting an issue or writing to us at contact@cryptocontrol.io
+
+- AI Integration
+- HFT (High Frequency Trading)
+- Custom Strategies
