@@ -2,9 +2,14 @@ import BaseStrategy from "./BaseStrategy"
 
 
 export default class StopLossStrategy extends BaseStrategy {
+  private constructor (id: string, trigger: any) {
+    // do nothing... for now
+    super()
+  }
+
+
   static create (id: string, trigger: any) {
-    console.log(id, trigger)
-    return new StopLossStrategy
+    return new StopLossStrategy(id, trigger)
   }
 
 

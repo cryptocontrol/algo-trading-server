@@ -1,12 +1,13 @@
-*.sublime-project
-*.sublime-workspace
 .DS_Store
 .editorconfig
 .eslint*
 .idea/
 .nyc_output/
 .vscode/
-storage
+*.sublime-project
+*.sublime-workspace
 node_modules/
 nodemon.json
 npm-debug.log
+storage
+storage_prod

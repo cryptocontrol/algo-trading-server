@@ -3,7 +3,7 @@ FROM node:9
 ENV NODE_ENV production
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Install app dependencies
 COPY package.json ./
@@ -18,4 +18,4 @@ COPY . .
 
 # Final configuration and then run!
 EXPOSE 8080
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "start:prod" ]

@@ -24,6 +24,7 @@ node_modules/
 npm-debug.log*
 pids
 storage
+storage_prod
 typings/
 yarn-debug.log*
 yarn-error.log*
