@@ -27,6 +27,8 @@
     "tslint": "^5.9.1"
   },
   "scripts": {
+    "build": "tsc",
+    "build-docker": "docker build -t cryptocontrol-trading-server .",
     "start": "DEBUG=app* ts-node index.js",
     "start:prod": "NODE_ENV-production; node index.js"
   },
