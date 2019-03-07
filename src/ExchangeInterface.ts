@@ -1,5 +1,9 @@
 import * as ccxt from 'ccxt'
+import * as logger from 'logger'
+
 import * as Controller from './controllers/handlers'
+
+const debug = logger('app:exchange')
 
 
 export default abstract class ExchangeInterface {
@@ -20,9 +24,9 @@ export default abstract class ExchangeInterface {
 
 
   protected async onPriceUpdate (symbol: string, last: number) {
-    // process all triggers for the given symbol; write your code here sagar
-    //console.log('processing triggers for', symbol, 'at', last)
-    let triggers = await Controller.getSpecificTriggers('123')
+    debug('processing triggers for', symbol, 'at', last)
+
+    const triggers = await Controller.getSpecificTriggers('123')
     triggers.forEach(function(obj){
       let exchangeId = obj.exchangeId
       const exchange: ccxt.Exchange = new ccxt[exchangeId]
