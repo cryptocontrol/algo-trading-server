@@ -23,6 +23,7 @@ logs
 node_modules/
 npm-debug.log*
 pids
+storage
 typings/
 yarn-debug.log*
 yarn-error.log*
