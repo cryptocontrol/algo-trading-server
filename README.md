@@ -5,7 +5,7 @@ This server is meant to be used by the CryptoControl Terminal to execute advance
 
 ![Stop Loss Screenshot](./screenshot-stoploss.png)
 
-The CryptoControl Terminal allows users to also specifiy to execute advanced orders from their own trading servers for better security. By doing so, users don't ever expose their API keys to any of CryptoControl's servers.
+The CryptoControl Terminal allows users to also specifiy and execute advanced orders from their own trading servers for better security. By doing so, users never expose their API keys to CryptoControl.
 
 For a quick start with docker-compose run
 ```
