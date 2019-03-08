@@ -1,0 +1,233 @@
+{
+	"info": {
+		"_postman_id": "fe0f4f79-e478-4a94-95d6-66f2dfff36d9",
+		"name": "Autotrader",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get API keys",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-jwt",
+						"value": "{{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/keys",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"keys"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Server Status",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-jwt",
+						"type": "text",
+						"value": "{{jwt}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "file",
+					"file": {}
+				},
+				"url": {
+					"raw": "{{url}}/status",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Triggers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-jwt",
+						"value": "{{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/triggers",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"triggers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Trigger",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-jwt",
+						"type": "text",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/triggers/binance/BTCUSDT/0955c2cb3de666f1235cad3161fae686",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"triggers",
+						"binance",
+						"BTCUSDT",
+						"0955c2cb3de666f1235cad3161fae686"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Binance BTCUSDT stop loss trigger",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-jwt",
+						"type": "text",
+						"value": "{{jwt}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"price\": 3500\n}"
+				},
+				"url": {
+					"raw": "{{url}}/triggers/binance/BTCUSDT/stop-loss",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"triggers",
+						"binance",
+						"BTCUSDT",
+						"stop-loss"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set Binance API keys",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-jwt",
+						"type": "text",
+						"value": "{{jwt}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"key\": \"123\",\n\t\"secret\": \"456sdfsdfsdfdsf\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/binance/key",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"binance",
+						"key"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Binance API keys",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-jwt",
+						"type": "text",
+						"value": "{{jwt}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/binance/key",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"binance",
+						"key"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
