@@ -65,6 +65,16 @@ app.post('/:exchange/key', (req: IAppRequest, res) => {
 
 
 /**
+ * Set the API keys for multiple exchanges for the given user
+ */
+app.post('/keys', (req: IAppRequest, res) => {
+  const data = req.body || []
+  data.forEach(data => Database.addApiKeys(req.uid, data.exchange, data.keys))
+  res.json({ success: true })
+})
+
+
+/**
  * Get all the API keys saved for the logged in user
  */
 app.get('/keys', async (req: IAppRequest, res) => {
