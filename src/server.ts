@@ -36,8 +36,8 @@ app.use((req:IAppRequest, _res, next) => {
   // verify the jwt token
   jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) return next(new InvalidJWTError)
-    if (!decoded.id) return next(new NotAuthorizedError)
-    req.uid = decoded.id
+    if (!decoded.uid) return next(new NotAuthorizedError)
+    req.uid = decoded.uid
     next()
   })
 })
