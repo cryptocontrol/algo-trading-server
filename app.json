@@ -5,6 +5,11 @@
   "logo": "https://node-js-sample.herokuapp.com/node.png",
   "keywords": ["node", "express", "static"],
   "scripts": {
-    "start:prod": "NODE_ENV=production node index.js"
+    "postdeploy": "NODE_ENV=production node index.js"
+  },
+  "env": {
+    "SERVER_SECRET": {
+      "description": "A password to access the server"
+    }
   }
 }
