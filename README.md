@@ -1,5 +1,5 @@
-Trading Server for Advanced Orders
-==================================
+Algo Trading Server for Advanced Orders
+=======================================
 
 This server is meant to be used by the CryptoControl Terminal to execute advanced orders like stop-losses, trailing stop-losses, take profit (and more) on exchanges that don't support advanced orders.
 

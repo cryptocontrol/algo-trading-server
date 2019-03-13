@@ -5,6 +5,7 @@
   "description": "Trading Server for Advanced Orders",
   "main": "index.js",
   "dependencies": {
+    "@slack/client": "^4.11.0",
     "binance-api-node": "^0.8.18",
     "body-parser": "^1.18.3",
     "ccxt": "^1.18.297",
