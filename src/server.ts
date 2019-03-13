@@ -15,12 +15,14 @@ interface IAppRequest extends Request {
 }
 
 
-const jwtSecret = process.env.SERVER_SECRET || 'secret_keyboard_cat'
+
 
 
 const app = express()
 app.use(bodyParser.json({ limit: '2mb' }))
 app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }))
+
+const jwtSecret = app.get('secret') || process.env.SERVER_SECRET || 'secret_keyboard_cat'
 
 
 /**

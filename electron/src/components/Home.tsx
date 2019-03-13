@@ -32,6 +32,8 @@ export default class Home extends React.Component<{}, IState> {
       this.addMessage('starting server on port ' + port)
 
       process.env.SERVER_SECRET = this.state.password
+
+      server.set('secret', this.state.password)
       this.instance = server.listen(port)
 
       this.addMessage('listening on port ' + port)
