@@ -29,6 +29,7 @@
     "node_modules",
     "build",
     "config",
+    "electron",
     "release"
   ]
 }

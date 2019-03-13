@@ -4,9 +4,10 @@
  * https://webpack.github.io/docs/hot-module-replacement-with-webpack.html
  */
 
-const webpack = require('webpack');
-const merge = require('webpack-merge');
-const baseConfig = require('./config.base');
+const webpack = require('webpack')
+const merge = require('webpack-merge')
+const baseConfig = require('./config.base')
+const path = require('path')
 
 const port = process.env.PORT || 3000;
 
