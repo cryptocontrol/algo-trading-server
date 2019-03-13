@@ -22,8 +22,6 @@ const app = express()
 app.use(bodyParser.json({ limit: '2mb' }))
 app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }))
 
-const jwtSecret = app.get('secret') || process.env.SERVER_SECRET || 'secret_keyboard_cat'
-
 
 /**
  * Redirect to the github page
@@ -46,6 +44,8 @@ app.get('/status', (req: IAppRequest, res) => {
 // authenticate the user
 app.use((req:IAppRequest, _res, next) => {
   const token = req.header('x-jwt')
+
+  const jwtSecret = app.get('secret') || process.env.SERVER_SECRET || 'secret_keyboard_cat'
 
   // verify the jwt token
   jwt.verify(token, jwtSecret, (err, decoded) => {
