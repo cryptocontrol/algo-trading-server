@@ -26,7 +26,19 @@ app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }))
 /**
  * Redirect to the github page
  */
-app.get('/', (_req, res) => res.redirect('https://github.com/cryptocontrol/adv-trading-server'))
+app.get('/', (_req, res) => res.redirect('https://github.com/cryptocontrol/algo-trading-server'))
+
+
+/**
+ * Gets the status of the server. A great way for the terminal to check if the
+ * trading server is of the latest version or not.
+ */
+app.get('/status', (req: IAppRequest, res) => {
+  res.json({
+    version: packageJson.version,
+    uptime: process.uptime()
+  })
+})
 
 
 // authenticate the user
@@ -44,15 +56,9 @@ app.use((req:IAppRequest, _res, next) => {
 
 
 /**
- * Gets the status of the server. A great way for the terminal to check if the
- * trading server is of the latest version or not.
+ * Gets the current user's id
  */
-app.get('/status', (req: IAppRequest, res) => {
-  res.json({
-    version: packageJson.version,
-    uptime: process.uptime()
-  })
-})
+app.get('/me', (req: IAppRequest, res) => res.json({ uid: req.uid }))
 
 
 /**
