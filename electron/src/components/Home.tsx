@@ -1,7 +1,6 @@
 import * as React from 'react'
 import server from '../../../src/server'
 import './style.sass'
-import { Server } from 'http'
 
 interface IState {
   error?: string
@@ -12,7 +11,7 @@ interface IState {
 
 
 export default class Home extends React.Component<{}, IState> {
-  instance: Server
+  instance: any
 
 
   state: IState = {
@@ -45,7 +44,7 @@ export default class Home extends React.Component<{}, IState> {
     this.setState({ loading: true })
 
     try {
-      this.instance.close()
+      // this.instance.
       this.addMessage('server shut down')
       this.setState({ isServerRunning: false, loading: false })
     } catch(e) {
@@ -74,6 +73,16 @@ export default class Home extends React.Component<{}, IState> {
         <div className="divider" />
 
         <div>
+          <div className="password-section">
+            <div>
+              Password: <input type="text" placeholder="something secretive" />
+            </div>
+            <p>
+              The password is used to encrypt all your API keys and is used to authenticate
+              you from the CryptoControl terminal
+            </p>
+          </div>
+
           <div>
             <button
               onClick={this.runServer}
@@ -105,9 +114,9 @@ export default class Home extends React.Component<{}, IState> {
         <div className="divider" />
 
         <div className="messages">
-          <b> Message Console </b>
-          {this.state.messages.map(message => {
-            <div className="message">{message}</div>
+          <b> Message Console: </b>
+          {this.state.messages.map((message, index) => {
+            return (<div key={index} className="message">{message}</div>)
           })}
         </div>
       </div>
