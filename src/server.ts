@@ -2,6 +2,7 @@ import { Request } from 'express'
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as _ from 'underscore'
+import * as cors from 'cors'
 import * as jwt from 'jsonwebtoken'
 
 import * as Database from './database'
@@ -15,12 +16,13 @@ interface IAppRequest extends Request {
 }
 
 
-
-
-
 const app = express()
 app.use(bodyParser.json({ limit: '2mb' }))
 app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }))
+
+
+// enable all cors
+app.use(cors())
 
 
 /**
