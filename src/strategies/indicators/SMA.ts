@@ -4,7 +4,6 @@
 import Indicator from './Indicator'
 
 export default class SMA extends Indicator {
-  private input: string
   private windowLength: number
   private prices: number[]
   public result: number
@@ -12,9 +11,8 @@ export default class SMA extends Indicator {
   private sum: number
 
   constructor (windowLength) {
-    super()
+    super('price')
 
-    this.input = 'price';
     this.windowLength = windowLength;
     this.prices = [];
     this.result = 0;

@@ -7,7 +7,6 @@ export default class RSI extends Indicator {
   private age: number = 0
   private avgD: SMMA
   private avgU: SMMA
-  private readonly input: string = 'candle'
   private lastClose: number
   private d: number = 0
   private rs: number = 0
@@ -16,9 +15,8 @@ export default class RSI extends Indicator {
   public result: number = 0
 
   constructor (settings: any) {
-    super()
+    super('candle')
 
-    this.input = 'candle'
     this.lastClose = null
     this.weight = settings.interval
     this.avgU = new SMMA(this.weight)

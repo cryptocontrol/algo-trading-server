@@ -3,7 +3,6 @@ import SMA from './SMA'
 import Indicator from './Indicator'
 
 export default class SMMA extends Indicator {
-  private input: string
   private weight: number
   private prices: number[]
   public result: number
@@ -11,9 +10,8 @@ export default class SMMA extends Indicator {
   private sma: SMA
 
   constructor (weight: number) {
-    super()
+    super('price')
 
-    this.input = 'price'
     this.sma = new SMA(weight)
     this.weight = weight
     this.prices = []
