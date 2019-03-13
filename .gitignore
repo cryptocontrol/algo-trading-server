@@ -27,3 +27,16 @@ storage_prod
 typings/
 yarn-debug.log*
 yarn-error.log*
+
+
+electron/build
+electron/release
+electron/app/main.js
+electron/app/main.js.map
+electron/app/bundle.js
+electron/app/bundle.js.map
+electron/app/style.css
+electron/app/style.css.map
+electron/dist
+electron/main.js
+electron/main.js.map

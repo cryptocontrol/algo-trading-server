@@ -92,7 +92,12 @@
     "build": "tsc",
     "build-docker": "docker build -t cryptocontrol-trading-server .",
     "start": "NODE_ENV=production node index.js",
-    "start:prod": "NODE_ENV=production node index.js"
+    "start:prod": "NODE_ENV=production node index.js",
+
+    "hot-server": "cross-env NODE_ENV=development node --max_old_space_size=2096 server.js",
+    "build-app-main": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack --config electron/webpack/config.electron.js --progress --profile --colors",
+    "build-app-renderer": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack --config electron/webpack/config.production.js --progress --profile --colors",
+    "build-app": "npm run build-app-main && npm run build-app-renderer"
   },
   "repository": {
     "type": "git",

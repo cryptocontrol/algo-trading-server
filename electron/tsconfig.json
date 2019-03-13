@@ -27,11 +27,11 @@
     "outDir": "dist"
   },
   "files": [
-    "app/index.tsx"
+    "src/index.tsx"
   ],
   "include": [
-    "app/**/*.ts",
-    "app/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     "test/**/*.ts",
     "test/**/*.tsx",
     "node_modules/@types/**/*.d.ts"
