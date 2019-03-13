@@ -1,5 +1,5 @@
 import BaseStrategy from './BaseStrategy'
-import RSI from './indicators/RSI'
+import RSI from '../indicators/RSI'
 import log from '../utils/log'
 
 
