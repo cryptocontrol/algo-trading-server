@@ -1,0 +1,12 @@
+{
+  "name": "adv-trading-server",
+  "description": "Trading Cloud for the CryptoControl Terminal",
+  "repository": "https://github.com/cryptocontrol/adv-trading-server",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "express", "static"],
+  "env": {
+    "SERVER_SECRET": {
+      "description": "A password to access the server"
+    }
+  }
+}

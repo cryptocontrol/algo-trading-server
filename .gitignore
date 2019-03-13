@@ -16,7 +16,6 @@
 bower_components
 build/Release
 coverage
-dist
 jspm_packages/
 lib-cov
 logs

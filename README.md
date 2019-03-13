@@ -9,6 +9,8 @@ In the screenshot below, users have the ability to execute stop-loss and take-pr
 
 The CryptoControl Terminal allows users to host their own trading servers so that they can execute advanced orders from within the terminal itself but never expose their API keys to CryptoControl. Since the trading server is open-source, everything is transparent.
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/cryptocontrol/adv-trading-server)
+
 For a quick start with docker-compose run
 ```
 docker-compose up
