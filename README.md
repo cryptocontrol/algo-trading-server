@@ -5,7 +5,7 @@ This server is meant to be used by the CryptoControl Terminal to execute advance
 
 In the screenshot below, users have the ability to execute stop-loss and take-profit orders from the trading screen within the CryptoControl Terminal, on an exchange that doesn't support these kinds of orders.
 
-![Stop Loss Screenshot](./screenshot-stoploss.png)
+![Stop Loss Screenshot](./screenshots/stoploss.png)
 
 The CryptoControl Terminal allows users to host their own trading servers so that they can execute advanced orders from within the terminal itself but never expose their API keys to CryptoControl. Since the trading server is open-source, everything is transparent.
 
@@ -27,10 +27,17 @@ docker run -p 8080:8080 -e SERVER_SECRET=set_random_password_here cryptocontrol-
 ## Usage
 Host this server in your own machine and enter in the server's ip and password in the CryptoControl's trading's settings screen as shown below.
 
-![Insert Server Details](./screenshot.png)
+![Insert Server Details](./screenshots/screenshot.png)
 
 Once set, you'll be able to execute advanced orders straight from your terminal.
 
+
+## Using in your local machine
+The server can also be downloaded as an executable and run from your own machine locally.
+
+Simply download the executable, enter in a password and click on the button to start the server. Once the server has started, copy the details back into the terminal.
+
+![Desktop Gui](./screenshots/gui.png)
 
 <!-- ## How advanced orders work
 To execute advanced orders, a server needs to be running 24x7 monitoring the price feeds of various exchanges and executing trades automatically when certain conditions are met.
