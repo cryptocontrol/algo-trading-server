@@ -1,11 +1,33 @@
-.home
+body, html
   background: #1b1b1b
-  height: 100vh
-  position: relative
+  margin: 0
+  padding: 9
+  font-family: Arial, Helvetica, sans-serif
+  font-size: 12px
+
+#page-home
+  padding: 15px
+  color: #ddd
+
+  .home
+    height: 100vh
+    position: relative
 
   .container
     padding-top: 30%
     text-align: center
 
-    button
-      cursor: pointer
+  h1
+    margin-bottom: 0
+
+  button
+    cursor: pointer
+    background: rgba(#fff, 0.1)
+    border: 1px solid rgba(#fff, 0.2)
+    padding: 4px 10px
+    margin-right: 5px
+    margin-bottom: 10px
+    color: #fff
+
+    &:disabled
+      opacity: 0.5

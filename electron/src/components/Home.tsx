@@ -1,6 +1,6 @@
 import * as React from 'react'
 import server from '../../../src/server'
-
+import './style.sass'
 
 interface IState {
   isServerRunning: boolean
@@ -38,14 +38,20 @@ export default class Home extends React.Component<{}, IState> {
     }
   }
 
-  render() {
 
+  render() {
     const { isServerRunning } = this.state
 
     return (
-      <div style={{ fontFamily: 'arial' }}>
-        <div style={{ background: '#1b1b1b', height: '100vh', position: 'relative', padding: '10px' }} data-tid="container">
-          <div style={{ position: 'absolute', top: '40%', left: '45%' }}>
+      <div id="page-home">
+        <h1>CryptoControl Trading Server</h1>
+        <p>
+          To start the server, please enter a password and
+          then press the start button.
+        </p>
+
+        <div>
+          <div>
             <button
               onClick={this.runServer}
               disabled={isServerRunning} >
@@ -59,7 +65,7 @@ export default class Home extends React.Component<{}, IState> {
             </button>
           </div>
 
-          <div style={{ color: '#fff' }}>Server Status: &nbsp;
+          <div>Server Status: &nbsp;
             {isServerRunning ?
               <b style={{ color: '#0f0' }}>Running</b> :
               <b style={{ color: '#f00' }}>Not Running</b>}
