@@ -47,7 +47,7 @@ export const addTrigger = async (uid: string, sym: string, ex: string, strategy:
 export const getTriggersForUser = async (uid: string) => {
   const data = await triggersDB.getData('/')
 
-  const results = []
+  const results: any[] = []
 
   _.mapObject(data, (symbols, exchange) => {
     _.mapObject(symbols, (triggerIds, symbol) => {
