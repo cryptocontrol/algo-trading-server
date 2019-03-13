@@ -6,7 +6,7 @@
 
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const baseConfig = require('./webpack.config.base');
+const baseConfig = require('./config.base');
 
 const port = process.env.PORT || 3000;
 
@@ -16,7 +16,7 @@ module.exports = merge(baseConfig, {
   entry: [
     'react-hot-loader/patch',
     `webpack-hot-middleware/client?path=http://localhost:${port}/__webpack_hmr&reload=true`,
-    './app/index'
+    path.join(__dirname, '../src/index'),
   ],
 
   output: {

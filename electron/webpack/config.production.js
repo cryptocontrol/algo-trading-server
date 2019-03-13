@@ -7,17 +7,17 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const baseConfig = require('./webpack.config.base');
+const baseConfig = require('./config.base');
 
 module.exports = merge(baseConfig, {
   devtool: 'cheap-module-source-map',
 
   entry: [
-    './app/index'
+    path.join(__dirname, '../src/index')
   ],
 
   output: {
-    path: path.join(__dirname, 'app/dist'),
+    path: path.join(__dirname, '../src/dist'),
     publicPath: '../dist/'
   },
 

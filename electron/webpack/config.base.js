@@ -5,7 +5,7 @@
 const path = require('path');
 const {
   dependencies: externals
-} = require('./app/package.json');
+} = require('../src/package.json');
 
 module.exports = {
   module: {
@@ -20,7 +20,7 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname, 'app'),
+    path: path.join(__dirname, '../build'),
     filename: 'bundle.js',
 
     // https://github.com/webpack/webpack/issues/1114
