@@ -12,7 +12,7 @@ export default abstract class BaseStrategy {
   }
 
 
-  advice (reason?: string) {
+  advice (reason: 'long' | 'short' | 'close-position' | 'do-nothing') {
     // do nothing
   }
 

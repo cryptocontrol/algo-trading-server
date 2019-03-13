@@ -5,20 +5,14 @@ import Indicator from './Indicator'
 
 export default class SMA extends Indicator {
   private windowLength: number
-  private prices: number[]
-  public result: number
-  private age: number
-  private sum: number
+  private prices: number[] = []
+  private sum: number = 0
 
 
   constructor (windowLength) {
     super('price')
 
     this.windowLength = windowLength;
-    this.prices = [];
-    this.result = 0;
-    this.age = 0;
-    this.sum = 0;
   }
 
 

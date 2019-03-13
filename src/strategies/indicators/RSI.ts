@@ -4,22 +4,20 @@ import Indicator from './Indicator'
 
 
 export default class RSI extends Indicator {
-  private age: number = 0
   private avgD: SMMA
   private avgU: SMMA
-  private lastClose: number
   private d: number = 0
+  private lastClose: number = null
   private rs: number = 0
   private u: number = 0
   private weight: number
-  public result: number = 0
 
 
-  constructor (settings: any) {
+
+  constructor (interval: number) {
     super('candle')
 
-    this.lastClose = null
-    this.weight = settings.interval
+    this.weight = interval
     this.avgU = new SMMA(this.weight)
     this.avgD = new SMMA(this.weight)
   }
@@ -51,11 +49,8 @@ export default class RSI extends Indicator {
     this.rs = this.avgU.result / this.avgD.result
     this.result = 100 - (100 / (1 + this.rs))
 
-    if (this.avgD.result === 0 && this.avgU.result !== 0) {
-      this.result = 100
-    } else if (this.avgD.result === 0) {
-      this.result = 0
-    }
+    if (this.avgD.result === 0 && this.avgU.result !== 0) this.result = 100
+    else if (this.avgD.result === 0) this.result = 0
 
     this.lastClose = currentClose
     this.age++

@@ -4,9 +4,7 @@ import Indicator from './Indicator'
 
 export default class SMMA extends Indicator {
   private weight: number
-  private prices: number[]
-  public result: number
-  private age: number
+  private prices: number[] = []
   private sma: SMA
 
 
@@ -15,9 +13,6 @@ export default class SMMA extends Indicator {
 
     this.sma = new SMA(weight)
     this.weight = weight
-    this.prices = []
-    this.result = 0
-    this.age = 0
   }
 
 

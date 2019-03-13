@@ -28,7 +28,7 @@ export default class RSIStrategy extends BaseStrategy {
   private constructor (id: string, trigger: any) {
     super('RSI')
 
-    this.rsi = new RSI({})
+    this.rsi = new RSI(15)
 
     // this.requiredHistory = this.tradingAdvisor.historySize
 
@@ -38,9 +38,7 @@ export default class RSIStrategy extends BaseStrategy {
 
 
   static create (id: string, trigger: any) {
-    const instance = new RSIStrategy(id, trigger)
-    return instance
-    // return new StopLossStrategy(id, trigger)
+    return new RSIStrategy(id, trigger)
   }
 
 
@@ -76,15 +74,14 @@ export default class RSIStrategy extends BaseStrategy {
         }
 
       this.trend.duration++
-
-      log.debug('In high since', this.trend.duration, 'candle(s)')
+      log.debug(`in high since ${this.trend.duration} candle(s)`)
 
       if (this.trend.duration >= this.persistence) this.trend.persisted = true
 
       if (this.trend.persisted && !this.trend.adviced) {
         this.trend.adviced = true
         this.advice('short')
-      } else this.advice()
+      } else this.advice('do-nothing')
 
     } else if (rsiVal < this.thresholdLow) {
       // new trend detected
@@ -97,18 +94,17 @@ export default class RSIStrategy extends BaseStrategy {
         }
 
       this.trend.duration++
-
-      log.debug('In low since', this.trend.duration, 'candle(s)')
+      log.debug(`in low since ${this.trend.duration} candle(s)`)
 
       if (this.trend.duration >= this.persistence) this.trend.persisted = true
 
       if (this.trend.persisted && !this.trend.adviced) {
         this.trend.adviced = true
         this.advice('long')
-      } else this.advice()
+      } else this.advice('do-nothing')
     } else {
-      log.debug('In no trend')
-      this.advice()
+      log.debug('in no trend')
+      this.advice('do-nothing')
     }
   }
 }
