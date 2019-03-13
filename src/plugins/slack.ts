@@ -67,9 +67,8 @@ export default class Slack {
 
 
   checkResults (error) {
-      if (error) log.warn('error sending slack', error)
-      else log.info('Send advice via slack.')
-
+    if (error) log.warn('error sending slack', error)
+    else log.info('Send advice via slack.')
   }
 
 
