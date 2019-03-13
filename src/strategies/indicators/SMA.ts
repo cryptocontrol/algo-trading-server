@@ -10,6 +10,7 @@ export default class SMA extends Indicator {
   private age: number
   private sum: number
 
+
   constructor (windowLength) {
     super('price')
 

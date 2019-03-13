@@ -9,6 +9,7 @@ export default class SMMA extends Indicator {
   private age: number
   private sma: SMA
 
+
   constructor (weight: number) {
     super('price')
 
@@ -18,6 +19,7 @@ export default class SMMA extends Indicator {
     this.result = 0
     this.age = 0
   }
+
 
   update  (price) {
     this.prices[this.age] = price

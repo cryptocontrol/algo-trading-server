@@ -4,7 +4,7 @@ import BaseStrategy from "./BaseStrategy"
 export default class StopLossStrategy extends BaseStrategy {
   private constructor (id: string, trigger: any) {
     // do nothing... for now
-    super()
+    super('stop-loss')
   }
 
 

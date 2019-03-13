@@ -14,6 +14,7 @@ export default class RSI extends Indicator {
   private weight: number
   public result: number = 0
 
+
   constructor (settings: any) {
     super('candle')
 
