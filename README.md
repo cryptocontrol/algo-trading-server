@@ -37,7 +37,7 @@ The server can also be downloaded as an executable and run from your own machine
 
 Simply download the executable, enter in a password and click on the button to start the server. Once the server has started, copy the details back into the terminal.
 
-![Desktop Gui](./screenshots/gui.png)
+![Desktop Gui](./screenshots/gui2.png)
 
 <!-- ## How advanced orders work
 To execute advanced orders, a server needs to be running 24x7 monitoring the price feeds of various exchanges and executing trades automatically when certain conditions are met.
