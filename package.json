@@ -60,7 +60,7 @@
     "electron-builder-http": "^19.15.0",
     "electron-builder": "^19.8.0",
     "electron-devtools-installer": "^2.0.1",
-    "electron": "1.8.4",
+    "electron": "4.0.8",
     "enzyme-adapter-react-16": "^1.0.0",
     "enzyme": "^3.0.0",
     "express": "^4.16.4",
