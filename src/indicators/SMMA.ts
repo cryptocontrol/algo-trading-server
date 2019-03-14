@@ -16,7 +16,7 @@ export default class SMMA extends Indicator {
   }
 
 
-  update  (price) {
+  update (price: number) {
     this.prices[this.age] = price
 
     if (this.prices.length < this.weight) this.sma.update(price)

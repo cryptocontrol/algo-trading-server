@@ -1,6 +1,7 @@
 // required indicators
 import SMMA from './SMMA'
 import Indicator from './Indicator'
+import { ICandle } from 'src/interfaces'
 
 
 export default class RSI extends Indicator {
@@ -23,7 +24,7 @@ export default class RSI extends Indicator {
   }
 
 
-  update (candle) {
+  update (candle: ICandle) {
     const currentClose = candle.close
 
     if (this.lastClose === null) {
