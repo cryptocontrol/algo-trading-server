@@ -10,9 +10,9 @@ import log from 'src/utils/log'
  * The heart schedules and emit ticks every 20 seconds.
  */
 export default class Heart extends EventEmitter {
-  lastTick = 0
-  tickrate: number
-  interval: NodeJS.Timeout
+  private lastTick = 0
+  private tickrate: number
+  private interval: NodeJS.Timeout
 
 
   constructor (tickrate: number = 20) {
