@@ -8,7 +8,7 @@ import * as _ from 'underscore'
 import * as cors from 'cors'
 import * as jwt from 'jsonwebtoken'
 
-import router from './routes'
+import router from './routes/routes'
 import { IAppRequest } from 'src/interfaces'
 import InvalidJWTError from 'src/errors/InvalidJWTError'
 

@@ -3,9 +3,9 @@ import * as _ from 'underscore'
 import * as Bluebird from 'bluebird'
 
 import { IAppRequest } from 'src/interfaces'
-import * as Controllers from './controllers'
-import * as Database from '../database2'
+import keys from './keys'
 import NotAuthorizedError from 'src/errors/NotAuthorizedError'
+import * as Database from '../../database2'
 
 const packageJson = require('../../package.json')
 const router = Router()
@@ -37,54 +37,7 @@ router.use((req: IAppRequest, _res, next) => {
 router.get('/me', (req: IAppRequest, res) => res.json({ uid: req.uid }))
 
 
-
-router.post('/:exchange/key', (req: IAppRequest, res, next) => {
-  Controllers.setAPIKey(req.uid, req.params.exchange, req.body)
-    .then(data => res.json(data))
-    .catch(next)
-})
-
-
-/**
- * Set the API keys for multiple exchanges for the given user
- */
-router.post('/keys', (req: IAppRequest, res, next) => {
-  Bluebird.mapSeries(req.body, (data: any) => Controllers.setAPIKey(req.uid, data.exchange, data.keys))
-    .then(data => res.json(data))
-    .catch(next)
-})
-
-
-/**
- * Get all the API keys saved for the logged in user
- */
-router.get('/keys', async (req: IAppRequest, res, next) => {
-  Controllers.getAllUserApiKeys(req.uid)
-    .then(data => {
-
-      // hide the secret keys
-      const parsedKeys = data.map(row => {
-        const json = row.toJSON()
-        return _.mapObject(json, (val, key) => {
-          if (key !== 'apiSecret' && key !== 'apiPassword' || !val) return val
-          return val.replace(/./gi, '*')
-        })
-      })
-
-      res.json(parsedKeys)
-    })
-    .catch(next)
-})
-
-
-/**
- * Delete the API keys for the given exchange for the currently logged in user
- */
-router.delete('/:exchange/key', (req: IAppRequest, res) => {
-  Database.deleteApiKey(req.uid, req.params.exchange)
-  res.json({ success: true })
-})
-
+router.use('/keys', keys)
 
 /**
  * create a new trigger for a user

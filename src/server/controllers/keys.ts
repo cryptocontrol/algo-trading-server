@@ -1,7 +1,6 @@
 import * as _ from 'underscore'
 
 import UserExchanges from 'src/database/models/userexchanges'
-import { IAppRequest } from 'src/interfaces'
 
 
 /**
@@ -32,6 +31,27 @@ export const setAPIKey = async (uid: string, exchange: string, data: any) => {
 }
 
 
+/**
+ * Get all the API keys saved for the logged in user
+ */
 export const getAllUserApiKeys = async (uid: string) => {
   return await UserExchanges.findAll({ where: { uid } })
+  .then(data => {
+
+    // hide the secret keys
+    const parsedKeys = data.map(row => {
+      const json = row.toJSON()
+      return _.mapObject(json, (val, key) => {
+        if (key !== 'apiSecret' && key !== 'apiPassword' || !val) return val
+        return val.replace(/./gi, '*')
+      })
+    })
+
+    return parsedKeys
+  })
+}
+
+
+export const deleteApiKey = async (uid: string, exchange: string) => {
+  return await UserExchanges.destroy({ where: { uid, exchange }})
 }
