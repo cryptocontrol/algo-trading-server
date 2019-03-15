@@ -10,10 +10,7 @@ export interface ICandle {
 }
 
 
-export type IAdvice = 'long' | 'short' | 'soft'
-// export interface IAdvice {
-
-// }
+export type IAdvice = 'long' | 'short' | 'soft' | 'close-position' | 'do-nothing'
 
 
 export interface IAppRequest extends Request {

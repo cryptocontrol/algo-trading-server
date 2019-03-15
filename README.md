@@ -1,7 +1,9 @@
-Algo Trading Server for Advanced Orders
-=======================================
+Iguana - Algo Trading Server for Advanced Orders
+================================================
 
 This server is meant to be used by the CryptoControl Terminal to execute advanced orders like stop-losses, trailing stop-losses, take profit (and more) on exchanges that don't support advanced orders.
+
+IGUANA is heavily insipired by the popular open-source bitcoin trading bot, [Gekko](https://github.com/askmike/gekko).
 
 In the screenshot below, users have the ability to execute stop-loss and take-profit orders from the trading screen within the CryptoControl Terminal, on an exchange that doesn't support these kinds of orders.
 
