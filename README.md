@@ -27,7 +27,7 @@ docker run -p 8080:8080 -e SERVER_SECRET=set_random_password_here cryptocontrol-
 
 **THE AUTHORS AND ALL AFFILIATES ASSUME NO RESPONSIBILITY FOR ANY DAMAGE OR LOSS CAUSED BY THIS SOFTWARE.**
 
-**THERE CAN BE BUGS AND THE BOT MAY NOT PERFORM AS EXPECTED OR SPECIFIED. PLEASE CONSIDER TESTING IT FIRST WITH PAPER TRADING AND/OR BACKTESTING ON HISTORICAL DATA. ALSO LOOK AT THE CODE TO SEE WHAT HOW IT IS WORKING.**
+**THERE CAN BE BUGS AND THE BOT MAY NOT PERFORM AS EXPECTED OR SPECIFIED. PLEASE CONSIDER TESTING IT FIRST WITH PAPER TRADING AND/OR BACKTESTING ON HISTORICAL DATA. ALSO LOOK AT THE CODE TO SEE HOW IT IS WORKS.**
 
 ## Usage
 Host this server in your own machine and enter in the server's ip and password in the CryptoControl's trading's settings screen as shown below.
@@ -54,7 +54,7 @@ Iguana uses a password to encrypt/decrypt all API keys and to authenticate users
 
 If you are setting up the bot on your own cloud, then the password is taken from the environment variable `SERVER_PASSWORD`. If you're setting up the bot via the GUI, then simply enter in the password in the password field before you start the bot.
 
-Once set, all users can simply connect to the bot by entering the password that they've set from the CryptoControl terminal.
+Once set, all users can simply connect to the bot from the CryptoControl terminal with the right password.
 
 ## Supported Strategies
 As of now, the trading server supports
