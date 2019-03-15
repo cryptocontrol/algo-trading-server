@@ -1,9 +1,7 @@
 import {Table, Column, Model} from 'sequelize-typescript'
 
 
-@Table({
-  timestamps: true
-})
+@Table({ timestamps: true })
 export default class UserExchanges extends Model<UserExchanges> {
   @Column
   uid: string

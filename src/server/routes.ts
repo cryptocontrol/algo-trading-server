@@ -1,10 +1,11 @@
 import { Router } from 'express'
 import * as _ from 'underscore'
+import * as Bluebird from 'bluebird'
 
-import NotAuthorizedError from 'src/errors/NotAuthorizedError'
-import { setAPIKey } from './controllers'
 import { IAppRequest } from 'src/interfaces'
+import * as Controllers from './controllers'
 import * as Database from '../database2'
+import NotAuthorizedError from 'src/errors/NotAuthorizedError'
 
 const packageJson = require('../../package.json')
 const router = Router()
@@ -36,37 +37,43 @@ router.use((req: IAppRequest, _res, next) => {
 router.get('/me', (req: IAppRequest, res) => res.json({ uid: req.uid }))
 
 
-/**
- * Set the API key for an exchange for the logged in user
- */
-router.post('/:exchange/key', setAPIKey)
+
+router.post('/:exchange/key', (req: IAppRequest, res, next) => {
+  Controllers.setAPIKey(req.uid, req.params.exchange, req.body)
+    .then(data => res.json(data))
+    .catch(next)
+})
 
 
 /**
  * Set the API keys for multiple exchanges for the given user
  */
-router.post('/keys', (req: IAppRequest, res) => {
-  const data = req.body || []
-  data.forEach(data => Database.addApiKeys(req.uid, data.exchange, data.keys))
-  res.json({ success: true })
+router.post('/keys', (req: IAppRequest, res, next) => {
+  Bluebird.mapSeries(req.body, (data: any) => Controllers.setAPIKey(req.uid, data.exchange, data.keys))
+    .then(data => res.json(data))
+    .catch(next)
 })
 
 
 /**
  * Get all the API keys saved for the logged in user
  */
-router.get('/keys', async (req: IAppRequest, res) => {
-  const exchanges = await Database.getKeysForUser(req.uid)
+router.get('/keys', async (req: IAppRequest, res, next) => {
+  Controllers.getAllUserApiKeys(req.uid)
+    .then(data => {
 
-  // hide the secret keys
-  const parsedKeys = _.mapObject(exchanges, params => {
-    return _.mapObject(params, (val, key) => {
-      if (key === 'key') return val
-      return val.replace(/./gi, '*')
+      // hide the secret keys
+      const parsedKeys = data.map(row => {
+        const json = row.toJSON()
+        return _.mapObject(json, (val, key) => {
+          if (key !== 'apiSecret' && key !== 'apiPassword' || !val) return val
+          return val.replace(/./gi, '*')
+        })
+      })
+
+      res.json(parsedKeys)
     })
-  })
-
-  res.json(parsedKeys)
+    .catch(next)
 })
 
 
