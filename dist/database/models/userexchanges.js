@@ -33,8 +33,6 @@ __decorate([
     __metadata("design:type", String)
 ], UserExchanges.prototype, "apiPassword", void 0);
 UserExchanges = __decorate([
-    sequelize_typescript_1.Table({
-        timestamps: true
-    })
+    sequelize_typescript_1.Table({ timestamps: true })
 ], UserExchanges);
 exports.default = UserExchanges;
