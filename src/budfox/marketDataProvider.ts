@@ -47,12 +47,12 @@ export default class MarketDataProvider extends EventEmitter {
 
     // check if the exchange has streaming capabilities
     if (this.exchange.canStreamTrades(this.symbol)) {
-      // then we start streaming trades real-ltime
+      // then we start streaming trades in real-time
       this.exchange.on('trade', e => this.processTrades([e]))
       return
     }
 
-    // else poll the exchange; (by starting the heart!)
+    // else we poll the exchange; (by starting the heart!)
     this.heart.pump()
   }
 
