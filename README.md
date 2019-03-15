@@ -50,7 +50,11 @@ To execute advanced orders, a server needs to be running 24x7 monitoring the pri
 Some exchanges have a real-time api (websocket or FIX) for trades which allow  -->
 
 ## Authentication
-Iguana uses a server password to encrypt/decrypt all API keys. The password is taken from the environment variable `SERVER_PASSWORD` and is . header and is automatically sent from the CryptoControl terminal.
+Iguana uses a password to encrypt/decrypt all API keys and to authenticate users.
+
+If you are setting up the bot on your own cloud, then the password is taken from the environment variable `SERVER_PASSWORD`. If you're setting up the bot via the GUI, then simply enter in the password in the password field before you start the bot.
+
+Once set, all users can simply connect to the bot by entering the password that they've set from the CryptoControl terminal.
 
 ## Supported Strategies
 As of now, the trading server supports
