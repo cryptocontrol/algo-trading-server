@@ -8,11 +8,29 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      start: {
-        type: Sequelize.INTEGER
+      uid: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
-      open: {
+      exchange: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      symbol: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      advice: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      price: {
+        allowNull: false,
         type: Sequelize.DOUBLE
+      },
+      mode: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

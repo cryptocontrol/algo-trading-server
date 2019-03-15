@@ -5,17 +5,22 @@ import * as _ from 'underscore'
 import * as Controller from '../../database2'
 import BaseStrategy from '../../strategies/Strategy'
 import StopLossStrategy from '../../strategies/StopLossStrategy'
+import { EventEmitter } from 'events';
 
 const logger = debug('app:exchange')
 
 
-export default abstract class BaseExchange {
-  private exchange: ccxt.Exchange
-  private strategies: BaseStrategy[] = []
+export default abstract class BaseExchange extends EventEmitter {
+  public readonly name: string
+  protected exchange: ccxt.Exchange
+  protected strategies: BaseStrategy[] = []
 
 
   constructor (exchange: ccxt.Exchange) {
+    super()
+
     this.exchange = exchange
+    this.name = exchange.name
   }
 
 
@@ -25,6 +30,9 @@ export default abstract class BaseExchange {
    * this.onPriceUpdate(....) with the latest price for the any of the given symbols.
    */
   protected abstract startListening (): void
+
+
+  public getTrades = (since: number, descending: boolean): ccxt.Trade[] => { return [] }
 
 
   private async lazyLoadStrategies (symbol: string) {
