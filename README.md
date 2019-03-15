@@ -73,6 +73,7 @@ Strategies can also be backtested for performance with historic data from an exc
 Supported Strategies:
 - RSI Strategy
 
+You can also build your own strategies and use it with the CryptoControl terminal. For more info view [building custom strategies](./docs/CUSTOM_STRATEGIES.md).
 
 ## Supported Exchanges
 The following exchanges are supported: Binance, Bittrex
