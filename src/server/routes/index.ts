@@ -5,6 +5,7 @@ import { IAppRequest } from 'src/interfaces'
 import keys from './keys'
 import NotAuthorizedError from 'src/errors/NotAuthorizedError'
 import triggers from './triggers'
+import plugins from './plugins'
 
 const packageJson = require('../../package.json')
 const router = Router()
@@ -37,6 +38,7 @@ router.get('/me', (req: IAppRequest, res) => res.json({ uid: req.uid }))
 // init all the different routes
 router.use('/keys', keys)
 router.use('/triggers', triggers)
+router.use('/plugins', plugins)
 
 
 /**

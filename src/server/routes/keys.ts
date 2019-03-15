@@ -8,6 +8,7 @@ import * as Controllers from '../controllers/keys'
 const router = Router()
 
 
+// add an api key for an exchange
 router.post('/:exchange', (req: IAppRequest, res, next) => {
   Controllers.setAPIKey(req.uid, req.params.exchange, req.body)
     .then(data => res.json(data))
@@ -15,9 +16,7 @@ router.post('/:exchange', (req: IAppRequest, res, next) => {
 })
 
 
-/**
- * Set the API keys for multiple exchanges for the given user
- */
+// add api keys for multiple exchanges
 router.post('/', (req: IAppRequest, res, next) => {
   Bluebird.mapSeries(req.body, (data: any) => Controllers.setAPIKey(req.uid, data.exchange, data.keys))
     .then(data => res.json(data))
@@ -25,6 +24,7 @@ router.post('/', (req: IAppRequest, res, next) => {
 })
 
 
+// get all user's api keys
 router.get('/', async (req: IAppRequest, res, next) => {
   Controllers.getAllUserApiKeys(req.uid)
     .then(data => res.json(data))
@@ -32,6 +32,7 @@ router.get('/', async (req: IAppRequest, res, next) => {
 })
 
 
+// delete an api for an exchange
 router.delete('/:exchange', (req: IAppRequest, res, next) => {
   Controllers.deleteApiKey(req.uid, req.params.exchange)
     .then(data => res.json(data))
