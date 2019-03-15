@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('UserExchanges', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('UserExchanges', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -34,8 +34,14 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
-    });
+      },
+
+    })
+
+    await queryInterface.addIndex('UserExchanges', ['uid', 'exchange'], {
+      type: 'unique',
+      name: 'uid_exchange'
+    })
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('UserExchanges');

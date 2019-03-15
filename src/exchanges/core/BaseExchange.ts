@@ -2,7 +2,7 @@ import * as ccxt from 'ccxt'
 import * as debug from 'debug'
 import * as _ from 'underscore'
 
-import * as Controller from '../../database'
+import * as Controller from '../../database2'
 import BaseStrategy from '../../strategies/BaseStrategy'
 import StopLossStrategy from '../../strategies/StopLossStrategy'
 

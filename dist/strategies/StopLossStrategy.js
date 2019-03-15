@@ -1,29 +1,15 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var BaseStrategy_1 = require("./BaseStrategy");
-var StopLossStrategy = /** @class */ (function (_super) {
-    __extends(StopLossStrategy, _super);
-    function StopLossStrategy(id, trigger) {
+const BaseStrategy_1 = require("./BaseStrategy");
+class StopLossStrategy extends BaseStrategy_1.default {
+    constructor(id, trigger) {
         // do nothing... for now
-        return _super.call(this) || this;
+        super('stop-loss');
     }
-    StopLossStrategy.create = function (id, trigger) {
+    static create(id, trigger) {
         return new StopLossStrategy(id, trigger);
-    };
-    StopLossStrategy.prototype.process = function (lastprice) {
+    }
+    process(lastprice) {
         // process the trigger
         // triggers.forEach(trigger => {
         //   let strategy = trigger.strategy
@@ -51,7 +37,6 @@ var StopLossStrategy = /** @class */ (function (_super) {
         //console.log('trigger',triggers)
         // loop through all the avaialbe triggers for this exchange and symbol
         // check if the trigger conditions are met
-    };
-    return StopLossStrategy;
-}(BaseStrategy_1.default));
+    }
+}
 exports.default = StopLossStrategy;

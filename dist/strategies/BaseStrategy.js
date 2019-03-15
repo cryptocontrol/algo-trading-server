@@ -1,8 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var BaseStrategy = /** @class */ (function () {
-    function BaseStrategy() {
+const hat = require("hat");
+class BaseStrategy {
+    constructor(name) {
+        this.uid = hat();
+        this.name = name;
     }
-    return BaseStrategy;
-}());
+    advice(reason) {
+        // do nothing
+    }
+}
 exports.default = BaseStrategy;

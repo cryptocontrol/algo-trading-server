@@ -9,10 +9,11 @@ import * as _ from 'underscore'
 import * as cors from 'cors'
 import * as jwt from 'jsonwebtoken'
 
-import * as Database from './database'
-import InvalidJWTError from './errors/InvalidJWTError'
-import NotAuthorizedError from './errors/NotAuthorizedError'
-const packageJson = require('../package.json')
+import * as Database from '../database2'
+import InvalidJWTError from 'src/errors/InvalidJWTError'
+import NotAuthorizedError from 'src/errors/NotAuthorizedError'
+import UserExchanges from 'src/database/models/userexchanges'
+import router from './routes'
 
 
 interface IAppRequest extends Request {
@@ -28,23 +29,7 @@ app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }))
 // enable all cors
 app.use(cors())
 
-
-/**
- * Redirect to the github page
- */
-app.get('/', (_req, res) => res.redirect('https://github.com/cryptocontrol/algo-trading-server'))
-
-
-/**
- * Gets the status of the server. A great way for the terminal to check if the
- * trading server is of the latest version or not.
- */
-app.get('/status', (req: IAppRequest, res) => {
-  res.json({
-    version: packageJson.version,
-    uptime: process.uptime()
-  })
-})
+app.use(router)
 
 
 // authenticate the user using JWT tokens
@@ -72,9 +57,36 @@ app.get('/me', (req: IAppRequest, res) => res.json({ uid: req.uid }))
 /**
  * Set the API key for an exchange for the logged in user
  */
-app.post('/:exchange/key', (req: IAppRequest, res) => {
-  Database.addApiKeys(req.uid, req.params.exchange, req.body)
-  res.json({ success: true })
+app.post('/:exchange/key', async (req: IAppRequest, res, next) => {
+  try {
+    const found = await UserExchanges.findOne({
+      where: {
+        uid: req.uid,
+        exchange: req.params.exchange
+      }
+    })
+
+    if (found) {
+      found.apiKey = req.body.key
+      found.apiSecret = req.body.secret
+      found.apiPassword = req.body.pasword
+      await found.save()
+      return res.json(found)
+    }
+
+    const row = new UserExchanges({
+      uid: req.uid,
+      exchange: req.params.exchange,
+      apiKey: req.body.key,
+      apiSecret: req.body.secret,
+      apiPassword: req.body.password
+    })
+
+    await row.save()
+    res.json(row)
+  } catch (e) {
+    next(e)
+  }
 })
 
 

@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var server_1 = require("./server");
-var Binance_1 = require("./exchanges/Binance");
+const server_1 = require("./server");
+const Database = require("./database");
+// init the database
+Database.init();
 // start all the exchanges listeners
-var binance = new Binance_1.default();
-binance.startListening();
+// const binance = new Binance()
+// binance.startListening()
 // start the servers
-var port = process.env.PORT || 8080;
-server_1.default.listen(port, function () { return console.log('listening on port', port); });
+const port = process.env.PORT || 8080;
+server_1.default.listen(port, () => console.log('listening on port', port));

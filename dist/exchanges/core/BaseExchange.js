@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const debug = require("debug");
 const _ = require("underscore");
-const Controller = require("../database2");
-const StopLossStrategy_1 = require("../strategies/StopLossStrategy");
+const Controller = require("../../database2");
+const StopLossStrategy_1 = require("../../strategies/StopLossStrategy");
 const logger = debug('app:exchange');
 class BaseExchange {
     constructor(exchange) {

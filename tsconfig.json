@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "baseUrl": ".",
-    "target": "es5",
+    "target": "es6",
     "types": [
       "node",
       "express"
