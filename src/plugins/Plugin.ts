@@ -1,8 +1,11 @@
 import { IAdvice } from 'src/interfaces'
 
 /**
- * A plugin is something that integrates with the trader; It can be used
- * to create custom functionality that a user would like to create.
+ * A plugin is something that integrates with the trader; It can't be used
+ * to influence the decision of a trade, but it can be used to trigger 3rd
+ * party applications.
+ *
+ * For code that is used to influnce the decision of a trade; see Strategies.
  */
 export default abstract class Plugin<T> {
   public readonly name: string
