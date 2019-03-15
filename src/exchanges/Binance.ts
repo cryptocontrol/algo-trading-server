@@ -11,8 +11,13 @@ export default class Binance extends BaseExchange {
   }
 
 
-  startListening(): void {
+  startListening (): void {
     const client = BinanceApi()
     client.ws.trades(['BTCUSDT'], trade => this.onPriceUpdate('BTCUSDT', Number(trade.price)))
+  }
+
+
+  public canStreamTrades (_symbol: string): boolean {
+    return true
   }
 }

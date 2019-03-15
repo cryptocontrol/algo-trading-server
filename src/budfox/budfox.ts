@@ -1,7 +1,6 @@
-import Heart from './heart'
 import MarketDataProvider from './marketDataProvider'
 import { EventEmitter } from 'events'
-import { Exchange } from 'ccxt';
+import BaseExchange from 'src/exchanges/core/BaseExchange'
 
 // Budfox is the realtime market for Gekko!
 //
@@ -13,21 +12,16 @@ import { Exchange } from 'ccxt';
 // > [tosses back the handkerchief and walks away]
 
 export default class BudFox extends EventEmitter {
-  heart: Heart
   marketDataProvider: MarketDataProvider
 
 
-  constructor (exchange: Exchange, symbol: string) {
+  constructor (exchange: BaseExchange, symbol: string) {
     super()
 
     // init the different components
-    this.heart = new Heart()
     this.marketDataProvider = new MarketDataProvider(exchange, symbol)
 
     // connect them together
-
-    // on every `tick` retrieve trade data
-    this.heart.on('tick', this.marketDataProvider.retrieve)
 
     // on new trade data create candles and output it
     // this.marketDataProvider.on('trades', this.candleManager.processTrades);
@@ -37,8 +31,8 @@ export default class BudFox extends EventEmitter {
     this.marketDataProvider.on('market-start', e => this.emit('market-start', e))
     this.marketDataProvider.on('market-update', e => this.emit('market-update', e))
 
-    // once everything is connected, we pump the heart!
-    this.heart.pump()
+    // once everything is connected, we start the market data provider
+    this.marketDataProvider.start()
   }
 }
 

@@ -5,7 +5,7 @@ import * as _ from 'underscore'
 import * as Controller from '../../database2'
 import BaseStrategy from '../../strategies/Strategy'
 import StopLossStrategy from '../../strategies/StopLossStrategy'
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'events'
 
 const logger = debug('app:exchange')
 
@@ -33,6 +33,15 @@ export default abstract class BaseExchange extends EventEmitter {
 
 
   public getTrades = (since: number, descending: boolean): ccxt.Trade[] => { return [] }
+
+
+  /**
+   * Checks if the exchange can stream trades for the given symbol or not. Streaming happens via
+   * websockets or via FIX api.
+   *
+   * @param symbol The symbol to check for
+   */
+  public abstract canStreamTrades (symbol: string): boolean
 
 
   private async lazyLoadStrategies (symbol: string) {

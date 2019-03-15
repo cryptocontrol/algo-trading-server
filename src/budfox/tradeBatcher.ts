@@ -21,7 +21,7 @@ export interface ITradesBatchEvent {
  * - Emits `new batch` - all new trades.
  */
 export default class TradeBatcher extends EventEmitter {
-  lastTrade: Trade
+  private lastTrade: Trade
 
 
   write (trades: Trade[] = []) {
@@ -47,7 +47,7 @@ export default class TradeBatcher extends EventEmitter {
     //   '(' + first.date.from(last.date, true) + ')'
     // )
 
-    this.emit('new trades', {
+    this.emit('new batch', {
       count,
       start: first.timestamp,
       end: last.timestamp,
