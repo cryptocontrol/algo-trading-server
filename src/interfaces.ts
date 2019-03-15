@@ -10,6 +10,12 @@ export interface ICandle {
 }
 
 
+export type IAdvice = 'long' | 'short' | 'soft'
+// export interface IAdvice {
+
+// }
+
+
 export interface IAppRequest extends Request {
   uid: string
 }
