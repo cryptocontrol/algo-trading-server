@@ -1,7 +1,7 @@
 import * as ccxt from 'ccxt'
 import BinanceApi from 'binance-api-node'
 
-import BaseExchange from './BaseExchange'
+import BaseExchange from './core/BaseExchange'
 
 
 export default class Binance extends BaseExchange {

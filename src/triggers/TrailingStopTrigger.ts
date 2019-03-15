@@ -14,7 +14,7 @@ export default class TrailingStop extends Trigger {
    * @param trail        fixed offset from the price
    * @param initialPrice initial price, preferably buy price
    */
-  constructor(trail: number, initialPrice: number) {
+  constructor (trail: number, initialPrice: number) {
     super()
 
     this.trail = trail

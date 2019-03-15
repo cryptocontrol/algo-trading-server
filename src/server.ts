@@ -1,3 +1,7 @@
+/**
+ * This is where the HTTP Json server runs. It is what is used by the CryptoControl terminal to
+ * communicate with the trading sever.
+ */
 import { Request } from 'express'
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
@@ -6,8 +10,8 @@ import * as cors from 'cors'
 import * as jwt from 'jsonwebtoken'
 
 import * as Database from './database'
-import InvalidJWTError from './errors/InvalidJWTError';
-import NotAuthorizedError from './errors/NotAuthorizedError';
+import InvalidJWTError from './errors/InvalidJWTError'
+import NotAuthorizedError from './errors/NotAuthorizedError'
 const packageJson = require('../package.json')
 
 
@@ -43,7 +47,7 @@ app.get('/status', (req: IAppRequest, res) => {
 })
 
 
-// authenticate the user
+// authenticate the user using JWT tokens
 app.use((req:IAppRequest, _res, next) => {
   const token = req.header('x-jwt')
 
