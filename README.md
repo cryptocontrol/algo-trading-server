@@ -56,11 +56,23 @@ If you are setting up the bot on your own cloud, then the password is taken from
 
 Once set, all users can simply connect to the bot from the CryptoControl terminal with the right password.
 
-## Supported Strategies
-As of now, the trading server supports
+
+## Signals/Triggers
+Iguana supports triggers, which are one-time actions that execute when a price meets a certain condition.
+
+Supported Signals/Triggers:
 - Stop Loss
 - Take Profit
 - Trailing Take Profit
+
+## Strategies
+Iguana supports auto-trading with various trading strategies. Strategies keep running forever and execute trades on the basis of certain conditions (like Technical Indicators).
+
+Strategies can also be backtested for performance with historic data from an exchange.
+
+Supported Strategies:
+- RSI Strategy
+
 
 ## Supported Exchanges
 The following exchanges are supported: Binance, Bittrex
