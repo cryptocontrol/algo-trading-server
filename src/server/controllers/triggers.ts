@@ -7,13 +7,14 @@ import Triggers from 'src/database/models/triggers'
  * create a new trigger for a user
  */
 export const createTrigger = async (uid: string, exchange: string, symbol: string, kind: string, params: any) => {
-  const { price, orderId, ...rest } = params
+  const { price, volume, orderId, ...rest } = params
   const trigger = new Triggers({
     uid,
     symbol,
     exchange,
     kind,
     orderId,
+    targetVolume: volume,
     targetPrice: price,
     params: JSON.stringify(rest)
   })

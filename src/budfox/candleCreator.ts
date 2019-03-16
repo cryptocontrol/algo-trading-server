@@ -4,7 +4,6 @@ import { EventEmitter } from 'events'
 import { Trade } from 'ccxt'
 
 import { ICandle } from 'src/interfaces'
-import { ITradesBatchEvent } from './tradeBatcher'
 
 
 /**

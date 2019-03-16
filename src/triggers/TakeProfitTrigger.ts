@@ -4,14 +4,14 @@ import { ICandle } from 'src/interfaces'
 import BaseTrigger from './BaseTrigger'
 
 
-export default class StopLossTrigger extends BaseTrigger {
+export default class TakeProfitTrigger extends BaseTrigger {
   onTrade (trade: Trade) {
     if (!this.isLive) return
     const { price } = trade
 
-    // if price reaches or goes below the stop loss price, then
+    // if price reaches or goes above the take profit price, then
     // we close the position
-    if (price <= this.triggerDB.targetPrice) {
+    if (price >= this.triggerDB.targetPrice) {
       this.advice('close-position', this.triggerDB.targetPrice, this.triggerDB.targetVolume)
       this.close()
     }

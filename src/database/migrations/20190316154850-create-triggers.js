@@ -30,6 +30,9 @@ module.exports = {
       targetPrice: {
         type: Sequelize.DOUBLE,
       },
+      targetVolume: {
+        type: Sequelize.DOUBLE,
+      },
       hasTriggered: {
         allowNull: false,
         type: Sequelize.BOOLEAN,

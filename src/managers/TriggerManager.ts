@@ -24,14 +24,14 @@ export default class TriggerManger {
 
   public addTrigger (t: Triggers) {
     const budfox = this.manager.getBudfox(t.exchange, t.symbol)
-    const trigger = this.getTrigger(t, budfox)
+    const trigger = this.getTrigger(t)
 
     budfox.on('candle', candle => trigger.onCandle(candle))
     budfox.on('trade', trade => trigger.onTrade(trade))
   }
 
 
-  private getTrigger (triggerDB: Triggers, budfox: BudFox) {
+  private getTrigger (triggerDB: Triggers) {
     if (triggerDB.kind === 'stop-loss') return new StopLossTrigger(triggerDB)
   }
 

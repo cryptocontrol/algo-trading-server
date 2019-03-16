@@ -9,6 +9,7 @@ import Candles from 'src/database/models/candles'
 import log from 'src/utils/log'
 import MarketDataProvider from './marketDataProvider'
 import Trades from 'src/database/models/trades'
+import { EventEmitter } from 'events'
 
 
 /**
@@ -20,7 +21,7 @@ import Trades from 'src/database/models/trades'
  * Read more here what Budfox does (Gekko's version):
  * @link https://github.com/askmike/gekko/blob/stable/docs/internals/budfox.md
  */
-export default class BudFox extends Readable {
+export default class BudFox extends EventEmitter {
   private readonly marketDataProvider: MarketDataProvider
   private readonly candlesCreator: CandleCreator
   private readonly exchange: BaseExchange
@@ -47,7 +48,6 @@ export default class BudFox extends Readable {
     // relay a market-start, market-update and trade events
     this.marketDataProvider.on('market-start', e => this.emit('market-start', e))
     this.marketDataProvider.on('market-update', e => this.emit('market-update', e))
-    this.marketDataProvider.on('trade', e => this.emit('trade', e))
     this.marketDataProvider.on('trades', this.processTrades)
 
     // once everything is connected, we start the market data provider
@@ -58,7 +58,7 @@ export default class BudFox extends Readable {
   private processCandles = (candles: ICandle[]) => {
     candles.forEach(c => {
       // write to stream
-      this.push(JSON.stringify(c))
+      this.emit('candle', c)
 
       // save into the DB
       const candle = new Candles({
@@ -81,6 +81,8 @@ export default class BudFox extends Readable {
 
   private processTrades = (trades: Trade[]) => {
     trades.forEach(t => {
+      this.emit('trade', t)
+
       const trade = new Trades({
         exchange: this.exchange.name,
         price: t.price,
@@ -90,7 +92,6 @@ export default class BudFox extends Readable {
         tradeId: String(t.id),
         volume: t.amount
       })
-
 
       trade.save().catch(_.noop)
     })
