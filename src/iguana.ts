@@ -4,11 +4,10 @@
 import { Exchange } from 'ccxt'
 import * as ccxt from 'ccxt'
 import CCXTExchange from './exchanges/CCXTExchange'
-import BudFox from './budfox/budfox';
-import BudfoxManger from './managers/BudfoxManager';
+import BudfoxManger from './managers/BudfoxManager'
+
 
 const enabledExchanges = ['binance']
-
 
 
 export const start = () => {
