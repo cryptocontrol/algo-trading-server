@@ -27,23 +27,21 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      targetPrice: {
-        type: Sequelize.DOUBLE,
-      },
-      targetVolume: {
-        type: Sequelize.DOUBLE,
+      isActive: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
       },
       hasTriggered: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-      params: {
-        type: Sequelize.STRING,
-      },
-      triggeredAt: {
-        type: Sequelize.DATE
-      },
+      closedAt: { type: Sequelize.DATE },
+      lastTriggeredAt: { type: Sequelize.DATE },
+      params: { type: Sequelize.STRING, },
+      targetPrice: { type: Sequelize.DOUBLE },
+      targetVolume: { type: Sequelize.DOUBLE },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

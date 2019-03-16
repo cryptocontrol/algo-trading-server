@@ -24,7 +24,7 @@ export interface ICandle {
 // trades: _.size(trades)
 
 export type IAdvice = 'long' | 'short' | 'soft' | 'close-position' | 'do-nothing'
-
+// 'long' | 'short' | 'close-position' | 'do-nothing'
 
 export interface IAppRequest extends Request {
   uid: string

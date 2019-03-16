@@ -1,7 +1,7 @@
 import { Trade } from 'ccxt'
 import * as EventEmitter from 'events'
 
-import { ICandle } from 'src/interfaces'
+import { ICandle, IAdvice } from 'src/interfaces'
 import Triggers from 'src/database/models/triggers'
 import log from 'src/utils/log';
 
@@ -28,17 +28,28 @@ export default abstract class BaseTrigger extends EventEmitter {
   public abstract onCandle (candle: ICandle): void
 
 
-  protected advice (advice: 'long' | 'short' | 'close-position' | 'do-nothing', price: number, amount: number) {
+  protected advice (advice: IAdvice, price: number, amount: number) {
     // do nothing
-    log.debug(
-      `${this.triggerDB.kind} trigger ${this.triggerDB.exchange} ${this.triggerDB.symbol} ` +
+    const trigger = this.triggerDB
+    log.info(
+      `${trigger.kind} trigger for user ${trigger.uid} on ${trigger.exchange} ${trigger.symbol} ` +
       `adviced to ${advice} at ${price} for a volume of ${amount}`
     )
+
+    // mark the trigger as triggered
+    trigger.hasTriggered = true
+    trigger.lastTriggeredAt = new Date
+    trigger.save()
   }
 
 
   protected close () {
     this.isLive = false
     this.emit('close')
+
+    // mark the trigger as closed in the DB
+    this.triggerDB.isActive = false
+    this.triggerDB.closedAt = new Date
+    this.triggerDB.save()
   }
 }

@@ -10,9 +10,9 @@ const router = Router()
 /**
  * create a new trigger for a user
  */
-router.post('/:exchange/:symbol/:kind', async (req: IAppRequest, res) => {
+router.post('/:exchange/:base/:quote/:kind', async (req: IAppRequest, res) => {
   const uid = req.uid
-  const symbol = req.params.symbol
+  const symbol = `${req.params.base}/${req.params.quote}`
   const exchange = req.params.exchange
   const kind = req.params.kind
   const params = req.body

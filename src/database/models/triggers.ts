@@ -22,13 +22,19 @@ export default class Triggers extends Model<Triggers> {
   kind: string
 
   @Column
-  triggeredAt: Date
+  lastTriggeredAt: Date
 
   @Column
   params: string
 
   @Column
   hasTriggered: boolean
+
+  @Column
+  closedAt: Date
+
+  @Column
+  isActive: boolean
 
   @Column
   orderId: string

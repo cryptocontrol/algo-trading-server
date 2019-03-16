@@ -17,7 +17,7 @@ export default class TriggerManger {
 
 
   async loadTriggers () {
-    const activeTriggers = await Triggers.findAll({ where: { hasTriggered: false }})
+    const activeTriggers = await Triggers.findAll({ where: { isActive: true }})
     activeTriggers.forEach(t => this.addTrigger(t))
   }
 
