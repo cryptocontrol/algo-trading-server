@@ -2,12 +2,8 @@ import * as ccxt from 'ccxt'
 import * as debug from 'debug'
 import * as _ from 'underscore'
 
-import * as Controller from '../../database2'
 import BaseStrategy from '../../strategies/BaseStrategy'
-import StopLossStrategy from '../../strategies/StopLossStrategy'
 import { EventEmitter } from 'events'
-
-const logger = debug('app:exchange')
 
 
 export default abstract class BaseExchange extends EventEmitter {
@@ -42,31 +38,6 @@ export default abstract class BaseExchange extends EventEmitter {
    * @param symbol The symbol to check for
    */
   public abstract canStreamTrades (symbol: string): boolean
-
-
-  private async lazyLoadStrategies (symbol: string) {
-    try {
-      const triggerIdsMap = await Controller.getTriggersForSymbol(this.exchange.id, symbol)
-
-      this.strategies = []
-
-      _.mapObject(triggerIdsMap, (trigger, id) => {
-        if (trigger.strategy === 'stop-loss') this.strategies.push(StopLossStrategy.create(id, trigger))
-      })
-
-      return this.strategies
-    } catch (e) {
-      return []
-    }
-  }
-
-
-  protected async onPriceUpdate (symbol: string, last: number) {
-    logger('processing triggers for', symbol, 'at', last)
-
-    const strategies = await this.lazyLoadStrategies(symbol)
-    strategies.forEach(strategy => strategy.process(last))
-  }
 
 
   public start () {

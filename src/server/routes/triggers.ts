@@ -17,7 +17,7 @@ router.post('/:exchange/:symbol/:kind', async (req: IAppRequest, res) => {
   const kind = req.params.kind
   const params = req.body
 
-  const trigger = await Controllers.createTrigger(uid, symbol, exchange, kind, params)
+  const trigger = await Controllers.createTrigger(uid, exchange, symbol, kind, params)
   res.json({ trigger, success: true })
 })
 
