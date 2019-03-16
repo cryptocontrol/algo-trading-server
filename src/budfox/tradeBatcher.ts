@@ -1,9 +1,9 @@
 import * as _ from 'underscore'
 import * as moment from 'moment'
 import { EventEmitter } from 'events'
+import { Trade } from 'ccxt'
 
 import log from 'src/utils/log'
-import { Trade } from 'ccxt'
 
 
 export interface ITradesBatchEvent {

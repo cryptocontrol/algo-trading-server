@@ -8,11 +8,29 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      start: {
-        type: Sequelize.INTEGER
-      },
-      open: {
+      price: {
+        allowNull: false,
         type: Sequelize.DOUBLE
+      },
+      volume: {
+        allowNull: false,
+        type: Sequelize.DOUBLE
+      },
+      exchange: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      symbol: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      tradeId: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      tradedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +43,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Trades');
+    return queryInterface.dropTable('Trades')
   }
 };

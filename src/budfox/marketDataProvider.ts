@@ -6,6 +6,7 @@ import TradeBatcher, { ITradesBatchEvent } from './tradeBatcher'
 import BaseExchange from 'src/exchanges/core/BaseExchange'
 import Heart from './heart'
 import log from 'src/utils/log'
+import Trades from 'src/database/models/trades'
 
 
 /**
@@ -67,6 +68,19 @@ export default class MarketDataProvider extends EventEmitter {
     this.emit('market-update', e.last.timestamp)
     this.emit('trades', e)
     this.emit('trade', e.last)
+
+    e.trades.forEach(trade => {
+      const t = new Trades({
+        exchange: this.exchange.name,
+        price: trade.price,
+        symbol: this.symbol,
+        tradedAt: new Date(trade.timestamp),
+        tradeId: trade.id,
+        volume: trade.amount
+      })
+
+      t.save().catch(_.noop)
+    })
   }
 
 
