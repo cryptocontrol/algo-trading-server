@@ -4,19 +4,12 @@ import Triggers from 'src/database/models/triggers'
 import { Trade } from 'ccxt';
 
 
-export default class TrailingStopTrigger extends BaseTrigger {
+export default class StopLossTrigger extends BaseTrigger {
   previousPrice: number
   trail: number
   trailingPoint: number
 
 
-  /**
-   * Note: as of now only supports trailing the price going up (after
-   * a buy), on trigger (when the price moves down) you should sell.
-   *
-   * @param trail        fixed offset from the price
-   * @param initialPrice initial price, preferably buy price
-   */
   constructor (trigger: Triggers) {
     super(trigger)
 

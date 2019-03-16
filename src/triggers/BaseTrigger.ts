@@ -1,4 +1,8 @@
+import { Trade } from 'ccxt'
 import * as EventEmitter from 'events'
+
+import { ICandle } from 'src/interfaces'
+import Triggers from 'src/database/models/triggers'
 
 // Note: as of now only supports trailing the price going up (after
 // a buy), on trigger (when the price moves down) you should sell.
@@ -9,24 +13,20 @@ import * as EventEmitter from 'events'
 // @param onTrigger: fn to call when the stop triggers
 export default abstract class BaseTrigger extends EventEmitter {
   protected isLive: boolean = true
+  protected readonly triggerDB
 
-  // constructor({ trail, initialPrice, onTrigger }) {
-  constructor () {
+
+  constructor (triggerDB: Triggers) {
     super()
-
-    // this.trail = trail
-    // this.onTrigger = onTrigger
-
-    // this.previousPrice = initialPrice
-    // this.trailingPoint = initialPrice - this.trail
+    this.triggerDB = triggerDB
   }
 
 
-  protected abstract updatePrice (price: number): void
+  public abstract onTrade (trade: Trade): void
+  public abstract onCandle (candle: ICandle): void
 
 
-  trigger (price: number) {
-    if (!this.isLive) return
-    this.emit('trigger', price)
+  advice (reason: 'long' | 'short' | 'close-position' | 'do-nothing', price: number, amount: number) {
+    // do nothing
   }
 }

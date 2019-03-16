@@ -22,7 +22,7 @@ export default class Triggers extends Model<Triggers> {
   triggeredAt: Date
 
   @Column
-  params: string
+  params: any
 
   @Column
   hasTriggered: boolean

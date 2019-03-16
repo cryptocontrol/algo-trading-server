@@ -2,6 +2,7 @@ import BaseTrigger from 'src/triggers/BaseTrigger'
 import BudFox from 'src/budfox'
 import BudfoxManger from './BudfoxManager';
 import Triggers from 'src/database/models/triggers';
+import StopLossTrigger from 'src/triggers/StopLossTrigger';
 
 
 interface IExchangeTriggers {
@@ -17,22 +18,21 @@ export default class TriggerManger {
 
   async loadTriggers () {
     const activeTriggers = await Triggers.findAll({ where: { hasTriggered: false }})
-
-    activeTriggers.forEach(t => {
-      console.log(t.exchange, t.symbol)
-      const budfox = this.manager.getBudfox(t.exchange, t.symbol)
-
-    })
+    activeTriggers.forEach(t => this.addTrigger(t))
   }
 
 
-  addTrigger (trigger: BaseTrigger) {
-    // const exchangeSymbol = `${triggerexchange.name}:${symbol}`
+  public addTrigger (t: Triggers) {
+    const budfox = this.manager.getBudfox(t.exchange, t.symbol)
+    const trigger = this.getTrigger(t, budfox)
 
-    // if (this.triggers[exchangeSymbol]) return this.triggers[exchangeSymbol]
+    budfox.on('candle', candle => trigger.onCandle(candle))
+    budfox.on('trade', trade => trigger.onTrade(trade))
+  }
 
-    // this.triggers[exchangeSymbol] = new BudFox(exchange, symbol)
-    // return this.triggers[exchangeSymbol]
+
+  private getTrigger (triggerDB: Triggers, budfox: BudFox) {
+    if (triggerDB.kind === 'stop-loss') return new StopLossTrigger(triggerDB)
   }
 
 
