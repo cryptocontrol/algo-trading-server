@@ -7,7 +7,7 @@ import NotAuthorizedError from 'src/errors/NotAuthorizedError'
 import triggers from './triggers'
 import plugins from './plugins'
 
-const packageJson = require('../../package.json')
+const packageJson = require('../../../package.json')
 const router = Router()
 
 
