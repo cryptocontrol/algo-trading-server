@@ -1,3 +1,4 @@
+import * as _ from 'underscore'
 import { Readable } from 'stream'
 
 import BaseExchange from 'src/exchanges/core/BaseExchange'
@@ -6,7 +7,6 @@ import MarketDataProvider from './marketDataProvider'
 import log from 'src/utils/log'
 import { ICandle } from 'src/interfaces'
 import Candles from 'src/database/models/candles'
-import { ITradesBatchEvent } from './tradeBatcher'
 
 
 /**
@@ -71,13 +71,9 @@ export default class BudFox extends Readable {
         exchange: this.exchange.name,
         symbol: this.symbol
       })
-      candle.save()
+
+      candle.save().catch(_.noop)
     })
-  }
-
-
-  private processTrades = (trades: ITradesBatchEvent) => {
-
   }
 
 

@@ -65,17 +65,20 @@ export default class MarketDataProvider extends EventEmitter {
       this.emit('market-start', e.first.timestamp)
     }
 
+    if (!e.trades) return
+
     this.emit('market-update', e.last.timestamp)
-    this.emit('trades', e)
+    this.emit('trades', e.trades)
     this.emit('trade', e.last)
 
+    // Add trades into the DB
     e.trades.forEach(trade => {
       const t = new Trades({
         exchange: this.exchange.name,
         price: trade.price,
         symbol: this.symbol,
         tradedAt: new Date(trade.timestamp),
-        tradeId: trade.id,
+        tradeId: String(trade.id),
         volume: trade.amount
       })
 
