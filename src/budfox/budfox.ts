@@ -1,10 +1,12 @@
-import { EventEmitter } from 'events'
-import { ICandle } from 'src/interfaces'
+import { Readable } from 'stream'
+
 import BaseExchange from 'src/exchanges/core/BaseExchange'
 import CandleCreator from './candleCreator'
 import MarketDataProvider from './marketDataProvider'
-import { Readable } from 'stream';
-import log from 'src/utils/log';
+import log from 'src/utils/log'
+import { ICandle } from 'src/interfaces'
+import Candles from 'src/database/models/candles'
+import { ITradesBatchEvent } from './tradeBatcher'
 
 
 /**
@@ -17,13 +19,17 @@ import log from 'src/utils/log';
  * @link https://github.com/askmike/gekko/blob/stable/docs/internals/budfox.md
  */
 export default class BudFox extends Readable {
-  marketDataProvider: MarketDataProvider
-  candlesCreator: CandleCreator
+  private readonly marketDataProvider: MarketDataProvider
+  private readonly candlesCreator: CandleCreator
+  private readonly exchange: BaseExchange
+  private readonly symbol: string
 
 
   constructor (exchange: BaseExchange, symbol: string) {
     super()
     log.debug('init budfox for', exchange.name, symbol)
+    this.exchange = exchange
+    this.symbol = symbol
 
     // init the different components
     this.marketDataProvider = new MarketDataProvider(exchange, symbol)
@@ -33,7 +39,8 @@ export default class BudFox extends Readable {
 
     // on new trade data create candles and stream it
     this.marketDataProvider.on('trades', this.candlesCreator.write)
-    this.candlesCreator.on('candles', candles => candles.forEach(c => this.push(c)))
+    this.candlesCreator.on('candles', this.processCandles)
+
 
     // relay a market-start, market-update and trade events
     this.marketDataProvider.on('market-start', e => this.emit('market-start', e))
@@ -43,5 +50,38 @@ export default class BudFox extends Readable {
 
     // once everything is connected, we start the market data provider
     this.marketDataProvider.start()
+  }
+
+
+  private processCandles = (candles: ICandle[]) => {
+    candles.forEach(c => {
+      // write to stream
+      this.push(JSON.stringify(c))
+
+      // save into the DB
+      const candle = new Candles({
+        open: c.open,
+        high: c.high,
+        low: c.low,
+        volume: c.volume,
+        close: c.close,
+        vwp: c.vwp,
+        start: c.start,
+        trades: c.trades,
+        exchange: this.exchange.name,
+        symbol: this.symbol
+      })
+      candle.save()
+    })
+  }
+
+
+  private processTrades = (trades: ITradesBatchEvent) => {
+
+  }
+
+
+  public _read () {
+    // do nothing
   }
 }

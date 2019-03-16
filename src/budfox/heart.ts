@@ -1,4 +1,3 @@
-import * as moment from 'moment'
 import * as _ from 'underscore'
 import { EventEmitter } from 'events'
 
@@ -27,23 +26,27 @@ export default class Heart extends EventEmitter {
   }
 
 
+  attack () {
+    log.debug('stopping ticks')
+    clearInterval(this.interval)
+  }
+
+
   private tick = () => {
     if (this.lastTick) {
-      // make sure the last tick happened not to lang ago
+      // make sure the last tick happened not too long ago
       // @link https://github.com/askmike/gekko/issues/514
-      if (this.lastTick < moment().unix() - this.tickrate * 3)
+      if (this.lastTick < Date.now() - this.tickrate * 3000)
         die('Failed to tick in time, see https://github.com/askmike/gekko/issues/514 for details', true)
     }
 
-    this.lastTick = moment().unix()
+    this.lastTick = Date.now()
     this.emit('tick')
   }
 
 
   private scheduleTicks () {
-    this.interval = setInterval(this.tick, +moment.duration(this.tickrate, 's'))
-
-    // start!
+    this.interval = setInterval(this.tick, this.tickrate * 1000)
     _.defer(this.tick)
   }
 }

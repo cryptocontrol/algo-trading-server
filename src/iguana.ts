@@ -19,8 +19,11 @@ export const start = () => {
   // connect all plugins \
 
   const budfox = new BudFox(exchanges[0], 'BTC/USDT')
-  // budfox.on('trade')
+  budfox.on('data', (chunk: Buffer) => {
+    console.log('data', chunk.toString())
+  })
 }
+
 // start all the exchanges listeners
 // const binance = new Binance()
 // binance.startListening()

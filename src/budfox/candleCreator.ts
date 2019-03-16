@@ -4,6 +4,7 @@ import { EventEmitter } from 'events'
 
 import { Trade } from 'ccxt'
 import { ICandle } from 'src/interfaces'
+import { ITradesBatchEvent } from './tradeBatcher';
 
 
 /**
@@ -26,8 +27,8 @@ export default class CandleCreator extends EventEmitter {
     this.buckets = {}
   }
 
-  write = (batch) => {
-    let trades = batch.data
+  write = (batch: ITradesBatchEvent) => {
+    let trades = batch.trades
 
     if(_.isEmpty(trades)) return
 
@@ -35,12 +36,14 @@ export default class CandleCreator extends EventEmitter {
     this.fillBuckets(trades)
 
     let candles = this.calculateCandles()
+    // console.log(candles)
     candles = this.addEmptyCandles(candles)
 
     if (_.isEmpty(candles)) return
 
     // the last candle is not complete
     this.threshold = candles.pop().start.unix()
+
 
     this.emit('candles', candles)
     this.emit('candle', _.last(candles))

@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize-typescript'
 
 import UserExchanges from './models/userexchanges'
-import log from 'src/utils/log';
+import log from 'src/utils/log'
+import Candles from './models/candles'
 
 
 const env = process.env.NODE_ENV || 'development'
@@ -30,7 +31,7 @@ export const init = () => {
   log.info('init database')
 
   const sequelize = new Sequelize(config)
-  sequelize.addModels([UserExchanges])
+  sequelize.addModels([UserExchanges, Candles])
   // sequelize.import('./models/userexchanges')
 
   return sequelize

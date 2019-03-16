@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Candles', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Candles', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,8 +9,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       start: {
-        uniqur: true,
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.DATE
       },
       open: {
         allowNull: false,
@@ -40,6 +40,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      exchange: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      symbol: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -49,7 +57,13 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
+
+    await queryInterface.addIndex('Candles', ['symbol', 'exchange', 'start'], {
+      type: 'unique',
+      name: 'symbol_exchange_start'
+    })
   },
+
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Candles');
   }
