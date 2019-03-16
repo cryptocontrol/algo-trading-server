@@ -22,16 +22,13 @@ export default class CandleCreator extends EventEmitter {
   private buckets: { [minute: string]: Trade[] } = {}
 
 
-  write = (batch: ITradesBatchEvent) => {
-    let trades = batch.trades
+  write = (batch: Trade[]) => {
+    const trades = this.filter(batch)
 
     if(_.isEmpty(trades)) return
-
-    trades = this.filter(trades)
     this.fillBuckets(trades)
 
     let candles = this.calculateCandles()
-    // console.log(candles)
     candles = this.addEmptyCandles(candles)
 
     if (_.isEmpty(candles)) return

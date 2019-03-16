@@ -1,5 +1,5 @@
 import Trigger from 'src/triggers/Trigger'
-import BudFox from 'src/budfox/budfox'
+import BudFox from 'src/budfox'
 
 
 interface IExchangeTriggers {

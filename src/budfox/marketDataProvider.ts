@@ -31,7 +31,7 @@ export default class MarketDataProvider extends EventEmitter {
     this.exchange = exchange
     this.symbol = symbol
 
-    this.heart = new Heart()
+    this.heart = new Heart
     this.batcher = new TradeBatcher
 
     // connect the heart to the fetch fn
@@ -59,12 +59,12 @@ export default class MarketDataProvider extends EventEmitter {
 
 
   private relayTrades = (e: ITradesBatchEvent) => {
+    if (!e.trades) return
+
     if (this.marketStarted) {
       this.marketStarted = true
       this.emit('market-start', e.first.timestamp)
     }
-
-    if (!e.trades) return
 
     this.emit('market-update', e.last.timestamp)
     this.emit('trades', e.trades)
@@ -94,7 +94,7 @@ export default class MarketDataProvider extends EventEmitter {
 
   private processTrades (trades: Trade[]) {
     if (_.isEmpty(trades)) {
-      log.debug('Trade fetch came back empty, refetching...')
+      log.debug('trade fetch came back empty, refetching...')
       // setTimeout(this._fetch, +moment.duration(1, 's'))
       return
     }

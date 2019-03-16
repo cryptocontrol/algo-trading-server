@@ -1,4 +1,4 @@
-import BudFox from 'src/budfox/budfox'
+import BudFox from 'src/budfox'
 import BaseExchange from 'src/exchanges/core/BaseExchange'
 
 
