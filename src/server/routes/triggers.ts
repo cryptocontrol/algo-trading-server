@@ -47,14 +47,4 @@ router.delete('/triggers/:exchange/:symbol/:id', async (req: IAppRequest, res) =
 })
 
 
-/**
- * Error handler
- */
-router.use((err, _req, res, _next) => {
-  console.log(err)
-  res.status(err.status || 500)
-  res.json({ error: err.message })
-})
-
-
 export default router

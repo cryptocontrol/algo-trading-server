@@ -4,6 +4,7 @@ import BaseExchange from 'src/exchanges/core/BaseExchange'
 import CandleCreator from './candleCreator'
 import MarketDataProvider from './marketDataProvider'
 import { Readable } from 'stream';
+import log from 'src/utils/log';
 
 
 /**
@@ -22,7 +23,7 @@ export default class BudFox extends Readable {
 
   constructor (exchange: BaseExchange, symbol: string) {
     super()
-    console.log('init budfox for', exchange.name, symbol)
+    log.debug('init budfox for', exchange.name, symbol)
 
     // init the different components
     this.marketDataProvider = new MarketDataProvider(exchange, symbol)

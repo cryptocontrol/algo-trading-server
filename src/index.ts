@@ -4,6 +4,7 @@
 import server from './server'
 import * as Iguana from './iguana'
 import * as Database from './database'
+import log from './utils/log';
 
 // init the database
 Database.init()
@@ -13,4 +14,4 @@ Iguana.start()
 
 // start the servers
 const port = process.env.PORT || 8080
-server.listen(port, () => console.log('listening on port', port))
+server.listen(port, () => log.info('listening on port', port))

@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript'
 
 import UserExchanges from './models/userexchanges'
+import log from 'src/utils/log';
 
 
 const env = process.env.NODE_ENV || 'development'
@@ -26,7 +27,7 @@ const config = require('./config.json')[env]
 
 
 export const init = () => {
-  console.log('init database')
+  log.info('init database')
 
   const sequelize = new Sequelize(config)
   sequelize.addModels([UserExchanges])
