@@ -21,6 +21,7 @@ export default class MarketDataProvider extends EventEmitter {
   private heart: Heart
   private marketStarted: boolean = false
   private symbol: string
+  private firstFetch: boolean = true
   private batcher: TradeBatcher
 
 
@@ -70,16 +71,17 @@ export default class MarketDataProvider extends EventEmitter {
 
 
   fetch = async () => {
-    let since = 0
+    let since
+
     // if (this.firstFetch) {
     //   since = this.firstSince
     //   this.firstFetch = false
-    // } else since = false
+    // }
 
     // this.tries = 0
     log.debug('Requested', this.symbol, 'trade data from', this.exchange.name, '...')
 
-    const trades = await this.exchange.getTrades(since, false)
+    const trades = await this.exchange.getTrades(this.symbol, since, false)
     this.processTrades(trades)
     // .catch(e => {
     //   log.warn(this.exchange.name, 'returned an error while fetching trades:', e)

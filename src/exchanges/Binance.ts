@@ -20,4 +20,9 @@ export default class Binance extends BaseExchange {
   public canStreamTrades (_symbol: string): boolean {
     return true
   }
+
+
+  public getTrades (_symbol: string, _since: number, _descending: boolean): Promise<ccxt.Trade[]> {
+    return Promise.resolve([])
+  }
 }

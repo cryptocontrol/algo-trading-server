@@ -1,3 +1,6 @@
+/**
+ * This is the starting point of the application. Here we initialize the database and start the server..
+ */
 import server from './server'
 import Binance from './exchanges/Binance'
 import * as Database from './database'

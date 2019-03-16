@@ -32,7 +32,7 @@ export default abstract class BaseExchange extends EventEmitter {
   protected abstract startListening (): void
 
 
-  public getTrades = (since: number, descending: boolean): ccxt.Trade[] => { return [] }
+  public abstract getTrades (symbol: string, since: number, descending: boolean): Promise<ccxt.Trade[]>
 
 
   /**

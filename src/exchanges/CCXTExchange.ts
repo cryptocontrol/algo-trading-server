@@ -13,4 +13,9 @@ export default class CCXTExchange extends BaseExchange {
   public canStreamTrades(_symbol: string): boolean {
     return false
   }
+
+
+  public async getTrades (symbol: string, since: number, descending: boolean) {
+    return await this.exchange.fetchTrades(symbol, since)
+  }
 }
