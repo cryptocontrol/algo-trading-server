@@ -3,24 +3,27 @@ import BudFox from 'src/budfox/budfox'
 
 
 interface IExchangeTriggers {
-  [exchange: string]: {
-    [symbol: string]: Trigger[]
-  }
+  [exchangeSymbol: string]: Trigger[]
 }
 
 
-class TriggerManger {
-  triggers: IExchangeTriggers = {}
+export default class TriggerManger {
+  private triggers: IExchangeTriggers = {}
 
 
   constructor (budfox: BudFox) {
-    budfox.on('data', (chunk) => {
-
+    budfox.on('data', (chunk: Buffer) => {
+      // const
     })
   }
 
 
   addTrigger (trigger: Trigger) {
+    // const exchangeSymbol = `${triggerexchange.name}-${symbol}`
 
+    // if (this.triggers[exchangeSymbol]) return this.triggers[exchangeSymbol]
+
+    // this.triggers[exchangeSymbol] = new BudFox(exchange, symbol)
+    // return this.triggers[exchangeSymbol]
   }
 }

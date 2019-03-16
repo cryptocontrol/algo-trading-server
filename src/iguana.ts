@@ -5,6 +5,7 @@ import { Exchange } from 'ccxt'
 import * as ccxt from 'ccxt'
 import CCXTExchange from './exchanges/CCXTExchange'
 import BudFox from './budfox/budfox';
+import BudfoxManger from './managers/BudfoxManager';
 
 const enabledExchanges = ['binance']
 
@@ -18,12 +19,7 @@ export const start = () => {
 
   // connect all plugins \
 
-  const budfox = new BudFox(exchanges[0], 'BTC/USDT')
-  budfox.on('data', (chunk: Buffer) => {
-    console.log('data', chunk.toString())
-  })
+  // Create the budfox manager and add budfoxes
+  const bmanager = new BudfoxManger()
+  bmanager.addBudfox(exchanges[0], 'BTC/USDT')
 }
-
-// start all the exchanges listeners
-// const binance = new Binance()
-// binance.startListening()

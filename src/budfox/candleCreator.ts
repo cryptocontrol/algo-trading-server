@@ -1,10 +1,10 @@
 import * as moment from 'moment'
 import * as _ from 'underscore'
 import { EventEmitter } from 'events'
-
 import { Trade } from 'ccxt'
+
 import { ICandle } from 'src/interfaces'
-import { ITradesBatchEvent } from './tradeBatcher';
+import { ITradesBatchEvent } from './tradeBatcher'
 
 
 /**
@@ -16,16 +16,11 @@ import { ITradesBatchEvent } from './tradeBatcher';
  */
 export default class CandleCreator extends EventEmitter {
   private lastTrade: Trade
-  private buckets: { [minute: string]: Trade[] } = {}
   private threshold: number = 0
 
+  // This also holds the leftover between fetches
+  private buckets: { [minute: string]: Trade[] } = {}
 
-  constructor () {
-    super()
-
-    // This also holds the leftover between fetches
-    this.buckets = {}
-  }
 
   write = (batch: ITradesBatchEvent) => {
     let trades = batch.trades
@@ -43,7 +38,6 @@ export default class CandleCreator extends EventEmitter {
 
     // the last candle is not complete
     this.threshold = candles.pop().start.unix()
-
 
     this.emit('candles', candles)
     this.emit('candle', _.last(candles))
