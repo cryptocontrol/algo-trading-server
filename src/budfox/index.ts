@@ -86,9 +86,11 @@ export default class BudFox extends Readable {
         price: t.price,
         symbol: this.symbol,
         tradedAt: new Date(t.timestamp),
+        side: t.side,
         tradeId: String(t.id),
         volume: t.amount
       })
+
 
       trade.save().catch(_.noop)
     })

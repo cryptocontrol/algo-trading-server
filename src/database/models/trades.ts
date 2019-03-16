@@ -20,4 +20,7 @@ export default class Trades extends Model<Trades> {
 
   @Column
   tradeId: string
+
+  @Column
+  side: string
 }

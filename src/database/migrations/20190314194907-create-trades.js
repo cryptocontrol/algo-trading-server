@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Trades', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Trades', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -28,6 +28,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      side: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       tradedAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -40,7 +44,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    })
+
+
+    await queryInterface.addIndex('Trades', ['symbol', 'exchange', 'tradeId'], {
+      type: 'unique',
+      name: 'symbol_exchange_tid'
+    })
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Trades')
