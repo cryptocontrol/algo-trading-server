@@ -1,6 +1,7 @@
 import * as _ from 'underscore'
 
 import Triggers from 'src/database/models/triggers'
+import TriggerManger from 'src/managers/TriggerManager';
 
 
 /**
@@ -20,6 +21,10 @@ export const createTrigger = async (uid: string, exchange: string, symbol: strin
   })
 
   await trigger.save()
+
+  // once the trigger is created, we start tracking it in our DB
+  TriggerManger.getInstance().addTrigger(trigger)
+
   return trigger
 }
 

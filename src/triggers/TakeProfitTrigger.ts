@@ -12,7 +12,8 @@ export default class TakeProfitTrigger extends BaseTrigger {
     // if price reaches or goes above the take profit price, then
     // we close the position
     if (price >= this.triggerDB.targetPrice) {
-      this.advice('close-position', this.triggerDB.targetPrice, this.triggerDB.targetVolume)
+      const targetPrice = Math.max(this.triggerDB.targetPrice, price)
+      this.advice('close-position', targetPrice, this.triggerDB.targetVolume)
       this.close()
     }
   }

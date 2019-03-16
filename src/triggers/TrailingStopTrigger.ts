@@ -20,9 +20,10 @@ export default class TrailingStopTrigger extends BaseTrigger {
   constructor (trigger: Triggers) {
     super(trigger)
 
-    this.trail = trigger.params.trail
-    this.previousPrice = trigger.params.initialPrice
-    this.trailingPoint = trigger.params.initialPrice - this.trail
+    const params = JSON.parse(trigger.params)
+    this.trail = params.trail
+    this.previousPrice = params.initialPrice
+    this.trailingPoint = params.initialPrice - this.trail
   }
 
 
@@ -35,8 +36,8 @@ export default class TrailingStopTrigger extends BaseTrigger {
     this.previousPrice = price
 
     if (price <= this.trailingPoint) {
-      this.isLive = false
-      // this.trigger(this.previousPrice)
+      this.advice('close-position', price, this.triggerDB.targetVolume)
+      this.close()
     }
   }
 
