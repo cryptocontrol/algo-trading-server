@@ -1,4 +1,4 @@
-import BaseStrategy from './Strategy'
+import BaseStrategy from './BaseStrategy'
 import RSI from '../indicators/RSI'
 import log from '../utils/log'
 

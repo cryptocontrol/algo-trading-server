@@ -1,9 +1,9 @@
-import Trigger from 'src/triggers/Trigger'
+import BaseTrigger from 'src/triggers/BaseTrigger'
 import BudFox from 'src/budfox'
 
 
 interface IExchangeTriggers {
-  [exchangeSymbol: string]: Trigger[]
+  [exchangeSymbol: string]: BaseTrigger[]
 }
 
 
@@ -18,7 +18,7 @@ export default class TriggerManger {
   }
 
 
-  addTrigger (trigger: Trigger) {
+  addTrigger (trigger: BaseTrigger) {
     // const exchangeSymbol = `${triggerexchange.name}-${symbol}`
 
     // if (this.triggers[exchangeSymbol]) return this.triggers[exchangeSymbol]

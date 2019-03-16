@@ -3,7 +3,7 @@ import * as debug from 'debug'
 import * as _ from 'underscore'
 
 import * as Controller from '../../database2'
-import BaseStrategy from '../../strategies/Strategy'
+import BaseStrategy from '../../strategies/BaseStrategy'
 import StopLossStrategy from '../../strategies/StopLossStrategy'
 import { EventEmitter } from 'events'
 

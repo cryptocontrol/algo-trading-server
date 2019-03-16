@@ -1,7 +1,7 @@
-import Trigger from './Trigger'
+import BaseTrigger from './BaseTrigger'
 
 
-export default class TrailingStop extends Trigger {
+export default class TrailingStop extends BaseTrigger {
   previousPrice: number
   trail: number
   trailingPoint: number

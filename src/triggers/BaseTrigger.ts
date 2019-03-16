@@ -7,7 +7,7 @@ import * as EventEmitter from 'events'
 // @param initialPrice: initial price, preferably buy price
 // @param trail: fixed offset from the price
 // @param onTrigger: fn to call when the stop triggers
-export default abstract class Trigger extends EventEmitter {
+export default abstract class BaseTrigger extends EventEmitter {
   protected isLive: boolean = true
 
   // constructor({ trail, initialPrice, onTrigger }) {
