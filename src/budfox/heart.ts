@@ -27,7 +27,7 @@ export default class Heart extends EventEmitter {
   }
 
 
-  tick () {
+  private tick = () => {
     if (this.lastTick) {
       // make sure the last tick happened not to lang ago
       // @link https://github.com/askmike/gekko/issues/514
@@ -40,7 +40,7 @@ export default class Heart extends EventEmitter {
   }
 
 
-  scheduleTicks () {
+  private scheduleTicks () {
     this.interval = setInterval(this.tick, +moment.duration(this.tickrate, 's'))
 
     // start!

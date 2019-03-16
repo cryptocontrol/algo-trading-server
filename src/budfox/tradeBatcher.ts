@@ -1,4 +1,5 @@
 import * as _ from 'underscore'
+import * as moment from 'moment'
 import { EventEmitter } from 'events'
 
 import log from 'src/utils/log'
@@ -28,14 +29,17 @@ export default class TradeBatcher extends EventEmitter {
     if (trades.length === 0) return log.debug('Trade fetch came back empty.')
 
     // filter and count trades
-    const filterBatch = this.filter(trades)
-    const count = _.size(filterBatch)
-    if (!count) return log.debug('No new trades.')
+    const filteredBatch = this.filter(trades)
+    const count = filteredBatch.length
+    if (count === 0) return log.debug('No new trades.')
 
     // pick first & last trades
-    const last = _.last(trades)
-    const first = _.first(trades)
-    log.debug(`Processing ${count} new trades from ${first.timestamp} UTC to ${last.timestamp} UTC`)
+    const last = _.last(filteredBatch)
+    const first = _.first(filteredBatch)
+
+    const firstDate = moment(first.timestamp), lastDate = moment(last.timestamp)
+    log.debug(`Processing ${count} new trades from ${first.timestamp} UTC to ${last.timestamp} UTC ` +
+      `(${firstDate.from(lastDate, true)})`)
 
     // log.debug(
     //   'Processing', amount, 'new trades.',
@@ -53,7 +57,7 @@ export default class TradeBatcher extends EventEmitter {
       end: last.timestamp,
       last,
       first,
-      trades
+      trades: filteredBatch
     })
 
     this.lastTrade = last
@@ -69,6 +73,7 @@ export default class TradeBatcher extends EventEmitter {
     // weed out known trades
     // TODO: optimize by stopping as soon as the
     // first trade is too old (reverse first)
-    return _.filter(batch, trade => this.lastTrade.timestamp < trade.timestamp)
+    if (this.lastTrade) return _.filter(batch, trade => this.lastTrade.timestamp < trade.timestamp)
+    return batch
   }
 }

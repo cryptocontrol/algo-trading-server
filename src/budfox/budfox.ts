@@ -42,6 +42,6 @@ export default class BudFox extends Readable {
     this.marketDataProvider.on('trades', e => this.emit('trades', e))
 
     // once everything is connected, we start the market data provider
-    // this.marketDataProvider.start()
+    this.marketDataProvider.start()
   }
 }
