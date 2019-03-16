@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('UserExchanges', {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable('Triggers', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,16 +16,31 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      apiKey: {
+      symbol: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      apiSecret: {
+      orderId: {
+        type: Sequelize.STRING
+      },
+      kind: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      apiPassword: {
-        type: Sequelize.STRING
+      targetPrice: {
+        type: Sequelize.DOUBLE,
+      },
+      hasTriggered: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      params: {
+        type: Sequelize.STRING,
+      },
+      triggeredAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -36,13 +51,8 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
-
-    await queryInterface.addIndex('UserExchanges', ['uid', 'exchange'], {
-      type: 'unique',
-      name: 'uid_exchange'
-    })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('UserExchanges');
+    return queryInterface.dropTable('Triggers')
   }
-};
+}

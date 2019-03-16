@@ -20,7 +20,8 @@ export default class BudfoxManger {
     this.budfoxes[exchangeSymbol] = budfox
 
     budfox.on('data', (chunk: Buffer) => {
-      console.log('exchangeSymbol', chunk.toString())
+      const candle = JSON.parse(chunk.toString())
+      console.log('exchangeSymbol', candle)
     })
 
     return budfox
