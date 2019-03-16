@@ -6,13 +6,13 @@ import Triggers from 'src/database/models/triggers'
 /**
  * create a new trigger for a user
  */
-export const createTrigger = async (uid: string, exchange: string, symbol: string, strategy: string, params: any) => {
+export const createTrigger = async (uid: string, exchange: string, symbol: string, kind: string, params: any) => {
   const trigger = new Triggers({
     uid,
     symbol,
     exchange,
-    strategy,
-    price: params.price,
+    kind,
+    targetPrice: params.price,
     params: JSON.stringify(params)
   })
 
@@ -25,7 +25,7 @@ export const createTrigger = async (uid: string, exchange: string, symbol: strin
  * get all existing triggers for a user
  */
 export const getTriggers = async (uid: string) => {
-  const triggers = await Triggers.find({ where: { uid } })
+  const triggers = await Triggers.findAll({ where: { uid } })
   return triggers
 }
 

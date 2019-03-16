@@ -21,7 +21,7 @@ export default class BudfoxManger {
 
     budfox.on('data', (chunk: Buffer) => {
       const candle = JSON.parse(chunk.toString())
-      console.log('exchangeSymbol', candle)
+      // console.log('exchangeSymbol', candle)
     })
 
     return budfox

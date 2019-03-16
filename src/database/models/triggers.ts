@@ -10,7 +10,7 @@ export default class Triggers extends Model<Triggers> {
   exchange: string
 
   @Column
-  price: number
+  targetPrice: number
 
   @Column
   uid: string
@@ -20,9 +20,6 @@ export default class Triggers extends Model<Triggers> {
 
   @Column
   triggeredAt: Date
-
-  @Column
-  strategy: string
 
   @Column
   params: string
