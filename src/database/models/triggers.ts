@@ -13,13 +13,19 @@ export default class Triggers extends Model<Triggers> {
   price: number
 
   @Column
-  uid: number
+  uid: string
 
   @Column
   kind: string
 
   @Column
   triggeredAt: Date
+
+  @Column
+  strategy: string
+
+  @Column
+  params: string
 
   @Column
   hasTriggered: boolean

@@ -1,47 +1,39 @@
-import { Router } from 'express'
 import * as _ from 'underscore'
 
-import { IAppRequest } from 'src/interfaces'
-import * as Database from '../../database2'
-
-const router = Router()
+import Triggers from 'src/database/models/triggers'
 
 
 /**
  * create a new trigger for a user
  */
-router.post('/triggers/:exchange/:symbol/:strategy', async (req: IAppRequest, res) => {
-  const uid = req.uid
-  const symbol = req.params.symbol
-  const exchange = req.params.exchange
-  const strategy = req.params.strategy
-  const params = req.body
+export const createTrigger = async (uid: string, exchange: string, symbol: string, strategy: string, params: any) => {
+  const trigger = new Triggers({
+    uid,
+    symbol,
+    exchange,
+    strategy,
+    price: params.price,
+    params: JSON.stringify(params)
+  })
 
-  const trigger = await Database.addTrigger(uid, symbol, exchange, strategy, params)
-  res.json({ trigger, success: true })
-})
+  await trigger.save()
+  return trigger
+}
 
 
 /**
  * get all existing triggers for a user
  */
-router.get('/triggers', async (req: IAppRequest, res) => res.json(await Database.getTriggersForUser(req.uid)))
+export const getTriggers = async (uid: string) => {
+  const triggers = await Triggers.find({ where: { uid } })
+  return triggers
+}
 
 
 /**
  * Delete a specific trigger
  */
-router.delete('/triggers/:exchange/:symbol/:id', async (req: IAppRequest, res) => {
-  const uid = req.uid
-  const symbol = req.params.symbol
-  const exchange = req.params.exchange
-  const id = req.params.id
-
-  const trigger = await Database.getTrigger(exchange, symbol, id)
-
-  if (!trigger) throw new Error('no such trigger')
-  if (trigger.uid !== uid) throw new Error('not your trigger')
-
-  await Database.deleteTrigger(exchange, symbol, id)
-  res.json({ success: true })
-})
+export const deleteTrigger = async (uid: string, id: number) => {
+  const triggers = await Triggers.findOne({ where: { uid, id } })
+  if (triggers) triggers.destroy()
+}
