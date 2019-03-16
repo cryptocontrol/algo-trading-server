@@ -1,12 +1,14 @@
 import * as _ from 'underscore'
 import { Readable } from 'stream'
+import { Trade } from 'ccxt'
 
+import { ICandle } from 'src/interfaces'
 import BaseExchange from 'src/exchanges/core/BaseExchange'
 import CandleCreator from './candleCreator'
-import MarketDataProvider from './marketDataProvider'
-import log from 'src/utils/log'
-import { ICandle } from 'src/interfaces'
 import Candles from 'src/database/models/candles'
+import log from 'src/utils/log'
+import MarketDataProvider from './marketDataProvider'
+import Trades from 'src/database/models/trades'
 
 
 /**
@@ -46,7 +48,7 @@ export default class BudFox extends Readable {
     this.marketDataProvider.on('market-start', e => this.emit('market-start', e))
     this.marketDataProvider.on('market-update', e => this.emit('market-update', e))
     this.marketDataProvider.on('trade', e => this.emit('trade', e))
-    this.marketDataProvider.on('trades', e => this.emit('trades', e))
+    this.marketDataProvider.on('trades', this.processTrades)
 
     // once everything is connected, we start the market data provider
     this.marketDataProvider.start()
@@ -73,6 +75,22 @@ export default class BudFox extends Readable {
       })
 
       candle.save().catch(_.noop)
+    })
+  }
+
+
+  private processTrades = (trades: Trade[]) => {
+    trades.forEach(t => {
+      const trade = new Trades({
+        exchange: this.exchange.name,
+        price: t.price,
+        symbol: this.symbol,
+        tradedAt: new Date(t.timestamp),
+        tradeId: String(t.id),
+        volume: t.amount
+      })
+
+      trade.save().catch(_.noop)
     })
   }
 
