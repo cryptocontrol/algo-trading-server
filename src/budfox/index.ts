@@ -24,13 +24,13 @@ import { EventEmitter } from 'events'
 export default class BudFox extends EventEmitter {
   private readonly marketDataProvider: MarketDataProvider
   private readonly candlesCreator: CandleCreator
-  private readonly exchange: BaseExchange
-  private readonly symbol: string
+  public readonly exchange: BaseExchange
+  public readonly symbol: string
 
 
   constructor (exchange: BaseExchange, symbol: string) {
     super()
-    log.debug('init budfox for', exchange.name, symbol)
+    log.debug('init budfox for', exchange.id, symbol)
     this.exchange = exchange
     this.symbol = symbol
 
@@ -70,7 +70,7 @@ export default class BudFox extends EventEmitter {
         vwp: c.vwp,
         start: c.start,
         trades: c.trades,
-        exchange: this.exchange.name,
+        exchange: this.exchange.id,
         symbol: this.symbol
       })
 
@@ -84,7 +84,7 @@ export default class BudFox extends EventEmitter {
       this.emit('trade', t)
 
       const trade = new Trades({
-        exchange: this.exchange.name,
+        exchange: this.exchange.id,
         price: t.price,
         symbol: this.symbol,
         tradedAt: new Date(t.timestamp),
@@ -100,5 +100,14 @@ export default class BudFox extends EventEmitter {
 
   public _read () {
     // do nothing
+  }
+
+
+  /**
+   * Stop budfox
+   */
+  public murder () {
+    log.debug('murdered budfox for', this.exchange.id, this.symbol)
+    this.marketDataProvider.stop()
   }
 }

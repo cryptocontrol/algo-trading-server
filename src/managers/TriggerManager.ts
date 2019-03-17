@@ -26,13 +26,27 @@ export default class TriggerManger {
     const trigger = this.getTrigger(t)
     if (!trigger) return
 
+    const exchangeSymbol = `${t.exchange}-${t.symbol}`
     const budfox = this.manager.getBudfox(t.exchange, t.symbol)
 
     budfox.on('candle', candle => trigger.onCandle(candle))
     budfox.on('trade', trade => trigger.onTrade(trade))
 
-    // todo; handle a remove
-    // trigger.on('close', )
+    // once a trigger has finished
+    trigger.on('close', () => {
+      // we remove the trigger from the array of triggers
+      const exchangeSymbolTriggers = this.triggers[exchangeSymbol] || []
+      const index = exchangeSymbolTriggers.indexOf(trigger)
+      if (index === -1) return
+      this.triggers[exchangeSymbol].splice(index, 1)
+
+      // and remove budfox if there are no more triggers left
+      if (this.triggers[exchangeSymbol].length === 0) this.manager.removeBudfox(budfox)
+    })
+
+    const exchangeSymbolTriggers = this.triggers[exchangeSymbol] || []
+    exchangeSymbolTriggers.push(trigger)
+    this.triggers[exchangeSymbol] = exchangeSymbolTriggers
   }
 
 

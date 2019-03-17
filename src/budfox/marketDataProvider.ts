@@ -58,6 +58,10 @@ export default class MarketDataProvider extends EventEmitter {
   }
 
 
+  public stop () {
+    this.heart.attack()
+  }
+
   private relayTrades = (e: ITradesBatchEvent) => {
     if (!e.trades) return
 
@@ -81,7 +85,7 @@ export default class MarketDataProvider extends EventEmitter {
     // }
 
     // this.tries = 0
-    log.debug('Requested', this.symbol, 'trade data from', this.exchange.name, '...')
+    log.debug('Requested', this.symbol, 'trade data from', this.exchange.id, '...')
 
     const trades = await this.exchange.getTrades(this.symbol, since, false)
     this.processTrades(trades)

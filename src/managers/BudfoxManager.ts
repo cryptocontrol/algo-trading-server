@@ -1,5 +1,6 @@
 import BudFox from 'src/budfox'
 import ExchangeManger from './ExchangeManager'
+import log from 'src/utils/log';
 
 
 interface IBudfoxes {
@@ -19,6 +20,7 @@ export default class BudfoxManger {
     if (this.budfoxes[exchangeSymbol]) return this.budfoxes[exchangeSymbol]
 
     const exchange = this.manager.getExchange(exchangeId)
+    log.debug('creating budfox for', exchange.id, symbol)
 
     const budfox = new BudFox(exchange, symbol)
     this.budfoxes[exchangeSymbol] = budfox
@@ -27,21 +29,14 @@ export default class BudfoxManger {
   }
 
 
-  // addBudfox (exchange: BaseExchange, symbol: string): BudFox {
-  //   const exchangeSymbol = `${exchange.name}-${symbol}`
+  removeBudfox (budfox: BudFox) {
+    log.debug('removing budfox for', budfox.exchange.id, budfox.symbol)
 
-  //   if (this.budfoxes[exchangeSymbol]) return this.budfoxes[exchangeSymbol]
+    const exchangeSymbol = `${budfox.exchange.id}-${budfox.symbol}`
+    if (this.budfoxes[exchangeSymbol]) delete this.budfoxes[exchangeSymbol]
+    budfox.murder()
+  }
 
-  //   const budfox = new BudFox(exchange, symbol)
-  //   this.budfoxes[exchangeSymbol] = budfox
-
-  //   budfox.on('data', (chunk: Buffer) => {
-  //     const candle = JSON.parse(chunk.toString())
-  //     // console.log('exchangeSymbol', candle)
-  //   })
-
-  //   return budfox
-  // }
 
   static getInstance () {
     return BudfoxManger.instance

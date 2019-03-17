@@ -20,13 +20,13 @@ export default class Heart extends EventEmitter {
   }
 
 
-  pump () {
+  public pump () {
     log.debug('scheduling ticks')
     this.scheduleTicks()
   }
 
 
-  attack () {
+  public attack () {
     log.debug('stopping ticks')
     clearInterval(this.interval)
   }

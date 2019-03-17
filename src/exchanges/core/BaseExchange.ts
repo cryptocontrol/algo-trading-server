@@ -7,7 +7,7 @@ import { EventEmitter } from 'events'
 
 
 export default abstract class BaseExchange extends EventEmitter {
-  public readonly name: string
+  public readonly id: string
   protected exchange: ccxt.Exchange
   protected strategies: BaseStrategy[] = []
 
@@ -16,7 +16,7 @@ export default abstract class BaseExchange extends EventEmitter {
     super()
 
     this.exchange = exchange
-    this.name = exchange.name
+    this.id = exchange.id
   }
 
 
@@ -46,5 +46,10 @@ export default abstract class BaseExchange extends EventEmitter {
     // 2. start listening for price changes
     this.startListening()
     //this.onPriceUpdate()
+  }
+
+
+  public toString () {
+    return this.exchange.id
   }
 }
