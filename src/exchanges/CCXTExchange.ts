@@ -5,8 +5,8 @@ import BaseExchange from './core/BaseExchange'
 
 
 export default class CCXTExchange extends BaseExchange {
-  protected startListening(): void {
-    throw new Error("Method not implemented.");
+  public streamTrades (_symbol: string): void {
+    throw new Error("Method not implemented.")
   }
 
 

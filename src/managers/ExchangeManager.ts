@@ -1,6 +1,8 @@
+import * as ccxt from 'ccxt'
+
 import BaseExchange from 'src/exchanges/core/BaseExchange'
 import CCXTExchange from 'src/exchanges/CCXTExchange'
-import * as ccxt from 'ccxt'
+import BinanceExchange from 'src/exchanges/BinanceExchange'
 
 
 interface IExchanges {
@@ -19,10 +21,16 @@ export default class ExchangeManger {
     // create a CCXT instance for each exchange; (note that the enableRateLimit should be enabled)
     const ccxtExchange = new ccxt[exchangeId]({ enableRateLimit: true })
 
-    const exchange = new CCXTExchange(ccxtExchange)
+    const exchange = this.createBaseExchangeInstance(ccxtExchange)
     this.exchanges[exchangeId] = exchange
 
     return exchange
+  }
+
+
+  createBaseExchangeInstance (exchange: ccxt.Exchange) {
+    if (exchange.id === 'binance') return new BinanceExchange()
+    return new CCXTExchange(exchange)
   }
 
 

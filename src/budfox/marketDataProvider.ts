@@ -49,7 +49,12 @@ export default class MarketDataProvider extends EventEmitter {
     // check if the exchange has streaming capabilities
     if (this.exchange.canStreamTrades(this.symbol)) {
       // then we start streaming trades in real-time
-      this.exchange.on('trade', e => this.processTrades([e]))
+      this.exchange.on('trade', (trade: Trade) => {
+        if (trade.symbol === this.symbol) this.processTrades([trade])
+      })
+
+      this.exchange.streamTrades(this.symbol)
+
       return
     }
 
@@ -61,6 +66,7 @@ export default class MarketDataProvider extends EventEmitter {
   public stop () {
     this.heart.attack()
   }
+
 
   private relayTrades = (e: ITradesBatchEvent) => {
     if (!e.trades) return
