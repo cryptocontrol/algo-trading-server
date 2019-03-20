@@ -40,6 +40,11 @@ export default abstract class BaseTrigger extends EventEmitter {
   }
 
 
+  public getUID () {
+    return this.triggerDB.uid
+  }
+
+
   protected advice (advice: IAdvice, price: number, amount: number) {
     // do nothing
     const trigger = this.triggerDB
@@ -52,6 +57,8 @@ export default abstract class BaseTrigger extends EventEmitter {
     trigger.hasTriggered = true
     trigger.lastTriggeredAt = new Date
     trigger.save()
+
+    this.emit('triggered', { advice, price, amount })
   }
 
 

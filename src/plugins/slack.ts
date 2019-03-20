@@ -1,9 +1,10 @@
 import * as _ from 'underscore'
 
 import { IAdvice } from 'src/interfaces'
+import BasePlugin from './BasePlugin'
+import BaseTrigger from 'src/triggers/BaseTrigger'
 import log from '../utils/log'
-import Plugin from './Plugin'
-import BaseTrigger from 'src/triggers/BaseTrigger';
+import Plugins from 'src/database/models/plugins';
 
 
 const WebClient = require('@slack/client').WebClient
@@ -17,7 +18,7 @@ interface ISlackOptions {
 }
 
 
-export default class SlackPlugin extends Plugin<ISlackOptions> {
+export default class SlackPlugin extends BasePlugin<ISlackOptions> {
   public readonly name = 'Slack'
   public readonly description = 'Sends notifications to slack channel.'
   public readonly version = 1
@@ -25,8 +26,8 @@ export default class SlackPlugin extends Plugin<ISlackOptions> {
   private readonly slack: any
 
 
-  constructor (uid: string, options?: ISlackOptions) {
-    super(uid, options)
+  constructor (pluginDB: Plugins, options?: ISlackOptions) {
+    super(pluginDB, pluginDB.uid, options)
     this.slack = new WebClient(options.token)
 
     if (options.sendMessageOnStart){

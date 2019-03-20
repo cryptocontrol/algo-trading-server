@@ -1,5 +1,6 @@
 import BaseTrigger from 'src/triggers/BaseTrigger'
 import BudfoxManger from './BudfoxManager'
+import PluginsManager from './PluginsManager'
 import StopLossTrigger from 'src/triggers/StopLossTrigger'
 import TakeProfitTrigger from 'src/triggers/TakeProfitTrigger'
 import Triggers from 'src/database/models/triggers'
@@ -13,6 +14,8 @@ interface IExchangeTriggers {
 export default class TriggerManger {
   private readonly triggers: IExchangeTriggers = {}
   private readonly manager = BudfoxManger.getInstance()
+  private readonly pluginmanager = PluginsManager.getInstance()
+
   private static readonly instance = new TriggerManger()
 
 
@@ -31,6 +34,13 @@ export default class TriggerManger {
 
     budfox.on('candle', candle => trigger.onCandle(candle))
     budfox.on('trade', trade => trigger.onTrade(trade))
+
+    // whenever a trigger executes
+    trigger.on('triggered', ({ advice, price, amount }) => {
+      // notify all the plugins for this user...
+      this.pluginmanager.onTrigger(trigger, advice, price, amount)
+    })
+
 
     // once a trigger has finished
     trigger.on('close', () => {

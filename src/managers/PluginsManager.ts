@@ -1,60 +1,46 @@
 import BaseTrigger from 'src/triggers/BaseTrigger'
-import BudfoxManger from './BudfoxManager'
-import StopLossTrigger from 'src/triggers/StopLossTrigger'
-import TakeProfitTrigger from 'src/triggers/TakeProfitTrigger'
-import Triggers from 'src/database/models/triggers'
+import BasePlugin from 'src/plugins/BasePlugin'
+import { IAdvice } from 'src/interfaces';
 import Plugins from 'src/database/models/plugins';
+import SlackPlugin from 'src/plugins/slack';
+import TelegramPlugin from 'src/plugins/telegram';
 
 
-interface IExchangeTriggers {
-  [exchangeSymbol: string]: BaseTrigger[]
+interface IPlugins {
+  [exchangeSymbol: string]: BasePlugin<any>[]
 }
 
 
 export default class PluginsManager {
-  private readonly triggers: IExchangeTriggers = {}
-  private readonly manager = BudfoxManger.getInstance()
+  private readonly plugins: IPlugins = {}
   private static readonly instance = new PluginsManager()
 
 
-  async loadTriggers () {
-    const activeTriggers = await Plugins.findAll({ where: { isActive: true }})
-    activeTriggers.forEach(t => this.addTrigger(t))
+  public async loadPlugins () {
+    const plugins = await Plugins.findAll({ where: { isActive: true }})
+    plugins.forEach(p => this.registerPlugin(p))
   }
 
 
-  public addTrigger (t: Triggers) {
-    const trigger = this.getTrigger(t)
-    if (!trigger) return
-
-    const exchangeSymbol = `${t.exchange}-${t.symbol}`
-    const budfox = this.manager.getBudfox(t.exchange, t.symbol)
-
-    budfox.on('candle', candle => trigger.onCandle(candle))
-    budfox.on('trade', trade => trigger.onTrade(trade))
-
-    // once a trigger has finished
-    trigger.on('close', () => {
-      // we remove the trigger from the array of triggers
-      const exchangeSymbolTriggers = this.triggers[exchangeSymbol] || []
-      const index = exchangeSymbolTriggers.indexOf(trigger)
-      if (index === -1) return
-      this.triggers[exchangeSymbol].splice(index, 1)
-
-      // and remove budfox if there are no more triggers left
-      if (this.triggers[exchangeSymbol].length === 0) this.manager.removeBudfox(budfox)
-    })
-
-    const exchangeSymbolTriggers = this.triggers[exchangeSymbol] || []
-    exchangeSymbolTriggers.push(trigger)
-    this.triggers[exchangeSymbol] = exchangeSymbolTriggers
+  public onTrigger (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
+    const triggers = this.plugins[trigger.getUID()] || []
+    triggers.forEach(t => t.onTriggered(trigger, advice, price, amount))
   }
 
 
-  private getTrigger (triggerDB: Triggers) {
-    if (triggerDB.kind === 'stop-loss') return new StopLossTrigger(triggerDB)
-    if (triggerDB.kind === 'take-profit') return new TakeProfitTrigger(triggerDB)
-    if (triggerDB.kind === 'trailing-stop') return new TakeProfitTrigger(triggerDB)
+  public registerPlugin (p: Plugins) {
+    const plugin = this.getPlugin(p)
+    if (!plugin) return
+
+    const userplugins = this.plugins[p.uid] || []
+    userplugins.push(plugin)
+    this.plugins[p.uid] = userplugins
+  }
+
+
+  private getPlugin (plugin: Plugins) {
+    if (plugin.kind === 'slack') return new SlackPlugin(plugin, JSON.parse(plugin.config))
+    if (plugin.kind === 'telegram') return new TelegramPlugin(plugin, JSON.parse(plugin.config))
   }
 
 

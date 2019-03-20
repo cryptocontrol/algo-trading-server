@@ -1,6 +1,6 @@
 import { IAdvice } from 'src/interfaces'
-import Triggers from 'src/database/models/triggers';
-import BaseTrigger from 'src/triggers/BaseTrigger';
+import BaseTrigger from 'src/triggers/BaseTrigger'
+import Plugins from 'src/database/models/plugins';
 
 /**
  * A plugin is something that integrates with the trader; It can't be used
@@ -9,10 +9,11 @@ import BaseTrigger from 'src/triggers/BaseTrigger';
  *
  * For code that is used to influnce the decision of a trade; see Strategies.
  */
-export default abstract class Plugin<T> {
+export default abstract class BasePlugin<T> {
   public readonly name: string
   public readonly description: string
   public readonly version: number
+  public readonly pluginDB: Plugins
   public readonly modes: 'realtime' | 'backtest' []
 
   protected uid: string
@@ -25,7 +26,8 @@ export default abstract class Plugin<T> {
    * @param uid       The uid of the user
    * @param options An object of options passed from the user
    */
-  constructor (uid: string, options?: T) {
+  constructor (pluginDB: Plugins, uid: string, options?: T) {
+    this.pluginDB = pluginDB
     this.uid = uid
     this.options = options
   }
@@ -38,5 +40,5 @@ export default abstract class Plugin<T> {
    * @param advice  The advice given by the trigger
    * @param price   The price at which it was triggered
    */
-  abstract onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number): void
+  abstract onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number): void
 }
