@@ -53,6 +53,7 @@ export default class MarketDataProvider extends EventEmitter {
         if (trade.symbol === this.symbol) this.processTrades([trade])
       })
 
+      log.debug('Streaming', this.symbol, 'trades from', this.exchange.id, '...')
       this.exchange.streamTrades(this.symbol)
 
       return

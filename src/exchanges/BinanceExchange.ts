@@ -5,7 +5,8 @@ import BaseExchange from './core/BaseExchange'
 
 
 export default class BinanceExchange extends BaseExchange {
-  private clientws: WebSocket
+  private readonly clientws: WebSocket
+  private readonly streamingTradesSymbol: string[]
 
 
   constructor () {
@@ -14,6 +15,7 @@ export default class BinanceExchange extends BaseExchange {
 
     const client = BinanceApi()
     this.clientws = client.ws
+    this.streamingTradesSymbol = []
   }
 
 
@@ -23,7 +25,13 @@ export default class BinanceExchange extends BaseExchange {
 
 
   public streamTrades(symbol: string): void {
-    this.clientws.trades([symbol.replace('/', '')], trade => {
+    // check if we are already streaming this symbol or not
+    if (this.streamingTradesSymbol.indexOf(symbol) >= 0) return
+    this.streamingTradesSymbol.push(symbol)
+
+    const wsSymbol = symbol.replace('/', '').toUpperCase()
+    console.log('streaming', wsSymbol)
+    this.clientws.trades([wsSymbol], trade => {
       const ccxtTrade: ccxt.Trade = {
         amount: Number(trade.quantity),
         datetime: (new Date(trade.eventTime)).toISOString(),

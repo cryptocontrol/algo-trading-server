@@ -31,7 +31,7 @@ export default class TradeBatcher extends EventEmitter {
     // filter and count trades
     const filteredBatch = this.filter(trades)
     const count = filteredBatch.length
-    if (count === 0) return log.debug('No new trades.')
+    if (count === 0) return // log.debug('No new trades.')
 
     // pick first & last trades
     const last = _.last(filteredBatch)
