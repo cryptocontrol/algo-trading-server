@@ -18,7 +18,7 @@ export default class TrailingStopTrigger extends BaseTrigger {
    * @param initialPrice initial price, preferably buy price
    */
   constructor (trigger: Triggers) {
-    super(trigger)
+    super(trigger, 'Trailing Stop')
 
     const params = JSON.parse(trigger.params)
     this.trail = params.trail

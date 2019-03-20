@@ -2,9 +2,15 @@ import { Trade } from 'ccxt'
 
 import { ICandle } from 'src/interfaces'
 import BaseTrigger from './BaseTrigger'
+import Triggers from 'src/database/models/triggers'
 
 
 export default class TakeProfitTrigger extends BaseTrigger {
+  constructor (triggerDB: Triggers) {
+    super(triggerDB, 'Take Profit')
+  }
+
+
   onTrade (trade: Trade) {
     if (!this.isLive) return
     const { price } = trade

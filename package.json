@@ -24,6 +24,7 @@
     "mysql2": "^1.6.5",
     "node-binance-api": "^0.9.0",
     "node-json-db": "^0.10.0",
+    "node-telegram-bot-api": "^0.30.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.1",

@@ -3,6 +3,7 @@ import * as _ from 'underscore'
 import { IAdvice } from 'src/interfaces'
 import log from '../utils/log'
 import Plugin from './Plugin'
+import BaseTrigger from 'src/triggers/BaseTrigger';
 
 
 const WebClient = require('@slack/client').WebClient
@@ -17,17 +18,15 @@ interface ISlackOptions {
 
 
 export default class SlackPlugin extends Plugin<ISlackOptions> {
-  name = 'Slack'
-  description = 'Sends trades to slack channel.'
-  version = 1
+  public readonly name = 'Slack'
+  public readonly description = 'Sends notifications to slack channel.'
+  public readonly version = 1
 
-  slack: any
-  done: () => void
-  price: string = 'N/A'
+  private readonly slack: any
 
 
-  constructor (uid: string, exchange: string, symbol: string, options?: ISlackOptions) {
-    super(uid, exchange, symbol, options)
+  constructor (uid: string, options?: ISlackOptions) {
+    super(uid, options)
     this.slack = new WebClient(options.token)
 
     if (options.sendMessageOnStart){
@@ -37,7 +36,7 @@ export default class SlackPlugin extends Plugin<ISlackOptions> {
   }
 
 
-  onAdvice (advice: IAdvice, price: number) {
+  onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number) {
     if (advice == 'soft' && this.options.muteSoft) return
 
     const color = advice === 'long' ? 'good' :
@@ -50,12 +49,6 @@ export default class SlackPlugin extends Plugin<ISlackOptions> {
     )
 
     this._send(body)
-  }
-
-
-  processCandle (candle, done) {
-    this.price = candle.close
-    done()
   }
 
 
@@ -81,7 +74,7 @@ export default class SlackPlugin extends Plugin<ISlackOptions> {
 
   private _createResponse (color: string, text: string) {
     const template = {
-      username: `${this.exchange.toUpperCase()}-${this.symbol}`,
+      // username: `${this.exchange.toUpperCase()}-${this.symbol}`,
       // icon_url: this.createIconUrl(),
       attachments: [
         {
