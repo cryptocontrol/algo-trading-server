@@ -39,8 +39,8 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
 
   onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
     const message = `${trigger.name} triggered! and adviced to ${advice} ` +
-      `on ${trigger.getExchange()} ${trigger.getSymbol()} for a volume of ${amount}! ` +
-      `Current price is ${price}`
+      `on ${trigger.getExchange()} \`${trigger.getSymbol()}\` for a volume of ${amount}! ` +
+      `Current price is \`${price}\``
 
     this.bot.sendMessage(this.chatId, message)
   }
