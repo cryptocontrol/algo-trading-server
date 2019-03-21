@@ -64,9 +64,9 @@ Iguana supports triggers, which are one-time actions that execute when a price m
 Supported Signals/Triggers:
 - Stop Loss
 - Take Profit
-- Trailing Take Profit
+- Trailing Stop
 
-## Strategies
+## Strategies (Coming Soon)
 Iguana supports auto-trading with various trading strategies. Strategies keep running forever and execute trades on the basis of certain conditions (like Technical Indicators).
 
 Strategies can also be backtested for performance with historic data from an exchange.
@@ -77,7 +77,9 @@ Supported Strategies:
 You can also build your own strategies and use it with the CryptoControl terminal. For more info view [building custom strategies](./docs/CUSTOM_STRATEGIES.md).
 
 ## Supported Exchanges
-The following exchanges are supported: Binance, Bittrex
+The following exchanges are supported:
+
+_1btcxe, acx, allcoin, anxpro, anybits, bcex, bibox, bigone, binance, bit2c, bitbank, bitbay, bitfinex, bitflyer, bitforex, bithumb, bitibu, bitkk, bitlish, bitmarket, bitmex, bitsane, bitso, bitstamp, bittrex, bitz, bl3p, bleutrade, braziliex, btcalpha, btcbox, btcchina, btcexchange, btcmarkets, btctradeim, btctradeua, btcturk, buda, bxinth, ccex, cex, chbtc, chilebit, cobinhood, coinbase, coinbaseprime, coinbasepro, coincheck, coinegg, coinex, coinexchange, coinfalcon, coinfloor, coingi, coinmarketcap, coinmate, coinnest, coinone, coinspot, cointiger, coolcoin, coss, crex24, crypton, cryptopia, deribit, dsx, ethfinex, exmo, exx, fcoin, fcoinjp, flowbtc, foxbit, fybse, fybsg, gatecoin, gateio, gdax, gemini, getbtc, hadax, hitbtc, hitbtc2, huobipro, huobiru, ice3x, independentreserve, indodax, itbit, jubi, kkex, kraken, kucoin, kucoin2, kuna, lakebtc, lbank, liqui, liquid, livecoin, luno, lykke, mercado, mixcoins, negociecoins, nova, okcoincny, okcoinusd, okex, paymium, poloniex, quadrigacx, rightbtc, southxchange, stronghold, surbitcoin, theocean, therock, tidebit, tidex, uex, upbit, urdubit, vaultoro, vbtc, virwox, xbtce, yobit, yunbi, zaif, zb
 
 ## Plugins
 Plugins allow Iguana to communicate to the user via multiple channels in realtime.
