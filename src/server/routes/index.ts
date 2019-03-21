@@ -2,10 +2,12 @@ import { Router } from 'express'
 import * as _ from 'underscore'
 
 import { IAppRequest } from 'src/interfaces'
-import keys from './keys'
 import NotAuthorizedError from 'src/errors/NotAuthorizedError'
-import triggers from './triggers'
+
+import advices from './advices'
+import keys from './keys'
 import plugins from './plugins'
+import triggers from './triggers'
 
 const packageJson = require('../../../package.json')
 const router = Router()
@@ -36,9 +38,10 @@ router.get('/me', (req: IAppRequest, res) => res.json({ uid: req.uid }))
 
 
 // init all the different routes
+router.use('/advices', advices)
 router.use('/keys', keys)
-router.use('/triggers', triggers)
 router.use('/plugins', plugins)
+router.use('/triggers', triggers)
 
 
 /**
