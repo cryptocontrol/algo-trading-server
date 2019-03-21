@@ -47,6 +47,7 @@
     "@types/jest": "^22.0.0",
     "@types/node": "^11.9.5",
     "@types/node-json-db": "^0.0.1",
+    "@types/node-telegram-bot-api": "^0.30.4",
     "@types/react": "^16.0.5",
     "@types/react-dom": "16.0.3",
     "@types/react-hot-loader": "^3.0.4",

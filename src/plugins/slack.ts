@@ -36,6 +36,11 @@ export default class SlackPlugin extends BasePlugin<ISlackOptions> {
   }
 
 
+  kill () {
+
+  }
+
+
   onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number) {
     if (advice == 'soft' && this.options.muteSoft) return
 

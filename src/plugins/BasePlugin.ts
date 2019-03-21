@@ -40,6 +40,12 @@ export default abstract class BasePlugin<T> {
   abstract onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number): void
 
 
+  /**
+   * Called whenever a plugin is going to be killed
+   */
+  abstract kill ()
+
+
   public getUID () {
     return this.pluginDB.uid
   }

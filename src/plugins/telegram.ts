@@ -32,6 +32,11 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
   }
 
 
+  kill () {
+    this.bot.stopPolling()
+  }
+
+
   onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
     const message = `${trigger.name} triggered! and adviced to \`${advice}\` ` +
       `on \`${trigger.getExchange().toUpperCase()}\` \`${trigger.getSymbol()}\` with a ` +
@@ -42,7 +47,7 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
 
 
   private send (message: string, chatId?: string) {
-    this.bot.sendMessage(chatId || this.options.chatId, message, { parse_mode: 'markdown' })
+    this.bot.sendMessage(chatId || this.options.chatId, message, { parse_mode: 'Markdown' })
   }
 
 
@@ -60,13 +65,13 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
 
       case '/help':
         this.send(
-          `Your chat id is: \`${chatId}\`. Currently this bot does support commands :( ` +
-          `Enter the chat id in the CryptoControl terminal to recieve all kinds of trading notifications.`,
+          `Your chat id is: \`${chatId}\`. \n\nCurrently this bot does support commands :( ` +
+          `\n\nEnter the chat id in the CryptoControl terminal to recieve all kinds of trading notifications.`,
           chatId
         )
         return
     }
 
-    this.send(`use \`/help\` to see a list of commands`, chatId)
+    this.send(`use /help to see a list of commands`, chatId)
   }
 }

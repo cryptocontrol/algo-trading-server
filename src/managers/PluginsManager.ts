@@ -1,13 +1,17 @@
-import BaseTrigger from 'src/triggers/BaseTrigger'
+import * as _ from 'underscore'
+
+import { IAdvice } from 'src/interfaces'
 import BasePlugin from 'src/plugins/BasePlugin'
-import { IAdvice } from 'src/interfaces';
-import Plugins from 'src/database/models/plugins';
-import SlackPlugin from 'src/plugins/slack';
-import TelegramPlugin from 'src/plugins/telegram';
+import BaseTrigger from 'src/triggers/BaseTrigger'
+import Plugins from 'src/database/models/plugins'
+import SlackPlugin from 'src/plugins/slack'
+import TelegramPlugin from 'src/plugins/telegram'
 
 
 interface IPlugins {
-  [exchangeSymbol: string]: BasePlugin<any>[]
+  [uid: string]: {
+    [pluginKind: string]: BasePlugin<any>
+  }
 }
 
 
@@ -23,8 +27,10 @@ export default class PluginsManager {
 
 
   public onTrigger (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
-    const triggers = this.plugins[trigger.getUID()] || []
-    triggers.forEach(t => t.onTriggered(trigger, advice, price, amount))
+    const plugins = this.plugins[trigger.getUID()] || []
+
+    const pluginKeys = _.keys(plugins)
+    pluginKeys.forEach(key => plugins[key].onTriggered(trigger, advice, price, amount))
   }
 
 
@@ -32,8 +38,16 @@ export default class PluginsManager {
     const plugin = this.getPlugin(p)
     if (!plugin) return
 
-    const userplugins = this.plugins[p.uid] || []
-    userplugins.push(plugin)
+    const userplugins = this.plugins[p.uid] || {}
+
+    // delete the old plugin (if it exists)
+    if (userplugins[plugin.name]) {
+      userplugins[plugin.name].kill()
+      delete userplugins[plugin.name]
+    }
+
+    // added plugins
+    userplugins[plugin.name] = plugin
     this.plugins[p.uid] = userplugins
   }
 

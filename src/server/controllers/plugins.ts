@@ -29,6 +29,8 @@ export const updatePlugin = async (uid: string, id: string, config: any) => {
   if (plugin) {
     plugin.config = JSON.stringify(config)
     plugin.save()
+
+    PluginsManager.getInstance().registerPlugin(plugin)
   }
 }
 
