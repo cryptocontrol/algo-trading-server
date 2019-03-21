@@ -33,7 +33,7 @@ export const createTrigger = async (uid: string, exchange: string, symbol: strin
  * get all existing triggers for a user
  */
 export const getTriggers = async (uid: string) => {
-  const triggers = await Triggers.findAll({ where: { uid } })
+  const triggers = await Triggers.findAll({ where: { uid, isActive: true } })
   return triggers
 }
 
@@ -42,6 +42,11 @@ export const getTriggers = async (uid: string) => {
  * Delete a specific trigger
  */
 export const deleteTrigger = async (uid: string, id: number) => {
-  const triggers = await Triggers.findOne({ where: { uid, id } })
-  if (triggers) triggers.destroy()
+  const trigger = await Triggers.findOne({ where: { uid, id } })
+  if (trigger) {
+    TriggerManger.getInstance().removeTrigger(trigger)
+
+    trigger.isActive = false
+    trigger.save()
+  }
 }

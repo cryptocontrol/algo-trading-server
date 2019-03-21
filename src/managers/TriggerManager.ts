@@ -4,6 +4,7 @@ import PluginsManager from './PluginsManager'
 import StopLossTrigger from 'src/triggers/StopLossTrigger'
 import TakeProfitTrigger from 'src/triggers/TakeProfitTrigger'
 import Triggers from 'src/database/models/triggers'
+import Advices from 'src/database/models/advices';
 
 
 interface IExchangeTriggers {
@@ -39,8 +40,20 @@ export default class TriggerManger {
     trigger.on('triggered', ({ advice, price, amount }) => {
       // notify all the plugins for this user...
       this.pluginmanager.onTrigger(trigger, advice, price, amount)
-    })
 
+      const adviceDB = new Advices({
+        uid: trigger.getUID(),
+        symbol: trigger.getSymbol(),
+        exchange: trigger.getExchange(),
+        advice,
+        price,
+        mode: 'realtime',
+        volume: amount,
+        trigger_id: trigger.getDBId()
+      })
+
+      adviceDB.save()
+    })
 
     // once a trigger has finished
     trigger.on('close', () => {
@@ -57,6 +70,15 @@ export default class TriggerManger {
     const exchangeSymbolTriggers = this.triggers[exchangeSymbol] || []
     exchangeSymbolTriggers.push(trigger)
     this.triggers[exchangeSymbol] = exchangeSymbolTriggers
+  }
+
+
+  public removeTrigger (t: Triggers) {
+    const exchangeSymbol = `${t.exchange}-${t.symbol}`
+
+    const exchangeSymbolTriggers = this.triggers[exchangeSymbol] || []
+    const newTriggers = exchangeSymbolTriggers.filter(e => e.getDBId() !== t.id)
+    this.triggers[exchangeSymbol] = newTriggers
   }
 
 

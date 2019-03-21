@@ -28,9 +28,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DOUBLE
       },
+      volume: {
+        allowNull: false,
+        type: Sequelize.DOUBLE
+      },
       mode: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      trigger_id: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -39,7 +46,7 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
     });
   },
   down: (queryInterface, Sequelize) => {

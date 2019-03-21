@@ -14,7 +14,6 @@ import log from 'src/utils/log'
 // @param onTrigger: fn to call when the stop triggers
 export default abstract class BaseTrigger extends EventEmitter {
   public readonly name: string
-  protected isLive: boolean = true
   protected readonly triggerDB: Triggers
 
 
@@ -22,7 +21,6 @@ export default abstract class BaseTrigger extends EventEmitter {
     super()
     this.name = name
     this.triggerDB = triggerDB
-    this.isLive = !triggerDB.hasTriggered
   }
 
 
@@ -45,7 +43,19 @@ export default abstract class BaseTrigger extends EventEmitter {
   }
 
 
+  public getDBId () {
+    return this.triggerDB.id
+  }
+
+
+  public isLive () {
+    return this.triggerDB.isActive
+  }
+
+
   protected advice (advice: IAdvice, price: number, amount: number) {
+    if (!this.isLive()) return
+
     // do nothing
     const trigger = this.triggerDB
     log.info(
@@ -63,7 +73,6 @@ export default abstract class BaseTrigger extends EventEmitter {
 
 
   protected close () {
-    this.isLive = false
     this.emit('close')
 
     // mark the trigger as closed in the DB
