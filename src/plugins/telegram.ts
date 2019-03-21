@@ -26,7 +26,6 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
 
     this.bot = new Telegram(this.options.token, { polling: { interval: 1000 }})
 
-    console.log(this.options)
     if (this.options.chatId) this.send('I\'m now connected to the trading server!')
 
     this.bot.onText(/(.+)/, this.onText)
@@ -49,7 +48,6 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
 
   private send (message: string, _chatId?: string) {
     const chatId = _chatId || this.options.chatId
-    console.log(chatId, message)
     this.bot.sendMessage(chatId, message, { parse_mode: 'Markdown' })
   }
 

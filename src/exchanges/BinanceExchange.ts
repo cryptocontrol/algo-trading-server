@@ -30,7 +30,7 @@ export default class BinanceExchange extends BaseExchange {
     this.streamingTradesSymbol.push(symbol)
 
     const wsSymbol = symbol.replace('/', '').toUpperCase()
-    console.log('streaming', wsSymbol)
+
     this.clientws.trades([wsSymbol], trade => {
       const ccxtTrade: ccxt.Trade = {
         amount: Number(trade.quantity),
