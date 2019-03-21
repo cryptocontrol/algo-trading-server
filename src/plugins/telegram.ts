@@ -24,13 +24,11 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
   constructor (pluginDB: Plugins) {
     super(pluginDB)
 
-    this.bot = new Telegram(this.options.token, { polling: { interval: 5000 }})
+    this.bot = new Telegram(this.options.token, { polling: { interval: 1000 }})
 
     if (this.options.chatId) this.send('I\'m now connected to the trading server!')
 
-    this.bot.onText(/(.+)/, msg => {
-      this.send(`Hello! your chat id is: \`${msg.chat.id}\``, msg.chat.id)
-    })
+    this.bot.onText(/(.+)/, this.onText)
   }
 
 
@@ -43,7 +41,32 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
   }
 
 
-  private send(message: string, chatId?: string) {
+  private send (message: string, chatId?: string) {
     this.bot.sendMessage(chatId || this.options.chatId, message, { parse_mode: 'markdown' })
+  }
+
+
+  private onText = (msg: any, _text: string[]) =>{
+    const text = _text[0]
+    const chatId = msg.chat.id
+
+    switch (text.toLowerCase()) {
+      case '/start':
+        this.send(
+          `Hello! your chat id is: \`${chatId}\`. Enter the chat id in the CryptoControl ` +
+          `terminal to recieve all kinds of trading notifications.`, chatId
+        )
+        return
+
+      case '/help':
+        this.send(
+          `Your chat id is: \`${chatId}\`. Currently this bot does support commands :( ` +
+          `Enter the chat id in the CryptoControl terminal to recieve all kinds of trading notifications.`,
+          chatId
+        )
+        return
+    }
+
+    this.send(`use \`/help\` to see a list of commands`, chatId)
   }
 }

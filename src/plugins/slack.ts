@@ -52,12 +52,6 @@ export default class SlackPlugin extends BasePlugin<ISlackOptions> {
   }
 
 
-  // processStrategyNotification ({ content }) {
-  //   const body = this._createResponse('#909399', content)
-  //   this._send(body)
-  // }
-
-
   checkResults (error) {
     if (error) log.warn('error sending slack', error)
     else log.info('Send advice via slack.')
