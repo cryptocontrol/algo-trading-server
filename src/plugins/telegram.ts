@@ -4,7 +4,7 @@ import * as Telegram from 'node-telegram-bot-api'
 import { IAdvice } from 'src/interfaces'
 import BasePlugin from './BasePlugin'
 import BaseTrigger from 'src/triggers/BaseTrigger'
-import Plugins from 'src/database/models/plugins';
+import Plugins from 'src/database/models/plugins'
 
 
 
@@ -26,22 +26,27 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
   constructor (pluginDB: Plugins, options?: ITelegramOptions) {
     super(pluginDB, pluginDB.uid, options)
 
-    this.bot = new Telegram(options.token, { polling: true })
+    this.bot = new Telegram(options.token, { polling: { interval: 5000 }})
     this.chatId = options.chatId
 
-    if (this.chatId) this.bot.sendMessage(this.chatId, 'I\'m now connected to the trading server!')
+    if (this.chatId) this.send('I\'m now connected to the trading server!')
 
     this.bot.onText(/(.+)/, msg => {
-      this.bot.sendMessage(msg.chat.id, 'Hello! your chat id is: ' + msg.chat.id)
+      this.send(`Hello! your chat id is: \`${msg.chat.id}\``, msg.chat.id)
     })
   }
 
 
   onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
-    const message = `${trigger.name} triggered! and adviced to ${advice} ` +
-      `on ${trigger.getExchange()} \`${trigger.getSymbol()}\` for a volume of ${amount}! ` +
-      `Current price is \`${price}\``
+    const message = `${trigger.name} triggered! and adviced to \`${advice}\` ` +
+      `on \`${trigger.getExchange().toUpperCase()}\` \`${trigger.getSymbol()}\` with a ` +
+      `volume of \`${amount}\`! Current price is \`${price}\``
 
-    this.bot.sendMessage(this.chatId, message)
+    this.send(message)
+  }
+
+
+  private send(message: string, chatId?: string) {
+    this.bot.sendMessage(chatId || this.chatId, message, { parse_mode: 'markdown' })
   }
 }
