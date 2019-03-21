@@ -7,10 +7,9 @@ import BaseTrigger from 'src/triggers/BaseTrigger'
 import Plugins from 'src/database/models/plugins'
 
 
-
 interface ITelegramOptions {
-  token: string
   chatId?: string
+  token: string
 }
 
 
@@ -20,16 +19,14 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
   public readonly version = 1
 
   private bot: Telegram
-  private chatId?: string
 
 
-  constructor (pluginDB: Plugins, options?: ITelegramOptions) {
-    super(pluginDB, pluginDB.uid, options)
+  constructor (pluginDB: Plugins) {
+    super(pluginDB)
 
-    this.bot = new Telegram(options.token, { polling: { interval: 5000 }})
-    this.chatId = options.chatId
+    this.bot = new Telegram(this.options.token, { polling: { interval: 5000 }})
 
-    if (this.chatId) this.send('I\'m now connected to the trading server!')
+    if (this.options.chatId) this.send('I\'m now connected to the trading server!')
 
     this.bot.onText(/(.+)/, msg => {
       this.send(`Hello! your chat id is: \`${msg.chat.id}\``, msg.chat.id)
@@ -47,6 +44,6 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
 
 
   private send(message: string, chatId?: string) {
-    this.bot.sendMessage(chatId || this.chatId, message, { parse_mode: 'markdown' })
+    this.bot.sendMessage(chatId || this.options.chatId, message, { parse_mode: 'markdown' })
   }
 }

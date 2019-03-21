@@ -4,8 +4,7 @@ import { IAdvice } from 'src/interfaces'
 import BasePlugin from './BasePlugin'
 import BaseTrigger from 'src/triggers/BaseTrigger'
 import log from '../utils/log'
-import Plugins from 'src/database/models/plugins';
-
+import Plugins from 'src/database/models/plugins'
 
 const WebClient = require('@slack/client').WebClient
 
@@ -26,11 +25,11 @@ export default class SlackPlugin extends BasePlugin<ISlackOptions> {
   private readonly slack: any
 
 
-  constructor (pluginDB: Plugins, options?: ISlackOptions) {
-    super(pluginDB, pluginDB.uid, options)
-    this.slack = new WebClient(options.token)
+  constructor (pluginDB: Plugins) {
+    super(pluginDB)
+    this.slack = new WebClient(this.options.token)
 
-    if (options.sendMessageOnStart){
+    if (this.options.sendMessageOnStart){
       const body = this._createResponse('#439FE0', 'Gekko started!')
       this._send(body)
     } else log.debug('Skipping Send message on startup')

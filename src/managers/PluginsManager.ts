@@ -39,8 +39,8 @@ export default class PluginsManager {
 
 
   private getPlugin (plugin: Plugins) {
-    if (plugin.kind === 'slack') return new SlackPlugin(plugin, JSON.parse(plugin.config))
-    if (plugin.kind === 'telegram') return new TelegramPlugin(plugin, JSON.parse(plugin.config))
+    if (plugin.kind === 'slack') return new SlackPlugin(plugin)
+    if (plugin.kind === 'telegram') return new TelegramPlugin(plugin)
   }
 
 
