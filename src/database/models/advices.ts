@@ -23,7 +23,7 @@ export default class Advices extends Model<Advices> {
   advice: IAdvice
 
   @Column
-  mode: string
+  mode: 'realtime' | 'backtest' | 'paper'
 
   @Column
   trigger_id?: number
