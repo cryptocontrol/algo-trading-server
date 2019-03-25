@@ -30,13 +30,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/binance1/key",
+							"raw": "{{url}}/keys/binance",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"binance1",
-								"key"
+								"keys",
+								"binance"
 							]
 						}
 					},
@@ -91,13 +91,13 @@
 							"raw": "{\n\t\"key\": \"123\",\n\t\"secret\": \"456sdfsdfsdfdsf\",\n\t\"password\": \"password\"\n}"
 						},
 						"url": {
-							"raw": "{{url}}/binance/key",
+							"raw": "{{url}}/keys/binance",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"binance",
-								"key"
+								"keys",
+								"binance"
 							]
 						}
 					},
@@ -164,7 +164,7 @@
 					"response": []
 				},
 				{
-					"name": "Add Binance BTCUSDT stop loss trigger",
+					"name": "Add Binance BTCUSDT stop loss",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -182,18 +182,147 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"price\": 3500\n}"
+							"raw": "{\n\t\"price\": 4400,\n\t\"volume\": 15,\n\t\"closeOrderType\": \"limit\"\n}"
 						},
 						"url": {
-							"raw": "{{url}}/triggers/binance/BTCUSDT/stop-loss",
+							"raw": "{{url}}/triggers/binance/BTC/USDT/stop-loss",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"triggers",
 								"binance",
-								"BTCUSDT",
+								"BTC",
+								"USDT",
 								"stop-loss"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plugins",
+			"item": [
+				{
+					"name": "Get Plugins",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-jwt",
+								"type": "text",
+								"value": "{{jwt}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/plugins",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"plugins"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Plugins",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-jwt",
+								"type": "text",
+								"value": "{{jwt}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/plugins/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"plugins",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Plugin",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-jwt",
+								"type": "text",
+								"value": "{{jwt}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"token\": \"824042892:AAE2LQhUfJznRX6wrevO7rjcDA2De03Wwkg\",\n\t\"chatId\": \"580310139\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/plugins/6",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"plugins",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Telegram Plugin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-jwt",
+								"type": "text",
+								"value": "{{jwt}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"token\": \"824042892:AAE2LQhUfJznRX6wrevO7rjcDA2De03Wwkg\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/plugins/telegram",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"plugins",
+								"telegram"
 							]
 						}
 					},
@@ -229,6 +358,33 @@
 					"raw": "{{url}}",
 					"host": [
 						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Advices",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-jwt",
+						"type": "text",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/advices",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"advices"
 					]
 				}
 			},
