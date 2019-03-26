@@ -100,7 +100,7 @@ export default class BitfinexExchange extends BaseExchange {
         return {
           asset: wsSymbol,
           price: ask[0],
-          amount: ask[2]
+          amount: -ask[2]
         }
       })
 
@@ -110,7 +110,7 @@ export default class BitfinexExchange extends BaseExchange {
         asks: asks
       }
       this.emit('orderbook', orderBook)
-      //console.log(orderBook)
+      console.log(orderBook)
     })
   }
 
