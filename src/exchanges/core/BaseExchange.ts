@@ -21,7 +21,7 @@ export default abstract class BaseExchange extends EventEmitter {
 
   public abstract getTrades (symbol: string, since: number, descending: boolean): Promise<ccxt.Trade[]>
   public abstract streamTrades (symbol: string): void
-
+  public abstract streamOrderbook (symbol: string): void
 
   /**
    * Checks if the exchange can stream trades for the given symbol or not. Streaming happens via

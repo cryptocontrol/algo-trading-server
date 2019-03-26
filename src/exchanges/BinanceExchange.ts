@@ -46,6 +46,7 @@ export default class BinanceExchange extends BaseExchange {
         fee: undefined
       }
 
+      console.log(trade)
       this.emit('trade', ccxtTrade)
     })
   }
@@ -55,3 +56,11 @@ export default class BinanceExchange extends BaseExchange {
     return await this.exchange.fetchTrades(symbol, since)
   }
 }
+
+
+const main = async () => {
+  const binance = new BinanceExchange()
+  binance.streamTrades('ETHBTC')
+}
+
+main()
