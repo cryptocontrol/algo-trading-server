@@ -3,6 +3,17 @@ import BinanceApi, { WebSocket } from 'binance-api-node'
 
 import BaseExchange from './core/BaseExchange'
 
+interface IOrder {
+  asset: string
+  price: number
+  amount: number
+}
+
+
+interface IOrderBook {
+  bids: IOrder[]
+  asks: IOrder[]
+}
 
 export default class BinanceExchange extends BaseExchange {
   private readonly clientws: WebSocket
@@ -52,6 +63,38 @@ export default class BinanceExchange extends BaseExchange {
   }
 
 
+  public streamOrderbook(symbol: string): void {
+
+    const wsSymbol = symbol.replace('/', '').toUpperCase()
+
+    this.clientws.depth(wsSymbol, depth => {
+
+      const bids:IOrder[] = depth.bidDepth.map(bid => {
+        return {
+          asset: depth.symbol,
+          price: Number(bid.price),
+          amount: Number(bid.quantity)
+        }
+      })
+
+      const asks:IOrder[] = depth.askDepth.map(ask => {
+        return {
+          asset: depth.symbol,
+          price: Number(ask.price),
+          amount: Number(ask.quantity)
+        }
+      })
+
+      const orderBook:IOrderBook = {
+        bids: bids,
+        asks: asks
+      }
+      this.emit('orderbook', orderBook)
+      console.log(orderBook)
+
+    })
+  }
+
   public async getTrades (symbol: string, since: number, _descending: boolean): Promise<ccxt.Trade[]> {
     return await this.exchange.fetchTrades(symbol, since)
   }
@@ -60,7 +103,8 @@ export default class BinanceExchange extends BaseExchange {
 
 const main = async () => {
   const binance = new BinanceExchange()
-  binance.streamTrades('ETHBTC')
+  //binance.streamTrades('ETHBTC')
+  binance.streamOrderbook('ETHBTC')
 }
 
 main()
