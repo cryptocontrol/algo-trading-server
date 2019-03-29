@@ -95,16 +95,20 @@ export default class BinanceExchange extends BaseExchange {
     })
   }
 
+  public async loadMarkets () {
+
+  }
+
   public async getTrades (symbol: string, since: number, _descending: boolean): Promise<ccxt.Trade[]> {
     return await this.exchange.fetchTrades(symbol, since)
   }
 }
 
 
-const main = async () => {
-  const binance = new BinanceExchange()
-  //binance.streamTrades('ETHBTC')
-  binance.streamOrderbook('ETHBTC')
-}
-
-main()
+// const main = async () => {
+//   const binance = new BinanceExchange()
+//   //binance.streamTrades('ETHBTC')
+//   binance.streamOrderbook('ETHBTC')
+// }
+//
+// main()

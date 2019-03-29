@@ -114,6 +114,30 @@ export default class BitfinexExchange extends BaseExchange {
     })
   }
 
+  public async loadMarkets () {
+    const markets = await this.exchange.loadMarkets()
+    console.log(markets)
+    return await this.exchange.loadMarkets()
+  }
+
+
+  public async fetchMarkets () {
+    const markets = await this.exchange.fetchMarkets()
+    console.log(markets)
+    return await this.exchange.loadMarkets()
+  }
+
+
+  public async fetchTickers (symbol) {
+    const wsSymbol = symbol.replace('/', '').toUpperCase()
+    const ticker = await this.exchange.has['fetchTickers']
+    if(ticker == false){
+      console.log('fetchTickers is not supported')
+    } else {
+      const ticker = await this.exchange.fetchTickers(wsSymbol)
+      console.log(ticker)
+    }
+  }
 
   public async getTrades (symbol: string, since: number, _descending: boolean): Promise<ccxt.Trade[]> {
     return await this.exchange.fetchTrades(symbol, since)
@@ -124,7 +148,9 @@ export default class BitfinexExchange extends BaseExchange {
 const main = async () => {
   const bitfinex = new BitfinexExchange()
   //bitfinex.streamTrades('BTCUSD')
-  bitfinex.streamOrderbook('BTCUSD')
+  //bitfinex.streamOrderbook('BTCUSD')
+  //bitfinex.loadMarkets()
+  bitfinex.fetchTickers('BTCUSD')
 }
 
 main()
