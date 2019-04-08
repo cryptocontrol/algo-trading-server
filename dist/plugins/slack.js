@@ -1,81 +1,61 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const BasePlugin_1 = require("./BasePlugin");
+const log_1 = require("../utils/log");
 const WebClient = require('@slack/client').WebClient;
-const _ = require('underscore');
-const log = require('../core/log.js');
-const util = require('../core/util.js');
-const config = util.getConfig();
-const slackConfig = config.slack;
-class Slack {
-    constructor(done) {
-        this.slack;
-        this.price = 'N/A';
-        this.done = done;
-        this.setup();
+class SlackPlugin extends BasePlugin_1.default {
+    constructor(pluginDB) {
+        super(pluginDB);
+        this.name = 'Slack';
+        this.description = 'Sends notifications to slack channel.';
+        this.version = 1;
+        this.slack = new WebClient(this.options.token);
+        if (this.options.sendMessageOnStart) {
+            const body = this._createResponse('#439FE0', 'Gekko started!');
+            this._send(body);
+        }
+        else
+            log_1.default.debug('Skipping Send message on startup');
     }
-    setup() {
-        this.slack = new WebClient(slackConfig.token);
-        const setupSlack = function (error, result) {
-            if (slackConfig.sendMessageOnStart) {
-                const body = this.createResponse("#439FE0", "Gekko started!");
-                this.send(body);
-            }
-            else {
-                log.debug('Skipping Send message on startup');
-            }
-        };
-        setupSlack.call(this);
+    kill() {
     }
-    processCandle(candle, done) {
-        this.price = candle.close;
-        done();
-    }
-    processAdvice(advice) {
-        if (advice.recommendation == 'soft' && slackConfig.muteSoft)
+    onTriggered(trigger, advice, price) {
+        if (advice == 'soft' && this.options.muteSoft)
             return;
-        const color = advice.recommendation === "long" ? "good" : (advice.recommendation === "short" ? "danger" : "warning");
-        const body = this.createResponse(color, "There is a new trend! The advice is to go `" + advice.recommendation + "`! Current price is `" + this.price + "`");
-        this.send(body);
-    }
-    processStratNotification({ content }) {
-        const body = this.createResponse('#909399', content);
-        this.send(body);
-    }
-    send(content) {
-        this.slack.chat.postMessage(slackConfig.channel, "", content, (error, response) => {
-            if (error || !response)
-                log.error('Slack ERROR:', error);
-            else
-                log.info('Slack Message Sent');
-        });
+        const color = advice === 'long' ? 'good' :
+            advice === 'short' ? 'danger' :
+                'warning';
+        const body = this._createResponse(color, `There is a new trend! The advice is to go ${advice}! Current price is ${price}`);
+        this._send(body);
     }
     checkResults(error) {
         if (error)
-            log.warn('error sending slack', error);
+            log_1.default.warn('error sending slack', error);
         else
-            log.info('Send advice via slack.');
+            log_1.default.info('Send advice via slack.');
     }
-    createResponse(color, message) {
+    _send(content) {
+        this.slack.chat.postMessage(this.options.channel, '', content, (error, response) => {
+            if (error || !response)
+                log_1.default.error('Slack ERROR:', error);
+            else
+                log_1.default.info('Slack Message Sent');
+        });
+    }
+    _createResponse(color, text) {
         const template = {
-            username: this.createUserName(),
-            icon_url: this.createIconUrl(),
+            // username: `${this.exchange.toUpperCase()}-${this.symbol}`,
+            // icon_url: this.createIconUrl(),
             attachments: [
                 {
-                    fallback: "",
-                    color: color,
-                    text: message,
-                    mrkdwn_in: ["text"]
+                    fallback: '',
+                    color,
+                    text,
+                    mrkdwn_in: ['text']
                 }
             ]
         };
         return template;
     }
-    createUserName() {
-        return config.watch.exchange[0].toUpperCase() + config.watch.exchange.slice(1) + " - " + config.watch.currency + "/" + config.watch.asset;
-    }
-    createIconUrl() {
-        const asset = config.watch.asset === "XBT" ? "btc" : config.watch.asset.toLowerCase();
-        return "https://github.com/cjdowner/cryptocurrency-icons/raw/master/128/icon/" + asset + ".png";
-    }
 }
-exports.default = Slack;
+exports.default = SlackPlugin;

@@ -10,37 +10,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
-let Trades = class Trades extends sequelize_typescript_1.Model {
+let Plugins = class Plugins extends sequelize_typescript_1.Model {
 };
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
-], Trades.prototype, "symbol", void 0);
+], Plugins.prototype, "uid", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
-], Trades.prototype, "exchange", void 0);
-__decorate([
-    sequelize_typescript_1.Column,
-    __metadata("design:type", Number)
-], Trades.prototype, "price", void 0);
-__decorate([
-    sequelize_typescript_1.Column,
-    __metadata("design:type", Number)
-], Trades.prototype, "volume", void 0);
-__decorate([
-    sequelize_typescript_1.Column,
-    __metadata("design:type", Date)
-], Trades.prototype, "tradedAt", void 0);
+], Plugins.prototype, "kind", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
-], Trades.prototype, "tradeId", void 0);
+], Plugins.prototype, "config", void 0);
 __decorate([
     sequelize_typescript_1.Column,
-    __metadata("design:type", String)
-], Trades.prototype, "side", void 0);
-Trades = __decorate([
+    __metadata("design:type", Boolean)
+], Plugins.prototype, "isActive", void 0);
+Plugins = __decorate([
     sequelize_typescript_1.Table({ timestamps: true })
-], Trades);
-exports.default = Trades;
+], Plugins);
+exports.default = Plugins;

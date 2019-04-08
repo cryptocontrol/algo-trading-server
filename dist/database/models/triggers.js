@@ -10,37 +10,57 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
-let Trades = class Trades extends sequelize_typescript_1.Model {
+let Triggers = class Triggers extends sequelize_typescript_1.Model {
 };
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
-], Trades.prototype, "symbol", void 0);
+], Triggers.prototype, "symbol", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
-], Trades.prototype, "exchange", void 0);
+], Triggers.prototype, "exchange", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)
-], Trades.prototype, "price", void 0);
+], Triggers.prototype, "targetPrice", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)
-], Trades.prototype, "volume", void 0);
+], Triggers.prototype, "targetVolume", void 0);
+__decorate([
+    sequelize_typescript_1.Column,
+    __metadata("design:type", String)
+], Triggers.prototype, "uid", void 0);
+__decorate([
+    sequelize_typescript_1.Column,
+    __metadata("design:type", String)
+], Triggers.prototype, "kind", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", Date)
-], Trades.prototype, "tradedAt", void 0);
+], Triggers.prototype, "lastTriggeredAt", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
-], Trades.prototype, "tradeId", void 0);
+], Triggers.prototype, "params", void 0);
+__decorate([
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Boolean)
+], Triggers.prototype, "hasTriggered", void 0);
+__decorate([
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Date)
+], Triggers.prototype, "closedAt", void 0);
+__decorate([
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Boolean)
+], Triggers.prototype, "isActive", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
-], Trades.prototype, "side", void 0);
-Trades = __decorate([
+], Triggers.prototype, "orderId", void 0);
+Triggers = __decorate([
     sequelize_typescript_1.Table({ timestamps: true })
-], Trades);
-exports.default = Trades;
+], Triggers);
+exports.default = Triggers;

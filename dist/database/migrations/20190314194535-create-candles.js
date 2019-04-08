@@ -1,7 +1,15 @@
 'use strict';
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 module.exports = {
-    up: (queryInterface, Sequelize) => {
-        return queryInterface.createTable('Candles', {
+    up: (queryInterface, Sequelize) => __awaiter(this, void 0, void 0, function* () {
+        yield queryInterface.createTable('Candles', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -9,8 +17,8 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             start: {
-                uniqur: true,
-                type: Sequelize.INTEGER
+                allowNull: false,
+                type: Sequelize.DATE
             },
             open: {
                 allowNull: false,
@@ -40,6 +48,14 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.INTEGER
             },
+            exchange: {
+                allowNull: false,
+                type: Sequelize.STRING
+            },
+            symbol: {
+                allowNull: false,
+                type: Sequelize.STRING
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE
@@ -49,7 +65,11 @@ module.exports = {
                 type: Sequelize.DATE
             }
         });
-    },
+        yield queryInterface.addIndex('Candles', ['symbol', 'exchange', 'start'], {
+            type: 'unique',
+            name: 'symbol_exchange_start'
+        });
+    }),
     down: (queryInterface, Sequelize) => {
         return queryInterface.dropTable('Candles');
     }

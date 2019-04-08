@@ -18,6 +18,7 @@ export default abstract class BaseExchange extends EventEmitter {
   }
 
 
+  public abstract canStreamTrades (symbol: string): boolean
 
   public abstract streamTrades (symbol: string): void
   public abstract streamOrderbook (symbol: string): void

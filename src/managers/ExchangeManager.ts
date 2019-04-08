@@ -1,7 +1,7 @@
 import * as ccxt from 'ccxt'
 
 import BaseExchange from 'src/exchanges/core/BaseExchange'
-import CCXTExchange from 'src/exchanges/CCXTExchange'
+import CCXTExchange from 'src/exchanges/core/CCXTExchange'
 import BinanceExchange from 'src/exchanges/BinanceExchange'
 
 
@@ -29,7 +29,7 @@ export default class ExchangeManger {
 
 
   createBaseExchangeInstance (exchange: ccxt.Exchange) {
-    if (exchange.id === 'binance') return new BinanceExchange()
+    if (exchange.id === 'binance') return new BinanceExchange(exchange)
     return new CCXTExchange(exchange)
   }
 

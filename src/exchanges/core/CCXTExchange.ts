@@ -30,6 +30,7 @@ export default class CCXTExchange extends BaseExchange {
     this.tradeTimeouts[symbol] = Number(interval)
   }
 
+
   /**
    * The CCXT version of streaming trades is a polling fn.
    */
@@ -79,5 +80,10 @@ export default class CCXTExchange extends BaseExchange {
 
   public executeOrder (order: IOrderRequest): ccxt.Order {
     return
+  }
+
+
+  public canStreamTrades (symbol: string) {
+    return false
   }
 }

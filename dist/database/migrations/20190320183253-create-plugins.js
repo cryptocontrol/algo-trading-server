@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 module.exports = {
     up: (queryInterface, Sequelize) => __awaiter(this, void 0, void 0, function* () {
-        yield queryInterface.createTable('UserExchanges', {
+        yield queryInterface.createTable('Plugins', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -20,20 +20,18 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING
             },
-            exchange: {
+            config: {
                 allowNull: false,
                 type: Sequelize.STRING
             },
-            apiKey: {
+            kind: {
                 allowNull: false,
                 type: Sequelize.STRING
             },
-            apiSecret: {
+            isActive: {
                 allowNull: false,
-                type: Sequelize.STRING
-            },
-            apiPassword: {
-                type: Sequelize.STRING
+                type: Sequelize.BOOLEAN,
+                defaultValue: true
             },
             createdAt: {
                 allowNull: false,
@@ -44,12 +42,12 @@ module.exports = {
                 type: Sequelize.DATE
             }
         });
-        yield queryInterface.addIndex('UserExchanges', ['uid', 'exchange'], {
+        yield queryInterface.addIndex('Plugins', ['uid', 'kind'], {
             type: 'unique',
-            name: 'uid_exchange'
+            name: 'uid_kind'
         });
     }),
     down: (queryInterface, Sequelize) => {
-        return queryInterface.dropTable('UserExchanges');
+        return queryInterface.dropTable('Plugins');
     }
 };

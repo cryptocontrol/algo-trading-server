@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const keys_1 = require("./keys");
 const NotAuthorizedError_1 = require("src/errors/NotAuthorizedError");
+const advices_1 = require("./advices");
+const keys_1 = require("./keys");
+const plugins_1 = require("./plugins");
 const triggers_1 = require("./triggers");
-const packageJson = require('../../package.json');
+const packageJson = require('../../../package.json');
 const router = express_1.Router();
 /**
  * Gets the status of the server. A great way for the terminal to check if the
@@ -26,7 +28,9 @@ router.use((req, _res, next) => {
 // Gets the current user's id
 router.get('/me', (req, res) => res.json({ uid: req.uid }));
 // init all the different routes
+router.use('/advices', advices_1.default);
 router.use('/keys', keys_1.default);
+router.use('/plugins', plugins_1.default);
 router.use('/triggers', triggers_1.default);
 /**
  * Error handler

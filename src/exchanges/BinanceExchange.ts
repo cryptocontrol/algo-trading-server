@@ -22,6 +22,10 @@ export default class BinanceExchange extends CCXTExchange {
   }
 
 
+  public canStreamTrades (symbol: string) {
+    return true
+  }
+
   public streamTrades (symbol: string): void {
     // check if we are already streaming this symbol or not
     if (this.streamingTradesSymbol.indexOf(symbol) >= 0) return

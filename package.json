@@ -1,8 +1,8 @@
 {
-  "name": "algo-trading-server",
+  "name": "algo-trading-bot",
   "private": true,
   "version": "1.0.0",
-  "description": "Trading Server for algoanced Orders",
+  "description": "Trading bot for advanced orders & strategies",
   "main": "index.js",
   "dependencies": {
     "@slack/client": "^4.11.0",

@@ -7,39 +7,53 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const Database = require("../../database2");
-const router = express_1.Router();
+const triggers_1 = require("src/database/models/triggers");
+const TriggerManager_1 = require("src/managers/TriggerManager");
 /**
  * create a new trigger for a user
  */
-router.post('/triggers/:exchange/:symbol/:strategy', (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const uid = req.uid;
-    const symbol = req.params.symbol;
-    const exchange = req.params.exchange;
-    const strategy = req.params.strategy;
-    const params = req.body;
-    const trigger = yield Database.addTrigger(uid, symbol, exchange, strategy, params);
-    res.json({ trigger, success: true });
-}));
+exports.createTrigger = (uid, exchange, symbol, kind, params) => __awaiter(this, void 0, void 0, function* () {
+    const { price, volume, orderId } = params, rest = __rest(params, ["price", "volume", "orderId"]);
+    const trigger = new triggers_1.default({
+        uid,
+        symbol,
+        exchange,
+        kind,
+        orderId,
+        targetVolume: volume,
+        targetPrice: price,
+        params: JSON.stringify(rest)
+    });
+    yield trigger.save();
+    // once the trigger is created, we start tracking it in our DB
+    TriggerManager_1.default.getInstance().addTrigger(trigger);
+    return trigger;
+});
 /**
  * get all existing triggers for a user
  */
-router.get('/triggers', (req, res) => __awaiter(this, void 0, void 0, function* () { return res.json(yield Database.getTriggersForUser(req.uid)); }));
+exports.getTriggers = (uid) => __awaiter(this, void 0, void 0, function* () {
+    const triggers = yield triggers_1.default.findAll({ where: { uid, isActive: true } });
+    return triggers;
+});
 /**
  * Delete a specific trigger
  */
-router.delete('/triggers/:exchange/:symbol/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const uid = req.uid;
-    const symbol = req.params.symbol;
-    const exchange = req.params.exchange;
-    const id = req.params.id;
-    const trigger = yield Database.getTrigger(exchange, symbol, id);
-    if (!trigger)
-        throw new Error('no such trigger');
-    if (trigger.uid !== uid)
-        throw new Error('not your trigger');
-    yield Database.deleteTrigger(exchange, symbol, id);
-    res.json({ success: true });
-}));
+exports.deleteTrigger = (uid, id) => __awaiter(this, void 0, void 0, function* () {
+    const trigger = yield triggers_1.default.findOne({ where: { uid, id } });
+    if (trigger) {
+        TriggerManager_1.default.getInstance().removeTrigger(trigger);
+        trigger.isActive = false;
+        trigger.save();
+    }
+});

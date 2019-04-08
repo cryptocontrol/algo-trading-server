@@ -1,27 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
+const advices_1 = require("./models/advices");
+const candles_1 = require("./models/candles");
+const log_1 = require("src/utils/log");
+const plugins_1 = require("./models/plugins");
+const trades_1 = require("./models/trades");
+const triggers_1 = require("./models/triggers");
 const userexchanges_1 = require("./models/userexchanges");
 const env = process.env.NODE_ENV || 'development';
 const config = require('./config.json')[env];
-// fs
-//   .readdirSync(__dirname)
-//   .filter(file => {
-//     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js')
-//   })
-//   .forEach(file => {
-//     const model = sequelize['import'](path.join(__dirname, file))
-//     db[model.name] = model
-//   })
-// Object.keys(db).forEach(modelName => {
-//   if (db[modelName].associate) {
-//     db[modelName].associate(db)
-//   }
-// })
 exports.init = () => {
-    console.log('init database');
+    log_1.default.info('init database');
     const sequelize = new sequelize_typescript_1.Sequelize(config);
-    sequelize.addModels([userexchanges_1.default]);
-    // sequelize.import('./models/userexchanges')
+    sequelize.addModels([userexchanges_1.default, candles_1.default, trades_1.default, triggers_1.default, plugins_1.default, advices_1.default]);
     return sequelize;
 };

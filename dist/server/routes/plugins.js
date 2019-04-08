@@ -9,31 +9,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const Controllers = require("../controllers/triggers");
+const Controllers = require("../controllers/plugins");
 const router = express_1.Router();
-/**
- * create a new trigger for a user
- */
-router.post('/:exchange/:base/:quote/:kind', (req, res) => __awaiter(this, void 0, void 0, function* () {
+// get all plugins
+router.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () { return res.json(yield Controllers.getPlugins(req.uid)); }));
+// register a plugin
+router.post('/:kind', (req, res) => __awaiter(this, void 0, void 0, function* () {
     const uid = req.uid;
-    const symbol = `${req.params.base}/${req.params.quote}`;
-    const exchange = req.params.exchange;
     const kind = req.params.kind;
     const params = req.body;
-    const trigger = yield Controllers.createTrigger(uid, exchange, symbol, kind, params);
-    res.json({ trigger, success: true });
+    const plugin = yield Controllers.regsiterPlugin(uid, kind, params);
+    res.json({ plugin, success: true });
 }));
-/**
- * get all existing triggers for a user
- */
-router.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () { return res.json(yield Controllers.getTriggers(req.uid)); }));
-/**
- * Delete a specific trigger
- */
 router.delete('/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {
     const uid = req.uid;
     const id = Number(req.params.id);
-    yield Controllers.deleteTrigger(uid, id);
+    yield Controllers.deleteplugin(uid, id);
+    res.json({ success: true });
+}));
+router.put('/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const uid = req.uid;
+    const id = req.params.id;
+    yield Controllers.updatePlugin(uid, id, req.body);
     res.json({ success: true });
 }));
 exports.default = router;
