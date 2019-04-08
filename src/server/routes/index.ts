@@ -2,7 +2,7 @@ import { Router } from 'express'
 import * as _ from 'underscore'
 
 import { IAppRequest } from 'src/interfaces'
-import NotAuthorizedError from 'src/errors/NotAuthorizedError'
+import NotAuthorizedError from '../../errors/NotAuthorizedError'
 
 import advices from './advices'
 import keys from './keys'

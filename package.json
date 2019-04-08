@@ -101,7 +101,7 @@
     "webpack-merge": "^4.1.1"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist; tsc",
     "build-docker": "docker build -t cryptocontrol-trading-server .",
     "start": "NODE_ENV=production node index.js",
     "start:dev": "ts-node -r tsconfig-paths/register index.js",

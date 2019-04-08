@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const NotAuthorizedError_1 = require("src/errors/NotAuthorizedError");
+const NotAuthorizedError_1 = require("../../errors/NotAuthorizedError");
 const advices_1 = require("./advices");
 const keys_1 = require("./keys");
 const plugins_1 = require("./plugins");
