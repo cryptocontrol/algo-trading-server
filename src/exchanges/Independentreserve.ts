@@ -1,21 +1,10 @@
 import * as ccxt from 'ccxt'
 
 import BaseExchange from './core/BaseExchange'
-
-interface IOrder {
-  asset: string
-  price: number
-  amount: number
-}
+import CCXTExchange from './core/CCXTExchange'
 
 
-interface IOrderBook {
-  bids: IOrder[]
-  asks: IOrder[]
-}
-
-
-export default class IndependentreserveExchange extends BaseExchange {
+export default class IndependentreserveExchange extends CCXTExchange {
   private readonly clientws: WebSocket
   private readonly streamingTradesSymbol: string[]
 
@@ -24,7 +13,7 @@ export default class IndependentreserveExchange extends BaseExchange {
     super(independentreserve)
 
     const client = 'independentreserve'
-    //this.clientws = 'client.ws(2, { transform: true })'
+    // this.clientws = 'client.ws(2, { transform: true })'
     this.streamingTradesSymbol = []
   }
 
@@ -35,7 +24,6 @@ export default class IndependentreserveExchange extends BaseExchange {
 
 
   public streamTrades(symbol: string): void {
-
     // check if we are already streaming this symbol or not
     // if (this.streamingTradesSymbol.indexOf(symbol) >= 0) return
     // this.streamingTradesSymbol.push(symbol)
@@ -122,31 +110,30 @@ export default class IndependentreserveExchange extends BaseExchange {
   }
 
 
-  public async fetchTickers (symbol) {
+  public async fetchTickers (symbol: string) {
     const wsSymbol = symbol.replace('/', '').toUpperCase()
-    const ticker = await this.exchange.has['fetchTickers']
-    if(ticker == false){
-      const fakeTicker = {}
-      fakeTicker['symbol'] = wsSymbol
-      fakeTicker['timestamp'] = '1553862530261.5288'
-      fakeTicker['datetime'] = 'datetime'
-      fakeTicker['high'] = 9.3e-7
-      fakeTicker['bid'] = 8.5e-7
-      fakeTicker['bidVolume'] = undefined
-      fakeTicker['ask'] = 0.00000103
-      fakeTicker['askVolume'] = undefined
-      fakeTicker['vwap'] = undefined
-      fakeTicker['open'] = undefined
-      fakeTicker['close'] = 8.5e-7
-      fakeTicker['last'] = 8.5e-7
-      fakeTicker['previousClose'] = undefined
-      fakeTicker['change'] = undefined
-      fakeTicker['percentage'] = undefined
-      fakeTicker['average'] = 9.4e-7
-      fakeTicker['baseVolume'] = 179063.63874
-      fakeTicker['quoteVolume'] = undefined
-      fakeTicker['info'] =
-      { mid: '0.00000094',
+    const ticker = await this.exchange.has.fetchTickers
+    if (ticker === false) {
+      const fakeTicker: any = {}
+      fakeTicker.symbol = wsSymbol
+      fakeTicker.timestamp = '1553862530261.5288'
+      fakeTicker.datetime = 'datetime'
+      fakeTicker.high = 9.3e-7
+      fakeTicker.bid = 8.5e-7
+      fakeTicker.bidVolume = undefined
+      fakeTicker.ask = 0.00000103
+      fakeTicker.askVolume = undefined
+      fakeTicker.vwap = undefined
+      fakeTicker.open = undefined
+      fakeTicker.close = 8.5e-7
+      fakeTicker.last = 8.5e-7
+      fakeTicker.previousClose = undefined
+      fakeTicker.change = undefined
+      fakeTicker.percentage = undefined
+      fakeTicker.average = 9.4e-7
+      fakeTicker.baseVolume = 179063.63874
+      fakeTicker.quoteVolume = undefined
+      fakeTicker.info = { mid: '0.00000094',
         bid: '0.00000085',
         ask: '0.00000103',
         last_price: '0.00000085',
@@ -156,10 +143,10 @@ export default class IndependentreserveExchange extends BaseExchange {
         timestamp: '1553862530.261528837',
         pair: wsSymbol }
 
-      console.log('fetchTickers is not supported','\n', fakeTicker)
+      console.log('fetchTickers is not supported', '\n', fakeTicker)
     } else {
-      const ticker = await this.exchange.fetchTickers(wsSymbol)
-      console.log(ticker)
+      // const ticker2 = await this.exchange.fetchTickers(symbol)
+      // console.log(ticker2)
     }
   }
 
@@ -168,13 +155,3 @@ export default class IndependentreserveExchange extends BaseExchange {
     return await this.exchange.fetchTrades(symbol, since)
   }
 }
-
-
-const main = async () => {
-  const independentreserve = new IndependentreserveExchange()
-  //independentreserve.loadMarkets()
-  //independentreserve.fetchMarkets()
-  independentreserve.fetchTickers('BTCAUD')
-}
-
-main()

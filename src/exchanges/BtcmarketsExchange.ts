@@ -1,6 +1,7 @@
 import * as ccxt from 'ccxt'
 
-import BaseExchange from './core/BaseExchange'
+import CCXTExchange from './core/CCXTExchange'
+
 
 interface IOrder {
   asset: string
@@ -15,16 +16,15 @@ interface IOrderBook {
 }
 
 
-export default class BtcmarketsExchange extends BaseExchange {
+export default class BtcmarketsExchange extends CCXTExchange {
   private readonly clientws: WebSocket
   private readonly streamingTradesSymbol: string[]
 
-  constructor () {
-    const btcmarkets = new ccxt.btcmarkets({ enableRateLimit: true })
-    super(btcmarkets)
+  constructor (exchange: ccxt.Exchange) {
+    super(exchange)
 
     const client = 'btcmarketsWeb'
-    //this.clientws = 'btcmarketsWeb'
+    // this.clientws = 'btcmarketsWeb'
     this.streamingTradesSymbol = []
   }
 
@@ -121,58 +121,48 @@ export default class BtcmarketsExchange extends BaseExchange {
   }
 
 
-  public async fetchTickers (symbol) {
-    const wsSymbol = symbol.replace('/', '').toUpperCase()
-    const ticker = await this.exchange.has['fetchTickers']
-    if(ticker == false){
-      const fakeTicker = {}
-      fakeTicker['symbol'] = wsSymbol
-      fakeTicker['timestamp'] = '1553862530261.5288'
-      fakeTicker['datetime'] = 'datetime'
-      fakeTicker['high'] = 9.3e-7
-      fakeTicker['bid'] = 8.5e-7
-      fakeTicker['bidVolume'] = undefined
-      fakeTicker['ask'] = 0.00000103
-      fakeTicker['askVolume'] = undefined
-      fakeTicker['vwap'] = undefined
-      fakeTicker['open'] = undefined
-      fakeTicker['close'] = 8.5e-7
-      fakeTicker['last'] = 8.5e-7
-      fakeTicker['previousClose'] = undefined
-      fakeTicker['change'] = undefined
-      fakeTicker['percentage'] = undefined
-      fakeTicker['average'] = 9.4e-7
-      fakeTicker['baseVolume'] = 179063.63874
-      fakeTicker['quoteVolume'] = undefined
-      fakeTicker['info'] =
-      { mid: '0.00000094',
-        bid: '0.00000085',
-        ask: '0.00000103',
-        last_price: '0.00000085',
-        low: '0.00000072',
-        high: '0.00000093',
-        volume: '179063.63874',
-        timestamp: '1553862530.261528837',
-        pair: wsSymbol } 
+  // public async fetchTickers (symbol) {
+  //   const wsSymbol = symbol.replace('/', '').toUpperCase()
+  //   const ticker = await this.exchange.has['fetchTickers']
+  //   if(ticker == false){
+  //     const fakeTicker = {}
+  //     fakeTicker['symbol'] = wsSymbol
+  //     fakeTicker['timestamp'] = '1553862530261.5288'
+  //     fakeTicker['datetime'] = 'datetime'
+  //     fakeTicker['high'] = 9.3e-7
+  //     fakeTicker['bid'] = 8.5e-7
+  //     fakeTicker['bidVolume'] = undefined
+  //     fakeTicker['ask'] = 0.00000103
+  //     fakeTicker['askVolume'] = undefined
+  //     fakeTicker['vwap'] = undefined
+  //     fakeTicker['open'] = undefined
+  //     fakeTicker['close'] = 8.5e-7
+  //     fakeTicker['last'] = 8.5e-7
+  //     fakeTicker['previousClose'] = undefined
+  //     fakeTicker['change'] = undefined
+  //     fakeTicker['percentage'] = undefined
+  //     fakeTicker['average'] = 9.4e-7
+  //     fakeTicker['baseVolume'] = 179063.63874
+  //     fakeTicker['quoteVolume'] = undefined
+  //     fakeTicker['info'] =
+  //     { mid: '0.00000094',
+  //       bid: '0.00000085',
+  //       ask: '0.00000103',
+  //       last_price: '0.00000085',
+  //       low: '0.00000072',
+  //       high: '0.00000093',
+  //       volume: '179063.63874',
+  //       timestamp: '1553862530.261528837',
+  //       pair: wsSymbol }
 
-      console.log('fetchTickers is not supported','\n', fakeTicker)
-    } else {
-      const ticker = await this.exchange.fetchTickers(wsSymbol)
-      console.log(ticker)
-    }
-  }
+  //     console.log('fetchTickers is not supported','\n', fakeTicker)
+  //   } else {
+  //     const ticker = await this.exchange.fetchTickers(wsSymbol)
+  //     console.log(ticker)
+  //   }
+  // }
 
-  public async getTrades (symbol: string, since: number, _descending: boolean): Promise<ccxt.Trade[]> {
-    return await this.exchange.fetchTrades(symbol, since)
-  }
+  // public async getTrades (symbol: string, since: number, _descending: boolean): Promise<ccxt.Trade[]> {
+  //   return await this.exchange.fetchTrades(symbol, since)
+  // }
 }
-
-
-const main = async () => {
-  const btcmarkets = new BtcmarketsExchange()
-  //btcmarkets.loadMarkets()
-  //btcmarkets.fetchMarkets()
-  btcmarkets.fetchTickers('BTCAUD')
-}
-
-main()

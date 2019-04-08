@@ -1,32 +1,19 @@
 import * as ccxt from 'ccxt'
-import * as WebSocket from "ws"
+import * as WebSocket from 'ws'
 
-import BaseExchange from './core/BaseExchange'
-
-interface IOrder {
-  asset: string
-  price: number
-  amount: number
-}
+import { IOrder, IOrderBook } from 'src/interfaces'
+import CCXTExchange from './core/CCXTExchange'
 
 
-interface IOrderBook {
-  bids: IOrder[]
-  asks: IOrder[]
-}
-
-
-export default class BitmexExchange extends BaseExchange {
+export default class BitmexExchange extends CCXTExchange {
   private readonly clientws: WebSocket
-  private readonly streamingTradesSymbol: string[]
 
-  constructor () {
-    const bitmex = new ccxt.bitmex({ enableRateLimit: true })
-    super(bitmex)
 
-    const client = new WebSocket("wss://www.bitmex.com/realtime")
+  constructor (exchange: ccxt.Exchange) {
+    super(exchange)
+
+    const client = new WebSocket('wss://www.bitmex.com/realtime')
     this.clientws = client
-    this.streamingTradesSymbol = []
   }
 
 
@@ -35,52 +22,51 @@ export default class BitmexExchange extends BaseExchange {
   }
 
 
-  public streamTrades(symbol: string): void {
-
+  public streamTrades (symbol: string): void {
     // check if we are already streaming this symbol or not
     // if (this.streamingTradesSymbol.indexOf(symbol) >= 0) return
     // this.streamingTradesSymbol.push(symbol)
-    //
+
     const wsSymbol = symbol.replace('/', '').toUpperCase()
 
     this.clientws.on('open', () => {
       console.log('ws opened')
-      this.clientws.send(`{"op": "subscribe", "args": "trade:${wsSymbol}"}`)
-     //this.clientws.send('{"op": "subscribe", "args": "trade"}') //for all symbols
+      this.clientws.send(`{'op': 'subscribe', 'args': 'trade:${wsSymbol}'}`)
+     // this.clientws.send('{'op': 'subscribe', 'args': 'trade'}') //for all symbols
     })
 
-    this.clientws.on('message', (trade:any) => {
+    this.clientws.on('message', (trade: any) => {
       const parsedJSON = JSON.parse(trade)
       try {
         const data = parsedJSON.data
-        if(data){
-          data.forEach(function(obj){
+        if (data) {
+          data.forEach(obj => {
             var price = obj.price
             var size = obj.size
             var ts = obj.timestamp
-            var symbol = obj.symbol // this will be needed for all symbols
+            var symbol2 = obj.symbol // this will be needed for all symbols
             var timestamp = Date.parse(ts)
             var grossValue = obj.grossValue
 
-              const ccxtTrade: ccxt.Trade = {
-                amount: Number(size),
-                datetime: (new Date(timestamp)).toISOString(),
-                id: String(obj.trdMatchID),
-                price: Number(price),
-                info: {},
-                timestamp: timestamp,
-                side: obj.side,
-                symbol: symbol,
-                takerOrMaker: trade.maker ? 'maker' : 'taker',
-                cost: Number(price) * Number(size),
-                fee: undefined
-              }
-              console.log(ccxtTrade)
-              this.emit('trade', ccxtTrade)
+            const ccxtTrade: ccxt.Trade = {
+              amount: Number(size),
+              datetime: (new Date(timestamp)).toISOString(),
+              id: String(obj.trdMatchID),
+              price: Number(price),
+              info: {},
+              timestamp: timestamp,
+              side: obj.side,
+              symbol: symbol2,
+              takerOrMaker: trade.maker ? 'maker' : 'taker',
+              cost: Number(price) * Number(size),
+              fee: undefined
+            }
+            console.log(ccxtTrade)
+            this.emit('trade', ccxtTrade)
           })
         }
-      } catch (e){
-
+      } catch (e) {
+        // test
       }
     })
   }
@@ -91,14 +77,14 @@ export default class BitmexExchange extends BaseExchange {
 
     this.clientws.on('open', () => {
       console.log('ws opened')
-      this.clientws.send(`{"op": "subscribe", "args": "orderBook10:${wsSymbol}"}`)
+      this.clientws.send(`{'op': 'subscribe', 'args': 'orderBook10:${wsSymbol}'}`)
     })
 
-    this.clientws.on('message', (orders:any) => {
+    this.clientws.on('message', (orders: any) => {
       const parsedJSON = JSON.parse(orders)
-      try{
+      try {
         const data = parsedJSON.data
-        data.forEach(function(obj){
+        data.forEach(obj => {
           const bids: IOrder[] = obj.bids.map(bid => {
             return {
               asset: wsSymbol,
@@ -116,15 +102,15 @@ export default class BitmexExchange extends BaseExchange {
           })
 
 
-          const orderBook:IOrderBook = {
+          const orderBook: IOrderBook = {
             bids: bids,
             asks: asks
           }
           console.log(orderBook)
           this.emit('orderbook', orderBook)
         })
-      } catch(e) {
-        //console.log(e)
+      } catch (e) {
+        // console.log(e)
       }
     })
    }
@@ -136,10 +122,10 @@ export default class BitmexExchange extends BaseExchange {
 }
 
 
-const main = async () => {
-  const bitmex = new BitmexExchange()
-  //bitmex.streamTrades('ETHUSD')
-  bitmex.streamOrderbook('ETHUSD')
-}
+// const main = async () => {
+//   const bitmex = new BitmexExchange()
+//   // bitmex.streamTrades('ETHUSD')
+//   bitmex.streamOrderbook('ETHUSD')
+// }
 
-main()
+// main()

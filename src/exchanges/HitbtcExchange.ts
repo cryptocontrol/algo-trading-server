@@ -1,28 +1,16 @@
 import * as ccxt from 'ccxt'
-import * as WebSocket from "ws"
+import * as WebSocket from 'ws'
 
-import BaseExchange from './core/BaseExchange'
-
-interface IOrder {
-  asset: string
-  price: number
-  amount: number
-}
+import CCXTExchange from './core/CCXTExchange'
+import { IOrder, IOrderBook } from 'src/interfaces'
 
 
-interface IOrderBook {
-  bids: IOrder[]
-  asks: IOrder[]
-}
-
-
-export default class HitbtcExchange extends BaseExchange {
+export default class HitbtcExchange extends CCXTExchange {
   private readonly clientws: WebSocket
   private readonly streamingTradesSymbol: string[]
 
-  constructor () {
-    const hitbtc = new ccxt.hitbtc({ enableRateLimit: true })
-    super(hitbtc)
+  constructor (exchange: ccxt.Exchange) {
+    super(exchange)
 
     const client = new WebSocket('wss://api.hitbtc.com/api/2/ws')
     this.clientws = client
@@ -48,16 +36,16 @@ export default class HitbtcExchange extends BaseExchange {
       this.clientws.send(`{ "method":"subscribeTrades","params": { "symbol": "${wsSymbol}" }, "id":123 }`)
     })
 
-    this.clientws.on('message', (trade:any) => {
+    this.clientws.on('message', (trade: any) => {
       const parsedJSON = JSON.parse(trade)
       const params = parsedJSON.params
       try {
         const data = params.data
-        data.forEach(function(obj){
+        data.forEach(obj => {
           const price = obj.price
           const quantity = obj.quantity
           const timestamp = Date.parse(obj.timestamp)
-          //console.log(price, quantity, timestamp)
+          // console.log(price, quantity, timestamp)
 
           const ccxtTrade: ccxt.Trade = {
             amount: Number(quantity),
@@ -75,8 +63,8 @@ export default class HitbtcExchange extends BaseExchange {
           console.log(ccxtTrade)
           this.emit('trade', ccxtTrade)
         })
-      } catch (e){
-
+      } catch (e) {
+        // test
       }
     })
   }
@@ -90,10 +78,10 @@ export default class HitbtcExchange extends BaseExchange {
       this.clientws.send(`{"method": "subscribeOrderbook","params": {  "symbol": "${wsSymbol}"},  "id": 123}`)
     })
 
-    this.clientws.on('message', (orders:any) => {
+    this.clientws.on('message', (orders: any) => {
       const parsedJSON = JSON.parse(orders)
       const params = parsedJSON.params
-      try{
+      try {
         const bids: IOrder[] = params.bid.map(bid => {
           return {
             asset: wsSymbol,
@@ -110,14 +98,14 @@ export default class HitbtcExchange extends BaseExchange {
           }
         })
 
-        const orderBook:IOrderBook = {
+        const orderBook: IOrderBook = {
           bids: bids,
           asks: asks
         }
         this.emit('orderbook', orderBook)
         console.log(orderBook)
-      } catch(e) {
-
+      } catch (e) {
+        // test
       }
     })
    }
@@ -127,12 +115,3 @@ export default class HitbtcExchange extends BaseExchange {
     return await this.exchange.fetchTrades(symbol, since)
   }
 }
-
-
-const main = async () => {
-  const hitbtc = new HitbtcExchange()
-  //hitbtc.streamTrades('ETHBTC')
-  hitbtc.streamOrderbook('ETHBTC')
-}
-
-main()

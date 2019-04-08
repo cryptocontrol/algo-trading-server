@@ -1,29 +1,19 @@
 import * as ccxt from 'ccxt'
-import * as BitfinexApi from "bitfinex-api-node"
-import { WebSocket } from "bitfinex-api-node"
+import * as BitfinexApi from 'bitfinex-api-node'
+import { WebSocket } from 'bitfinex-api-node'
 
-import BaseExchange from './core/BaseExchange'
-
-interface IOrder {
-  asset: string
-  price: number
-  amount: number
-}
+import { IOrder, IOrderBook } from 'src/interfaces'
+import CCXTExchange from './core/CCXTExchange'
 
 
-interface IOrderBook {
-  bids: IOrder[]
-  asks: IOrder[]
-}
-
-
-export default class BitfinexExchange extends BaseExchange {
+export default class BitfinexExchange extends CCXTExchange {
   private readonly clientws: WebSocket
   private readonly streamingTradesSymbol: string[]
+  private readonly streamingOrderbookSymbol: string[]
 
-  constructor () {
-    const bitfinex = new ccxt.bitfinex({ enableRateLimit: true })
-    super(bitfinex)
+
+  constructor (exchange: ccxt.Exchange) {
+    super(exchange)
 
     const client = new BitfinexApi({
       ws: {
@@ -31,32 +21,25 @@ export default class BitfinexExchange extends BaseExchange {
         manageCandles: true
       }
     })
+
     this.clientws = client.ws(2, { transform: true })
+    this.clientws.open()
+
     this.streamingTradesSymbol = []
+    this.streamingOrderbookSymbol = []
   }
 
 
-  public canStreamTrades (_symbol: string): boolean {
-    return true
-  }
-
-
-  public streamTrades(symbol: string): void {
-
+  public streamTrades (symbol: string): void {
     // check if we are already streaming this symbol or not
-    // if (this.streamingTradesSymbol.indexOf(symbol) >= 0) return
-    // this.streamingTradesSymbol.push(symbol)
-    //
+    if (this.streamingTradesSymbol.indexOf(symbol) >= 0) return
+    this.streamingTradesSymbol.push(symbol)
+
     const wsSymbol = symbol.replace('/', '').toUpperCase()
 
-    this.clientws.open()
-    this.clientws.on('open', () => {
-      console.log('ws opened')
-      this.clientws.subscribeTrades(`t${wsSymbol}`)
-    })
-
+    this.clientws.subscribeTrades(`t${wsSymbol}`)
     this.clientws.onTrades({ symbol: `t${wsSymbol}` }, trade => {
-      trade.forEach((result:any) => {
+      trade.forEach(result => {
         const ccxtTrade: ccxt.Trade = {
           amount: Number(result.amount),
           datetime: (new Date(result.mts)).toISOString(),
@@ -70,24 +53,22 @@ export default class BitfinexExchange extends BaseExchange {
           cost: Number(result.price) * Number(result.amount),
           fee: undefined
         }
-        console.log(ccxtTrade)
-        this.emit('trade', ccxtTrade)
+
+        this.emit(`trade:${symbol}`, ccxtTrade)
       })
     })
   }
 
 
   public streamOrderbook (symbol: string) {
+    // check if we are already streaming this symbol or not
+    if (this.streamingOrderbookSymbol.indexOf(symbol) >= 0) return
+    this.streamingOrderbookSymbol.push(symbol)
+
     const wsSymbol = symbol.replace('/', '').toUpperCase()
 
-    this.clientws.open()
-    this.clientws.on('open', () => {
-      console.log('ws opened')
-      this.clientws.subscribeOrderBook(`${wsSymbol}`)
-    })
-
+    this.clientws.subscribeOrderBook(`${wsSymbol}`)
     this.clientws.onOrderBook({ symbol: `t${wsSymbol}` }, (orders) => {
-
       const bids: IOrder[] = orders.bids.map(bid => {
         return {
           asset: wsSymbol,
@@ -99,58 +80,12 @@ export default class BitfinexExchange extends BaseExchange {
       const asks: IOrder[] = orders.asks.map(ask => {
         return {
           asset: wsSymbol,
-          price: ask[0],
-          amount: ask[2]
+          price: Math.abs(ask[0]),
+          amount: Math.abs(ask[2])
         }
       })
 
-
-      const orderBook:IOrderBook = {
-        bids: bids,
-        asks: asks
-      }
-      this.emit('orderbook', orderBook)
-      console.log(orderBook)
+      this.emit(`orderbook:${symbol}`, { bids, asks })
     })
   }
-
-  public async loadMarkets () {
-    const markets = await this.exchange.loadMarkets()
-    console.log(markets)
-    return await this.exchange.loadMarkets()
-  }
-
-
-  public async fetchMarkets () {
-    const markets = await this.exchange.fetchMarkets()
-    console.log(markets)
-    return await this.exchange.loadMarkets()
-  }
-
-
-  public async fetchTickers (symbol) {
-    const wsSymbol = symbol.replace('/', '').toUpperCase()
-    const ticker = await this.exchange.has['fetchTickers']
-    if(ticker == false){
-      console.log('fetchTickers is not supported')
-    } else {
-      const ticker = await this.exchange.fetchTickers(wsSymbol)
-      console.log(ticker)
-    }
-  }
-
-  public async getTrades (symbol: string, since: number, _descending: boolean): Promise<ccxt.Trade[]> {
-    return await this.exchange.fetchTrades(symbol, since)
-  }
 }
-
-
-const main = async () => {
-  const bitfinex = new BitfinexExchange()
-  //bitfinex.streamTrades('BTCUSD')
-  //bitfinex.streamOrderbook('BTCUSD')
-  //bitfinex.loadMarkets()
-  bitfinex.fetchTickers('BTCUSD')
-}
-
-main()
