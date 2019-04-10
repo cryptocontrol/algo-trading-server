@@ -28,7 +28,7 @@
   "exclude": [
     "**/*test.tsx",
     "node_modules",
-    "build",
+    "dist",
     "config",
     "electron",
     "release"

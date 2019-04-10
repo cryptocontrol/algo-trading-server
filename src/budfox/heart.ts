@@ -11,7 +11,7 @@ import log from 'src/utils/log'
 export default class Heart extends EventEmitter {
   private lastTick = 0
   private tickrate: number
-  private interval: NodeJS.Timeout
+  private interval: any
 
 
   constructor (tickrate: number = 20) {
