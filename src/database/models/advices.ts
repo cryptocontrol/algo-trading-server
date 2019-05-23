@@ -1,5 +1,5 @@
 import { Table, Column, Model } from 'sequelize-typescript'
-import { IAdvice } from 'src/interfaces';
+import { IAdvice } from 'src/interfaces'
 
 
 @Table({ timestamps: true })

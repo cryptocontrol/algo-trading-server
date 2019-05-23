@@ -14,7 +14,8 @@ export interface ICandle {
 }
 
 
-export type IAdvice = 'long' | 'short' | 'soft' | 'close-position' | 'do-nothing'
+export type IAdvice = 'long' | 'short' | 'soft' | 'close-position' | 'do-nothing' | 'market-buy' | 'market-sell'
+  | 'limit-buy' | 'limit-sell'
 // 'long' | 'short' | 'close-position' | 'do-nothing'
 
 // https://support.bitfinex.com/hc/en-us/articles/115003451049-Bitfinex-Order-Types

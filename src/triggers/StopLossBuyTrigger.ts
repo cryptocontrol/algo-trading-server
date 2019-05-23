@@ -20,9 +20,9 @@ export default class StopLossBuyTrigger extends BaseTrigger {
     const { price } = trade
 
     // if price reaches or goes below the stop loss price, then
-    // we close the position with a market order
+    // we close the position with a market buy order
     if (price >= this.triggerDB.targetPrice) {
-      this.advice('close-position', price, this.triggerDB.targetVolume)
+      this.advice('market-buy', price, this.triggerDB.targetVolume)
       this.close()
     }
   }
