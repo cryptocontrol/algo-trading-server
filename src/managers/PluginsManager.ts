@@ -26,11 +26,19 @@ export default class PluginsManager {
   }
 
 
-  public onTrigger (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
+  public onAdvice (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
     const plugins = this.plugins[trigger.getUID()] || []
 
     const pluginKeys = _.keys(plugins)
     pluginKeys.forEach(key => plugins[key].onTriggered(trigger, advice, price, amount))
+  }
+
+
+  public onError (error: Error, trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
+    const plugins = this.plugins[trigger.getUID()] || []
+
+    const pluginKeys = _.keys(plugins)
+    pluginKeys.forEach(key => plugins[key].onError(error, trigger, advice, price, amount))
   }
 
 

@@ -57,6 +57,16 @@ export default class SlackPlugin extends BasePlugin<ISlackOptions> {
   }
 
 
+  onError (error: Error) {
+    const body = this._createResponse(
+      'danger',
+      `Error: ` + error
+    )
+
+    this._send(body)
+  }
+
+
   checkResults (error) {
     if (error) log.warn('error sending slack', error)
     else log.info('Send advice via slack.')
