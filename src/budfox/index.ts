@@ -44,7 +44,6 @@ export default class BudFox extends EventEmitter {
     this.marketDataProvider.on('trades', this.candlesCreator.write)
     this.candlesCreator.on('candles', this.processCandles)
 
-
     // relay a market-start, market-update and trade events
     this.marketDataProvider.on('market-start', e => this.emit('market-start', e))
     this.marketDataProvider.on('market-update', e => this.emit('market-update', e))

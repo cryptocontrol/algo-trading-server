@@ -6,15 +6,16 @@
 .node_repl_history
 .npm
 .nyc_output
+.sqlite
 .vscode
 .yarn-integrity
 *.log
 *.pid
 *.pid.lock
 *.seed
+*.sqlite
 *.tgz
 bower_components
-.sqlite
 build/Release
 coverage
 jspm_packages/
