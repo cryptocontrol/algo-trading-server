@@ -46,6 +46,11 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
   }
 
 
+  onError (error: Error) {
+    this.send(`Error: ` + error)
+  }
+
+
   private send (message: string, _chatId?: string) {
     const chatId = _chatId || this.options.chatId
     this.bot.sendMessage(chatId, message, { parse_mode: 'Markdown' })
