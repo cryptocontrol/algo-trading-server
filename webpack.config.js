@@ -5,8 +5,9 @@ const webpack = require('webpack')
 
 module.exports = {
   entry: {
-    app: './src/index.ts'
+    app: path.resolve('./src/index.ts')
   },
+
   output: {
     path: path.resolve('./dist'),
     filename: '[name].bundle.js'
@@ -34,15 +35,13 @@ module.exports = {
       'node_modules',
     ],
     plugins: [
-      new TsConfigPathsPlugin({ configFileName: "./tsconfig.json" })
+      new TsConfigPathsPlugin({ configFileName: path.resolve('./tsconfig.json') })
     ]
   },
 
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
+      'process.env': { NODE_ENV: JSON.stringify('production') }
     })
   ],
 
