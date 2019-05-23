@@ -6,6 +6,7 @@ import StopLossBuyTrigger from 'src/triggers/StopLossBuyTrigger'
 import TakeProfitTrigger from 'src/triggers/TakeProfitTrigger'
 import Triggers from 'src/database/models/triggers'
 import Advices from 'src/database/models/advices'
+import AdviceManager from './AdviceManager';
 
 
 interface IExchangeTriggers {
@@ -38,22 +39,8 @@ export default class TriggerManger {
     budfox.on('trade', trade => trigger.onTrade(trade))
 
     // whenever a trigger executes
-    trigger.on('triggered', ({ advice, price, amount }) => {
-      // notify all the plugins for this user...
-      this.pluginmanager.onTrigger(trigger, advice, price, amount)
-
-      const adviceDB = new Advices({
-        uid: trigger.getUID(),
-        symbol: trigger.getSymbol(),
-        exchange: trigger.getExchange(),
-        advice,
-        price,
-        mode: 'realtime',
-        volume: amount,
-        trigger_id: trigger.getDBId()
-      })
-
-      adviceDB.save()
+    trigger.on('advice', ({ advice, price, amount }) => {
+      AdviceManager.getInstance().addAdvice(trigger, advice, price, amount)
     })
 
     // once a trigger has finished

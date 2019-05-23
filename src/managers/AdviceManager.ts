@@ -12,6 +12,9 @@ export default class AdviceManager {
 
 
   public async addAdvice (t: BaseTrigger, advice: IAdvice, price: number, amount: number) {
+    // notify all the plugins for this user...
+    PluginsManager.getInstance().onAdvice(t, advice, price, amount)
+
     // whenever a trigger executes
     const adviceDB = new Advices({
       uid: t.getUID(),

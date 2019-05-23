@@ -68,7 +68,7 @@ export default abstract class BaseTrigger extends EventEmitter {
     trigger.lastTriggeredAt = new Date
     trigger.save()
 
-    this.emit('triggered', { advice, price, amount })
+    this.emit('advice', { advice, price, amount })
   }
 
 
