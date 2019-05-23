@@ -15,6 +15,7 @@ export const createTrigger = async (uid: string, exchange: string, symbol: strin
     exchange,
     kind,
     orderId,
+    isActive: true,
     targetVolume: volume,
     targetPrice: price,
     params: JSON.stringify(rest)

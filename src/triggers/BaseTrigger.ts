@@ -73,6 +73,11 @@ export default abstract class BaseTrigger extends EventEmitter {
 
 
   protected close () {
+    if (!this.isLive()) return
+
+    const trigger = this.triggerDB
+    log.info(`${trigger.kind} trigger for user ${trigger.uid} on ${trigger.exchange} ${trigger.symbol} closed`)
+
     this.emit('close')
 
     // mark the trigger as closed in the DB
