@@ -35,8 +35,8 @@ export default class AdviceManager {
       // create the exchange instance
       const exchange = new ccxt[t.getExchange()]({
         apiKey: data.apiKey,
-        apiSecret: data.apiSecret,
-        apiPassword: data.apiPassword
+        secret: data.apiSecret,
+        password: data.apiPassword
       })
 
       /* execute the advice */
