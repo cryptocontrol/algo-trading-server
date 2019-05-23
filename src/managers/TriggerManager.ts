@@ -1,10 +1,11 @@
 import BaseTrigger from 'src/triggers/BaseTrigger'
 import BudfoxManger from './BudfoxManager'
 import PluginsManager from './PluginsManager'
-import StopLossTrigger from 'src/triggers/StopLossTrigger'
+import StopLossSellTrigger from 'src/triggers/StopLossSellTrigger'
+import StopLossBuyTrigger from 'src/triggers/StopLossBuyTrigger'
 import TakeProfitTrigger from 'src/triggers/TakeProfitTrigger'
 import Triggers from 'src/database/models/triggers'
-import Advices from 'src/database/models/advices';
+import Advices from 'src/database/models/advices'
 
 
 interface IExchangeTriggers {
@@ -83,7 +84,8 @@ export default class TriggerManger {
 
 
   private getTrigger (triggerDB: Triggers) {
-    if (triggerDB.kind === 'stop-loss') return new StopLossTrigger(triggerDB)
+    if (triggerDB.kind === 'stop-loss-buy') return new StopLossBuyTrigger(triggerDB)
+    if (triggerDB.kind === 'stop-loss-sell') return new StopLossSellTrigger(triggerDB)
     if (triggerDB.kind === 'take-profit') return new TakeProfitTrigger(triggerDB)
     if (triggerDB.kind === 'trailing-stop') return new TakeProfitTrigger(triggerDB)
   }

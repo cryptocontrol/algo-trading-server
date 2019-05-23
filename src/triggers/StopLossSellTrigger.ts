@@ -5,9 +5,13 @@ import BaseTrigger from './BaseTrigger'
 import Triggers from 'src/database/models/triggers'
 
 
-export default class StopLossTrigger extends BaseTrigger {
+/**
+ * A stop loss sell trigger, is executed when the market price goes below a certain
+ * threshold. The trigger forces a market sell order.
+ */
+export default class StopLossSellTrigger extends BaseTrigger {
   constructor (triggerDB: Triggers) {
-    super(triggerDB, 'Stop Loss')
+    super(triggerDB, 'Stop Loss Sell')
   }
 
 
