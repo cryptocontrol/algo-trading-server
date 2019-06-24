@@ -8,6 +8,12 @@ interface IBudfoxes {
 }
 
 
+/**
+ * The Budfox Manager is responsible for managing all the budfox instances. All other mangers
+ * fetch budfox instances using this manager.
+ *
+ * This class is a singleton.
+ */
 export default class BudfoxManger {
   private readonly budfoxes: IBudfoxes = {}
   private readonly manager = ExchangeManger.getInstance()

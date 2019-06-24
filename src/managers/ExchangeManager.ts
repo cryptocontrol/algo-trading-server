@@ -16,6 +16,7 @@ export default class ExchangeManger {
 
 
   getExchange (exchangeId: string): BaseExchange {
+    // if the exchange is already instanstiated, then we return that
     if (this.exchanges[exchangeId]) return this.exchanges[exchangeId]
 
     // create a CCXT instance for each exchange; (note that the enableRateLimit should be enabled)

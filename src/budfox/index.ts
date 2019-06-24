@@ -1,7 +1,7 @@
-import * as _ from 'underscore'
-import { Readable } from 'stream'
 import { Trade } from 'ccxt'
+import * as _ from 'underscore'
 
+import { EventEmitter } from 'events'
 import { ICandle } from 'src/interfaces'
 import BaseExchange from 'src/exchanges/core/BaseExchange'
 import CandleCreator from './candleCreator'
@@ -9,7 +9,6 @@ import Candles from 'src/database/models/candles'
 import log from 'src/utils/log'
 import MarketDataProvider from './marketDataProvider'
 import Trades from 'src/database/models/trades'
-import { EventEmitter } from 'events'
 
 
 /**
