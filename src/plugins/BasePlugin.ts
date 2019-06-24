@@ -1,6 +1,6 @@
 import { IAdvice } from 'src/interfaces'
 import BaseTrigger from 'src/triggers/BaseTrigger'
-import Plugins from 'src/database/models/plugins';
+import Plugins from 'src/database/models/plugins'
 
 
 /**

@@ -1,6 +1,6 @@
 import BudFox from 'src/budfox'
 import ExchangeManger from './ExchangeManager'
-import log from 'src/utils/log';
+import log from 'src/utils/log'
 
 
 interface IBudfoxes {

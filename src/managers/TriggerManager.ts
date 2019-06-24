@@ -6,7 +6,7 @@ import StopLossBuyTrigger from 'src/triggers/StopLossBuyTrigger'
 import TakeProfitTrigger from 'src/triggers/TakeProfitTrigger'
 import Triggers from 'src/database/models/triggers'
 import Advices from 'src/database/models/advices'
-import AdviceManager from './AdviceManager';
+import AdviceManager from './AdviceManager'
 
 
 interface IExchangeTriggers {

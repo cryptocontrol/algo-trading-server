@@ -12,15 +12,15 @@ export default class SMA extends Indicator {
   constructor (windowLength) {
     super('price')
 
-    this.windowLength = windowLength;
+    this.windowLength = windowLength
   }
 
 
   update (price: number) {
-    var tail = this.prices[this.age] || 0; // oldest price in window
-    this.prices[this.age] = price;
-    this.sum += price - tail;
-    this.result = this.sum / this.prices.length;
+    var tail = this.prices[this.age] || 0 // oldest price in window
+    this.prices[this.age] = price
+    this.sum += price - tail
+    this.result = this.sum / this.prices.length
     this.age = (this.age + 1) % this.windowLength
   }
 }

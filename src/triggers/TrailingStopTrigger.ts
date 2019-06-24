@@ -1,7 +1,7 @@
 import { ICandle } from 'src/interfaces'
 import BaseTrigger from './BaseTrigger'
 import Triggers from 'src/database/models/triggers'
-import { Trade } from 'ccxt';
+import { Trade } from 'ccxt'
 
 
 export default class TrailingStopTrigger extends BaseTrigger {

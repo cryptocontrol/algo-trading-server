@@ -2,7 +2,7 @@
  * This is the starting point of the application. Here we initialize the database and start the server..
  */
 import TriggerManger from './managers/TriggerManager'
-import PluginsManager from './managers/PluginsManager';
+import PluginsManager from './managers/PluginsManager'
 
 
 
