@@ -30,14 +30,14 @@ export default abstract class BasePlugin<T> {
 
 
   /**
-   * This fn. is called whenever a trigger has been executed
+   * This fn. is called whenever a trigger has given an advice
    *
    * @param trigger   The trigger object
    * @param advice    The advice given by the trigger
    * @param price     The price at which it was triggered
    * @param amount    The amount adviced by the trigger
    */
-  abstract onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number): void
+  abstract onTriggerAdvice (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number): void
 
 
   /**

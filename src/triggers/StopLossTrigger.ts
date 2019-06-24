@@ -13,6 +13,7 @@ export default class StopLossTrigger extends BaseTrigger {
   action: 'buy' | 'sell'
   type: 'market' | 'limit'
 
+
   constructor (trigger: Triggers) {
     super(trigger, 'Stop Loss')
 

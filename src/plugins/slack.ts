@@ -41,7 +41,7 @@ export default class SlackPlugin extends BasePlugin<ISlackOptions> {
   }
 
 
-  onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number) {
+  onTriggerAdvice (trigger: BaseTrigger, advice: IAdvice, price?: number) {
     if (advice == 'soft' && this.options.muteSoft) return
 
     const color = advice === 'long' ? 'good' :

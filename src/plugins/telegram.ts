@@ -37,7 +37,7 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
   }
 
 
-  onTriggered (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
+  onTriggerAdvice (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
     const message = `${trigger.name} triggered! and adviced to \`${advice}\` ` +
       `on \`${trigger.getExchange().toUpperCase()}\` \`${trigger.getSymbol()}\` with a ` +
       `volume of \`${amount}\`! Current price is \`${price}\``
@@ -53,7 +53,7 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
 
   private send (message: string, _chatId?: string) {
     const chatId = _chatId || this.options.chatId
-    this.bot.sendMessage(chatId, message, { parse_mode: 'Markdown' })
+    if (chatId) this.bot.sendMessage(chatId, message, { parse_mode: 'Markdown' })
   }
 
 
