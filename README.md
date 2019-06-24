@@ -31,7 +31,8 @@ The CryptoControl Terminal allows users to host their own trading servers so tha
 
 
 ## Quick Start
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/cryptocontrol/adv-trading-server)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/cryptocontrol/algo-trading-server
+)
 
 For a quick start with docker-compose run
 ```
