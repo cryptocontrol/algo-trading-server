@@ -1,10 +1,7 @@
 import AdviceManager from './AdviceManager'
-import Advices from 'src/database/models/advices'
 import BaseTrigger from 'src/triggers/BaseTrigger'
 import BudfoxManger from './BudfoxManager'
-import PluginsManager from './PluginsManager'
-import StopLossBuyTrigger from 'src/triggers/StopLossBuyTrigger'
-import StopLossSellTrigger from 'src/triggers/StopLossSellTrigger'
+import StopLossTrigger from 'src/triggers/StopLossTrigger'
 import TakeProfitTrigger from 'src/triggers/TakeProfitTrigger'
 import Triggers from 'src/database/models/triggers'
 
@@ -97,12 +94,8 @@ export default class TriggerManger {
    */
   private _getTrigger (triggerDB: Triggers) {
     // stop losses
-    if (triggerDB.kind === 'stop-loss-buy') return new StopLossBuyTrigger(triggerDB)
-    if (triggerDB.kind === 'stop-loss-sell') return new StopLossSellTrigger(triggerDB)
-
-    // take profits
-    if (triggerDB.kind === 'take-profit-buy') return new TakeProfitTrigger(triggerDB)
-    if (triggerDB.kind === 'take-profit-sell') return new TakeProfitTrigger(triggerDB)
+    if (triggerDB.kind === 'stop-loss') return new StopLossTrigger(triggerDB)
+    if (triggerDB.kind === 'take-profit') return new TakeProfitTrigger(triggerDB)
 
     // tiered take-profits etc.. etc..
   }

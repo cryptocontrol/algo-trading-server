@@ -6,12 +6,12 @@ import Triggers from 'src/database/models/triggers'
 import log from 'src/utils/log'
 
 
-// Note: as of now only supports trailing the price going up (after
-// a buy), on trigger (when the price moves down) you should sell.
-
-// @param initialPrice: initial price, preferably buy price
-// @param trail: fixed offset from the price
-// @param onTrigger: fn to call when the stop triggers
+/**
+ * A trigger is an event that is executed once (or multiple times) when certain
+ * conditions are met.
+ *
+ * The most common examples of triggers are stop-losses and take profit triggers.
+ */
 export default abstract class BaseTrigger extends EventEmitter {
   public readonly name: string
   protected readonly triggerDB: Triggers
