@@ -16,6 +16,9 @@ export default class TakeProfitTrigger extends BaseTrigger {
     const params = JSON.parse(trigger.params)
     this.action = params.action
     this.type = params.type
+
+    if (params.action !== 'buy' || params.action !== 'sell') throw new Error('bad/missing action')
+    if (params.type !== 'market' || params.type !== 'limit') throw new Error('bad/missing type')
   }
 
 

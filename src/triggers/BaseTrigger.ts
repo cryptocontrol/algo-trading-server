@@ -11,6 +11,8 @@ import log from 'src/utils/log'
  * conditions are met.
  *
  * The most common examples of triggers are stop-losses and take profit triggers.
+ *
+ * This is an abstract, any trigger that follows this layout needs to implement the fns. below
  */
 export default abstract class BaseTrigger extends EventEmitter {
   public readonly name: string
@@ -24,7 +26,25 @@ export default abstract class BaseTrigger extends EventEmitter {
   }
 
 
+  /**
+   * This fn recieves every new trade made for a particular symbol & exchange. Every trigger instance
+   * needs to have this fn implemented with it's business logic.
+   *
+   * Trades are sent by Budfox
+   *
+   * @param trade the new trade made
+   */
   public abstract onTrade (trade: Trade): void
+
+
+  /**
+   * This fn recieves every new candle made for a particular symbol & exchange. Every trigger instance
+   * needs to have this fn implemented with it's business logic.
+   *
+   * Candles are emitted by Budfox
+   *
+   * @param candle the new candle emitted
+   */
   public abstract onCandle (candle: ICandle): void
 
 
