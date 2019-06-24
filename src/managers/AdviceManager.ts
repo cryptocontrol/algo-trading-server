@@ -1,21 +1,24 @@
 import * as ccxt from 'ccxt'
 
-import BaseTrigger from 'src/triggers/BaseTrigger'
-import Advices from 'src/database/models/advices'
-import UserExchanges from 'src/database/models/userexchanges'
-import PluginsManager from './PluginsManager'
 import { IAdvice } from 'src/interfaces'
+import Advices from 'src/database/models/advices'
+import BaseTrigger from 'src/triggers/BaseTrigger'
+import PluginsManager from './PluginsManager'
+import UserExchanges from 'src/database/models/userexchanges'
 
 
+/**
+ * The advice manager is where all the advices get executed.
+ */
 export default class AdviceManager {
   private static readonly instance = new AdviceManager()
 
 
   public async addAdvice (t: BaseTrigger, advice: IAdvice, price: number, amount: number) {
-    // notify all the plugins for this user...
+    // notify all the plugins about the advice made...
     PluginsManager.getInstance().onAdvice(t, advice, price, amount)
 
-    // whenever a trigger executes
+    // create and save the advice into the DB
     const adviceDB = new Advices({
       uid: t.getUID(),
       symbol: t.getSymbol(),
@@ -26,8 +29,6 @@ export default class AdviceManager {
       volume: amount,
       trigger_id: t.getDBId()
     })
-
-    // save advice into the DB
     await adviceDB.save()
 
     await UserExchanges.findOne({ where: { uid: t.getUID(), exchange: t.getExchange() } })
