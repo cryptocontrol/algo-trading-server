@@ -5,6 +5,7 @@ Iguana is heavily insipired by the popular open-source bitcoin trading bot, [Gek
 
 All data, including candle data, list of trades streamed from an exchange, list of trades made by the bot is stored in a SQL-compatiable database (MySQL, Postgres, Sqlite etc...). The connection details can be found in [`src/database/config.json`](./src/database/config.json).
 
+
 Understanding the code
 ======================
 

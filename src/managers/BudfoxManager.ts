@@ -26,6 +26,7 @@ export default class BudfoxManger {
     if (this.budfoxes[exchangeSymbol]) return this.budfoxes[exchangeSymbol]
 
     const exchange = this.manager.getExchange(exchangeId)
+
     log.debug('creating budfox for', exchange.id, symbol)
 
     const budfox = new BudFox(exchange, symbol)
