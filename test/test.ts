@@ -8,72 +8,108 @@ import StopLossTrigger from "../src/triggers/StopLossTrigger"
 
 
 
-describe("tests", async function() {
+describe("Stop Loss tests", async function() {
   let trade, trigger
 
-    before(async function() {
-      database.init()
-      const triggers = await Triggers.findAll({ where:
-        { isActive: false }, raw: true})
-      const trades = await Trades.findAll({ where: {
-        exchange: "binance",
-        CreatedAt: "2019-03-21 09:07:48"
-      }, raw: true })
+    // before(async function() {
+    //   database.init()
+    //   const triggers = await Triggers.findAll({ where:
+    //     { isActive: false }, raw: true})
+    //   const trades = await Trades.findAll({ where: {
+    //     exchange: "binance",
+    //     CreatedAt: "2019-03-21 09:07:48"
+    //   }, raw: true })
 
-      trigger = triggers[0] || {}
-      trade = trades[0] || {}
+    //   trigger = triggers[0] || {}
+    //   trade = trades[0] || {}
 
-      // console.log(triggers[0])
-    })
+    //   // console.log(triggers[0])
+    // })
 
-    context("pass", async function () {
-      it("should pass", async function () {
-        let triggers: any = await Triggers.findAll({ where:
-          { isActive: false }, raw: true})
+    it("check for stop loss market buy advice", done => {
+      trade = { ...data.default.trade }
+      trigger = { ...data.default.trigger }
 
-        let trades = await Trades.findAll({ where: {
-            exchange: "binance",
-            CreatedAt: "2019-03-21 09:07:48"
-          }, raw: true })
+      const stopLoss = new StopLossTrigger(trigger)
 
-        // const trigger = triggers[0]
+      stopLoss.on("advice", () => {
 
-        // console.log(trades)
-
-
-        // const trigger = data.default.trigger
-        // const trade = trades[0];
-        const trade = data.default.trade
-
-        triggers = triggers.map(t => {
-          return {
-            ...t,
-            params: `{"action": "sell", "type":"market"}`
-          }
-        })
-
-        const trigger = triggers[0];
-
-        console.log(trigger)
-
-        const stopLoss = new StopLossTrigger(trigger)
-
-        stopLoss.onTrade(trade)
-
-        expect(5).to.equal(5)
-      })
-    })
-
-
-    it("check for event emitted", done => {
-      trigger.on('close-position', () => {
         done()
       })
+
+
+      stopLoss.onTrade(trade)
     })
 
+    it("check for stop loss market sell advice", done => {
+      trade = {
+        ...data.default.trade
+      }
+      trigger = {
+        ...data.default.trigger,
+        params: '{ "action": "buy", "type": "market" }'
+      }
 
-    after(function() {
+      const stopLoss = new StopLossTrigger(trigger)
 
+      stopLoss.on("advice", () => {
+        done()
+      })
+
+
+      stopLoss.onTrade(trade)
+    })
+
+    it("check for stop loss limit sell advice", done => {
+      trade = {
+        ...data.default.trade
+      }
+      trigger = {
+        ...data.default.trigger,
+        params: '{ "action": "sell", "type": "limit" }'
+      }
+
+      const stopLoss = new StopLossTrigger(trigger)
+
+      stopLoss.on("advice", () => {
+        done()
+      })
+
+
+      stopLoss.onTrade(trade)
+    })
+
+    it("check for stop loss limit buy advice", done => {
+      trade = {
+        ...data.default.trade
+      }
+      trigger = {
+        ...data.default.trigger,
+        params: '{ "action": "buy", "type": "limit" }'
+      }
+
+      const stopLoss = new StopLossTrigger(trigger)
+
+      stopLoss.on("advice", () => {
+        done()
+      })
+
+
+      stopLoss.onTrade(trade)
+    })
+
+    it("check for stop loss close", done => {
+      trade = { ...data.default.trade }
+      trigger = { ...data.default.trigger }
+
+      const stopLoss = new StopLossTrigger(trigger)
+
+      stopLoss.on("close", () => {
+        done()
+      })
+
+
+      stopLoss.onTrade(trade)
     })
   }
 )
