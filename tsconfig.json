@@ -5,7 +5,8 @@
     "target": "es6",
     "types": [
       "node",
-      "express"
+      "express",
+      "mocha"
     ],
     "noImplicitAny": false,
     "sourceMap": false,
