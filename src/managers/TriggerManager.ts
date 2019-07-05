@@ -76,12 +76,16 @@ export default class TriggerManger {
   }
 
 
-  public removeTrigger (t: Triggers) {
+  public async removeTrigger (t: Triggers) {
     const exchangeSymbol = this._getExchangeSymbol(t)
 
     const exchangeSymbolTriggers = this.triggers[exchangeSymbol] || []
     const newTriggers = exchangeSymbolTriggers.filter(e => e.getDBId() !== t.id)
     this.triggers[exchangeSymbol] = newTriggers
+
+    // delete trigger from db
+
+     await Triggers.destroy({ where: { id: t.id }})
   }
 
 
