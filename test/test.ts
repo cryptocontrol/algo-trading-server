@@ -5,6 +5,7 @@ import * as data from "./data";
 // import Trades from "../src/database/models/trades";
 import StopLossTrigger from "../src/triggers/StopLossTrigger";
 import TakeProfitTrigger from "../src/triggers/TakeProfitTrigger";
+import TrailingStopTrigger from "../src/triggers/TrailingStopTrigger";
 
 
 
@@ -205,4 +206,47 @@ describe("Take Profit Trigger tests", async function() {
   })
 })
 
+// TODO: trailing trigger is not yet implemented
 
+// describe("Trailing Stop Trigger Tests", async function() {
+//   let trigger, trade;
+
+//   it("check & validate for trailing stop trigger", done => {
+//     trigger = {
+//       ...data.default.trigger,
+//       params: '{ "intialPrice": "0.9", "trail": "0.1" }' };
+//     trade = {
+//       ...data.default.trade,
+//       price: 0.01 };
+
+//     const trailingStopTrigger = new TrailingStopTrigger(trigger);
+
+//     trailingStopTrigger.on("close", data => {
+//       done();
+//     });
+
+//     trailingStopTrigger.onTrade(trade);
+//   })
+
+//   it("check & validate for trailing stop trigger ", done => {
+//     trigger = {
+//       ...data.default.trigger,
+//       params: '{ "intialPrice": "0.9", "trail": "0.1" }' };
+//     trade = {
+//       ...data.default.trade,
+//       price: 0.01 };
+
+//     const trailingStopTrigger = new TrailingStopTrigger(trigger);
+
+//     trailingStopTrigger.on("close", data => {
+//       expect(data).to.deep.equal(
+//         { advice: 'market-sell', price: 1, amount: 0.24 })
+//       done();
+//     });
+
+//     trailingStopTrigger.onTrade(trade);
+//   })
+// })
+
+
+// TODO: Write unit tests for cancel order trigger
