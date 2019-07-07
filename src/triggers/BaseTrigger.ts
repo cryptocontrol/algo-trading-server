@@ -3,7 +3,7 @@ import * as EventEmitter from 'events'
 
 import { ICandle, IAdvice } from 'src/interfaces'
 import Triggers from 'src/database/models/triggers'
-import log from 'src/utils/log'
+import log from '../utils/log'
 
 
 /**
@@ -70,6 +70,10 @@ export default abstract class BaseTrigger extends EventEmitter {
 
   public isLive () {
     return this.triggerDB.isActive
+  }
+
+  public getOrderId() {
+    return this.triggerDB.orderId;
   }
 
 

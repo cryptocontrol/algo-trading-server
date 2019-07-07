@@ -58,6 +58,9 @@ export default class AdviceManager {
 
         // limit buy
         if (adviceDB.advice === 'limit-buy') await exchange.createOrder(t.getSymbol(), 'limit', 'buy', amount, price)
+
+        // cancel order
+        if (adviceDB.advice === 'cancel-order') await exchange.cancelOrder(t.getOrderId(), t.getSymbol())
       } catch (e) {
         // TODO: if we encounter some kind of error; we notify the plugins about it
         PluginsManager.getInstance().onError(e, t, advice, price, amount)
