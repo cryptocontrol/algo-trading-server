@@ -4,6 +4,7 @@ import BudfoxManger from './BudfoxManager'
 import StopLossTrigger from 'src/triggers/StopLossTrigger'
 import TakeProfitTrigger from 'src/triggers/TakeProfitTrigger'
 import Triggers from 'src/database/models/triggers'
+import CancelOrderTrigger from 'src/triggers/CancelOrderTrigger';
 
 
 interface IExchangeTriggers {
@@ -100,6 +101,7 @@ export default class TriggerManger {
     // stop losses
     if (triggerDB.kind === 'stop-loss') return new StopLossTrigger(triggerDB)
     if (triggerDB.kind === 'take-profit') return new TakeProfitTrigger(triggerDB)
+    if (triggerDB.kind === 'cancel-order') return new CancelOrderTrigger(triggerDB);
 
     // tiered take-profits etc.. etc..
   }
