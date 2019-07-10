@@ -85,8 +85,8 @@ export default class TriggerManger {
     this.triggers[exchangeSymbol] = newTriggers
 
     // delete trigger from db
-
-     await Triggers.destroy({ where: { id: t.id }})
+    // No need to delete the trigger from db only a flag is changed 
+    // await Triggers.destroy({ where: { id: t.id }})
   }
 
 
