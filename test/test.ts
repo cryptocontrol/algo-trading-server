@@ -336,28 +336,77 @@ describe("Tiered Take Profit Tests", async function() {
   let trigger ,trade;
 
   it(`Should check & validate tiered take profit trigger
-   when price is 1/3rd of target price for sell market order`, done => {
-     trigger = {
-       ...data.default.trigger,
-       params: '{ "action": "sell", "type": "market" }'
-     };
+    when price is 1/3rd of target price for sell market order`, done => {
+    trigger = {
+      ...data.default.trigger,
+      params: '{ "action": "sell", "type": "market" }' };
 
-     const price = 0.34 * trigger.targetPrice;
-     const amount = 0.33 * trigger.targetVolume;
+    const price = 0.34 * trigger.targetPrice;
+    const amount = 0.33 * trigger.targetVolume;
 
-     trade = {
-       ...data.default.trigger,
-       price
-     }
+    trade = {
+      ...data.default.trigger,
+      price
+    }
 
-     const tieredTakeProfit = new TieredTakeProfitTrigger(trade);
+    const tieredTakeProfit = new TieredTakeProfitTrigger(trigger);
 
-     tieredTakeProfit.on("advice", data => {
-       expect(data).to.deep.equal(
-         { advice: "market-sell", price, amount })
+    tieredTakeProfit.on("advice", data => {
+      expect(data).to.deep.equal(
+        { advice: "market-sell", price, amount })
         done();
-     })
+    })
 
-     tieredTakeProfit.onTrade(trade);
-   })
+    tieredTakeProfit.onTrade(trade);
+  })
+
+  it(`Should check & validate tiered take profit trigger
+    when price is 1/3rd of target price for sell limit order`, done => {
+    trigger = {
+      ...data.default.trigger,
+      params: '{ "action": "sell", "type": "limit" }' };
+
+    const price = 0.34 * trigger.targetPrice;
+    const amount = 0.33 * trigger.targetVolume;
+
+    trade = {
+      ...data.default.trigger,
+      price
+    }
+
+    const tieredTakeProfit = new TieredTakeProfitTrigger(trigger);
+
+    tieredTakeProfit.on("advice", data => {
+      expect(data).to.deep.equal(
+        { advice: "limit-sell", price, amount })
+        done();
+    })
+
+    tieredTakeProfit.onTrade(trade);
+  })
+
+  it(`Should check & validate tiered take profit trigger
+    when price is 2/3rd of target price for sell market order`, done => {
+    trigger = {
+      ...data.default.trigger,
+      params: '{ "action": "sell", "type": "market" }' };
+
+    const price = 0.67 * trigger.targetPrice;
+    const amount = 0.33 * trigger.targetVolume;
+
+    trade = {
+      ...data.default.trigger,
+      price
+    }
+
+    const tieredTakeProfit = new TieredTakeProfitTrigger(trigger);
+
+    tieredTakeProfit.on("advice", data => {
+      expect(data).to.deep.equal(
+        { advice: "market-sell", price, amount })
+        done();
+    })
+
+    tieredTakeProfit.onTrade(trade);
+  })
 })
