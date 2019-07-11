@@ -7,7 +7,7 @@ import StopLossTrigger from "../src/triggers/StopLossTrigger";
 import TakeProfitTrigger from "../src/triggers/TakeProfitTrigger";
 import TrailingStopTrigger from "../src/triggers/TrailingStopTrigger";
 import CancelOrderTrigger from "../src/triggers/CancelOrderTrigger";
-
+import TieredTakeProfitTrigger from "../src/triggers/TieredTakeProfitTrigger";
 
 
 
@@ -336,7 +336,7 @@ describe("Tiered Take Profit Tests", async function() {
   let trigger ,trade;
 
   it(`Should check & validate tiered take profit trigger
-   when price is 1/3rd of target price for sell market order`, async function() {
+   when price is 1/3rd of target price for sell market order`, done => {
      trigger = {
        ...data.default.trigger,
        params: '{ "action": "sell", "type": "market" }'
@@ -350,11 +350,14 @@ describe("Tiered Take Profit Tests", async function() {
        price
      }
 
-     const tieredTakeProfit = new TieredTakeProfit(trade);
+     const tieredTakeProfit = new TieredTakeProfitTrigger(trade);
 
      tieredTakeProfit.on("advice", data => {
        expect(data).to.deep.equal(
          { advice: "market-sell", price, amount })
+        done();
      })
+
+     tieredTakeProfit.onTrade(trade);
    })
 })
