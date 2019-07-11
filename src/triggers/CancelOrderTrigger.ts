@@ -14,7 +14,7 @@ export default class CancelOrderTrigger extends BaseTrigger {
   private readonly condition: 'greater-than'|
                      'greater-than-equal' |
                      'less-than' |
-                     'less- han-equal';
+                     'less-than-equal';
 
 
   constructor(trigger: Triggers) {
@@ -38,7 +38,7 @@ export default class CancelOrderTrigger extends BaseTrigger {
 
   onTrade(trade: Trade) {
     // if the prices are not live than return
-    if (!this.isLive) return;
+    if (!this.isLive()) return;
     // get current price
     const { price } = trade;
 

@@ -27,7 +27,7 @@ export default class StopLossTrigger extends BaseTrigger {
 
 
   onTrade (trade: Trade) {
-    if (!this.isLive) return
+    if (!this.isLive()) return
     const { price } = trade
 
     // if price reaches or goes below the stop loss price, then
