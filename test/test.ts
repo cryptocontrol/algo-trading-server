@@ -332,3 +332,29 @@ describe("Cancel Order Trigger Tests", async function() {
   })
 })
 
+describe("Tiered Take Profit Tests", async function() {
+  let trigger ,trade;
+
+  it(`Should check & validate tiered take profit trigger
+   when price is 1/3rd of target price for sell market order`, async function() {
+     trigger = {
+       ...data.default.trigger,
+       params: '{ "action": "sell", "type": "market" }'
+     };
+
+     const price = 0.34 * trigger.targetPrice;
+     const amount = 0.33 * trigger.targetVolume;
+
+     trade = {
+       ...data.default.trigger,
+       price
+     }
+
+     const tieredTakeProfit = new TieredTakeProfit(trade);
+
+     tieredTakeProfit.on("advice", data => {
+       expect(data).to.deep.equal(
+         { advice: "market-sell", price, amount })
+     })
+   })
+})
