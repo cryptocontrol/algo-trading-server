@@ -42,17 +42,15 @@ export default class TieredTakeProfitTrigger extends BaseTrigger {
     if (price >= firstStep && price < secondStep) {
       if (this.type === "market") this.advice('market-sell', price, targetVolume);
       if (this.type === "limit") this.advice('limit-sell', price, targetVolume);
-      this.close();
     }
 
     // trigger a maket or limit sell when price crosses the second tier
     if (price >= secondStep && price < this.triggerDB.targetPrice) {
       if (this.type === "market") this.advice('market-sell', price, targetVolume);
       if (this.type === "limit") this.advice('limit-sell', price, targetVolume);
-      this.close();
     }
 
-    // trigger a maket or limit sell when target Price is achived 
+    // trigger a maket or limit sell when target Price is achived
     if (price >= this.triggerDB.targetPrice) {
       if (this.type === "market") this.advice('market-sell', price, remainingVolume);
       if (this.type === "limit") this.advice('limit-sell', price, remainingVolume);
