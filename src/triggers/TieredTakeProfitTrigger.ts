@@ -28,32 +28,34 @@ export default class TieredTakeProfitTrigger extends BaseTrigger {
     if (!this.isLive()) return;
 
     const { price } = trade;
+    const { createdAtPrice, targetPrice } = this.triggerDB
+    const priceDelta = targetPrice - createdAtPrice
 
     // price for the first tier or step
-    const firstStep = 0.33 * this.triggerDB.targetPrice;
+    const firstStep = 0.33 * priceDelta;
     // price for the second tier or step
-    const secondStep = 0.66 * this.triggerDB.targetPrice;
+    const secondStep = 0.66 * priceDelta;
     // the profit amount for for the first & second tier or step
-    const targetVolume = 0.33 * this.triggerDB.targetVolume;
+    const amount = Math.floor(0.33 * this.triggerDB.amount);
     // the profit amount when target priced is achived
-    const remainingVolume = this.triggerDB.targetVolume - (2 * targetVolume);
+    const remainingAmount = this.triggerDB.amount - (2 * amount);
 
     // trigger a maket or limit sell when price crosses the first tier
     if (price >= firstStep && price < secondStep) {
-      if (this.type === "market") this.advice('market-sell', price, targetVolume);
-      if (this.type === "limit") this.advice('limit-sell', price, targetVolume);
+      if (this.type === "market") this.advice('market-sell', price, amount);
+      if (this.type === "limit") this.advice('limit-sell', price, amount);
     }
 
     // trigger a maket or limit sell when price crosses the second tier
     if (price >= secondStep && price < this.triggerDB.targetPrice) {
-      if (this.type === "market") this.advice('market-sell', price, targetVolume);
-      if (this.type === "limit") this.advice('limit-sell', price, targetVolume);
+      if (this.type === "market") this.advice('market-sell', price, amount);
+      if (this.type === "limit") this.advice('limit-sell', price, amount);
     }
 
     // trigger a maket or limit sell when target Price is achived
     if (price >= this.triggerDB.targetPrice) {
-      if (this.type === "market") this.advice('market-sell', price, remainingVolume);
-      if (this.type === "limit") this.advice('limit-sell', price, remainingVolume);
+      if (this.type === "market") this.advice('market-sell', price, remainingAmount);
+      if (this.type === "limit") this.advice('limit-sell', price, remainingAmount);
       this.close();
     }
   }

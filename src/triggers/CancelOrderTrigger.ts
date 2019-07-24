@@ -53,7 +53,7 @@ export default class CancelOrderTrigger extends BaseTrigger {
       || price > this.triggerDB.targetPrice
         && this.condition.toString() === "greater-than") {
       // emitt a cancel order adivce for advice manager
-      this.advice("cancel-order", price, this.triggerDB.targetVolume);
+      this.advice("cancel-order", price, this.triggerDB.amount);
       // emitt a close event for the trigger
       this.close();
     }

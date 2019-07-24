@@ -2,9 +2,10 @@ import AdviceManager from './AdviceManager'
 import BaseTrigger from 'src/triggers/BaseTrigger'
 import BudfoxManger from './BudfoxManager'
 import StopLossTrigger from 'src/triggers/StopLossTrigger'
-import TakeProfitTrigger from 'src/triggers/TakeProfitTrigger'
+import TakeProfitTrigger from '../../src/triggers/TakeProfitTrigger'
 import Triggers from 'src/database/models/triggers'
 import CancelOrderTrigger from 'src/triggers/CancelOrderTrigger';
+import TieredTakeProfitTrigger from "../../src/triggers/TieredTakeProfitTrigger";
 
 
 interface IExchangeTriggers {
@@ -85,7 +86,7 @@ export default class TriggerManger {
     this.triggers[exchangeSymbol] = newTriggers
 
     // delete trigger from db
-    // No need to delete the trigger from db only a flag is changed 
+    // No need to delete the trigger from db only a flag is changed
     // await Triggers.destroy({ where: { id: t.id }})
   }
 
@@ -102,6 +103,7 @@ export default class TriggerManger {
     if (triggerDB.kind === 'stop-loss') return new StopLossTrigger(triggerDB)
     if (triggerDB.kind === 'take-profit') return new TakeProfitTrigger(triggerDB)
     if (triggerDB.kind === 'cancel-order') return new CancelOrderTrigger(triggerDB);
+    if (triggerDB.kind === 'tiered-profit') return new TieredTakeProfitTrigger(triggerDB);
 
     // tiered take-profits etc.. etc..
   }
