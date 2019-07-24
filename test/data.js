@@ -9,7 +9,10 @@ export default {
     uid: 123456,
     kind: "stop-loss-buy",
     lastTriggeredAt: null,
-    params: '{ "action": "buy", "type": "market" }',
+    params: `{
+      "action": "buy",
+      "type": "market",
+      "steps": 1 }`,
     hasTriggered: false,
     closedAt: new Date("2019-05-23 08:41:51"),
     isActive: true,

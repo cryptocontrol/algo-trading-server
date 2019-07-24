@@ -9,9 +9,20 @@ export default describe("Tiered Take Profit Tests", async function() {
     when price is 1/3rd of target price for sell market order`, done => {
     trigger = {
       ...data.default.trigger,
-      params: '{ "action": "sell", "type": "market" }' };
+      params: JSON.stringify({
+        action: "sell",
+        type: "market",
+        steps: 3,
+        executedSteps: {
+          1: false,
+          2: false,
+          3: false }
+        }) };
 
-    const price = 0.34 * trigger.targetPrice;
+    const { targetPrice, createdAtPrice } = trigger;
+    const priceDelta = targetPrice - createdAtPrice;
+
+    const price = createdAtPrice + (0.34 * priceDelta);
     const amount = Math.floor(0.33 * trigger.amount);
 
     trade = {
@@ -34,9 +45,20 @@ export default describe("Tiered Take Profit Tests", async function() {
     when price is 1/3rd of target price for sell limit order`, done => {
     trigger = {
       ...data.default.trigger,
-      params: '{ "action": "sell", "type": "limit" }' };
+      params: JSON.stringify({
+        action: "sell",
+        type: "limit",
+        steps: 3,
+        executedSteps: {
+          1: false,
+          2: false,
+          3: false }
+        }) };
 
-    const price = 0.34 * trigger.targetPrice;
+    const { targetPrice, createdAtPrice } = trigger;
+    const priceDelta = targetPrice - createdAtPrice;
+
+    const price = createdAtPrice + (0.34 * priceDelta);
     const amount = Math.floor(0.33 * trigger.amount);
 
     trade = {
@@ -59,9 +81,20 @@ export default describe("Tiered Take Profit Tests", async function() {
     when price is 2/3rd of target price for sell market order`, done => {
     trigger = {
       ...data.default.trigger,
-      params: '{ "action": "sell", "type": "market" }' };
+      params: JSON.stringify({
+        action: "sell",
+        type: "market",
+        steps: 3,
+        executedSteps: {
+          1: true,
+          2: false,
+          3: false }
+        }) };
 
-    const price = 0.67 * trigger.targetPrice;
+    const { targetPrice, createdAtPrice } = trigger;
+    const priceDelta = targetPrice - createdAtPrice;
+
+    const price = createdAtPrice + (0.68 * priceDelta);
     const amount = Math.floor(0.33 * trigger.amount);
 
     trade = {
@@ -84,9 +117,20 @@ export default describe("Tiered Take Profit Tests", async function() {
     when price is 2/3rd of target price for sell limit order`, done => {
     trigger = {
       ...data.default.trigger,
-      params: '{ "action": "sell", "type": "limit" }' };
+      params: JSON.stringify({
+        action: "sell",
+        type: "limit",
+        steps: 3,
+        executedSteps: {
+          1: true,
+          2: false,
+          3: false }
+        }) };
 
-    const price = 0.67 * trigger.targetPrice;
+    const { targetPrice, createdAtPrice } = trigger;
+    const priceDelta = targetPrice - createdAtPrice;
+
+    const price = createdAtPrice + (0.68 * priceDelta);
     const amount = Math.floor(0.33 * trigger.amount);
 
     trade = {
@@ -109,7 +153,15 @@ export default describe("Tiered Take Profit Tests", async function() {
     when price is greater than target price for sell market order`, done => {
     trigger = {
       ...data.default.trigger,
-      params: '{ "action": "sell", "type": "market" }' };
+      params: JSON.stringify({
+        action: "sell",
+        type: "market",
+        steps: 3,
+        executedSteps: {
+          1: true,
+          2: true,
+          3: false }
+        }) };
 
     const price = trigger.targetPrice;
     const amount = trigger.amount - 2 * Math.floor(0.33 * trigger.amount);
@@ -134,7 +186,15 @@ export default describe("Tiered Take Profit Tests", async function() {
     when price is greater than target price for sell limit order`, done => {
     trigger = {
       ...data.default.trigger,
-      params: '{ "action": "sell", "type": "limit" }' };
+      params: JSON.stringify({
+        action: "sell",
+        type: "limit",
+        steps: 3,
+        executedSteps: {
+          1: true,
+          2: true,
+          3: false }
+        }) };
 
     const price = trigger.targetPrice;
     const amount = trigger.amount - 2 * Math.floor(0.33 * trigger.amount);
