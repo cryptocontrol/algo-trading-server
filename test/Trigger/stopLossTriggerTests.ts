@@ -35,7 +35,7 @@ export default describe("Stop Loss Trigger tests", async function() {
       // check if advice event is emitted and check its value
       stopLoss.on("advice", data => {
         expect(data).to.deep.equal(
-          { advice: 'market-buy', price: 1, amount: 0.24 })
+          { advice: 'market-buy', price: 1, amount: 5 })
         done();
       });
 
@@ -56,7 +56,7 @@ export default describe("Stop Loss Trigger tests", async function() {
 
       stopLoss.on("advice", data => {
         expect(data).to.deep.equal(
-          { advice: 'market-sell', price: 1, amount: 0.24 })
+          { advice: 'market-sell', price: 1, amount: 5 })
         done();
       })
 
@@ -76,7 +76,7 @@ export default describe("Stop Loss Trigger tests", async function() {
 
       stopLoss.on("advice", data => {
         expect(data).to.deep.equal(
-          { advice: 'limit-sell', price: 1, amount: 0.24 })
+          { advice: 'limit-sell', price: 1, amount: 5 })
         done();
       });
 
@@ -96,7 +96,7 @@ export default describe("Stop Loss Trigger tests", async function() {
 
       stopLoss.on("advice", data => {
         expect(data).to.deep.equal(
-          { advice: 'limit-buy', price: 1, amount: 0.24 })
+          { advice: 'limit-buy', price: 1, amount: 5 })
         done();
       });
 

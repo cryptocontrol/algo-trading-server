@@ -17,7 +17,7 @@ export default describe("Cancel Order Trigger Tests", async function() {
 
     cancelOrder.on("advice", data => {
       expect(data).to.deep.equal(
-        { advice: "cancel-order", price: 0.09, amount: 0.24 })
+        { advice: "cancel-order", price: 0.09, amount: 5 })
       done();
     })
 
@@ -37,7 +37,7 @@ export default describe("Cancel Order Trigger Tests", async function() {
     cancelOrder.on("advice", data => {
       console.log("in advice")
       expect(data).to.deep.equal(
-        { advice: "cancel-order", price: 0.09, amount: 0.24 })
+        { advice: "cancel-order", price: 0.09, amount: 5 })
       done();
     })
 
@@ -56,7 +56,7 @@ export default describe("Cancel Order Trigger Tests", async function() {
 
     cancelOrder.on("advice", data => {
       expect(data).to.deep.equal(
-        { advice: "cancel-order", price: 0.11, amount: 0.24 })
+        { advice: "cancel-order", price: 0.11, amount: 5 })
       done();
     })
 
@@ -75,7 +75,7 @@ export default describe("Cancel Order Trigger Tests", async function() {
 
     cancelOrder.on("advice", data => {
       expect(data).to.deep.equal(
-        { advice: "cancel-order", price: 0.11, amount: 0.24 })
+        { advice: "cancel-order", price: 0.11, amount: 5 })
       done();
     })
 

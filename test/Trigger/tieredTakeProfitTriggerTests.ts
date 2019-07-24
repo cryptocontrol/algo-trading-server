@@ -12,7 +12,7 @@ export default describe("Tiered Take Profit Tests", async function() {
       params: '{ "action": "sell", "type": "market" }' };
 
     const price = 0.34 * trigger.targetPrice;
-    const amount = 0.33 * trigger.targetVolume;
+    const amount = Math.floor(0.33 * trigger.amount);
 
     trade = {
       ...data.default.trigger,
@@ -37,7 +37,7 @@ export default describe("Tiered Take Profit Tests", async function() {
       params: '{ "action": "sell", "type": "limit" }' };
 
     const price = 0.34 * trigger.targetPrice;
-    const amount = 0.33 * trigger.targetVolume;
+    const amount = Math.floor(0.33 * trigger.amount);
 
     trade = {
       ...data.default.trigger,
@@ -62,7 +62,7 @@ export default describe("Tiered Take Profit Tests", async function() {
       params: '{ "action": "sell", "type": "market" }' };
 
     const price = 0.67 * trigger.targetPrice;
-    const amount = 0.33 * trigger.targetVolume;
+    const amount = Math.floor(0.33 * trigger.amount);
 
     trade = {
       ...data.default.trigger,
@@ -87,7 +87,7 @@ export default describe("Tiered Take Profit Tests", async function() {
       params: '{ "action": "sell", "type": "limit" }' };
 
     const price = 0.67 * trigger.targetPrice;
-    const amount = 0.33 * trigger.targetVolume;
+    const amount = Math.floor(0.33 * trigger.amount);
 
     trade = {
       ...data.default.trigger,
@@ -112,7 +112,7 @@ export default describe("Tiered Take Profit Tests", async function() {
       params: '{ "action": "sell", "type": "market" }' };
 
     const price = trigger.targetPrice;
-    const amount = trigger.targetVolume - (0.66 * trigger.targetVolume);
+    const amount = trigger.amount - 2 * Math.floor(0.33 * trigger.amount);
 
     trade = {
       ...data.default.trigger,
@@ -137,7 +137,7 @@ export default describe("Tiered Take Profit Tests", async function() {
       params: '{ "action": "sell", "type": "limit" }' };
 
     const price = trigger.targetPrice;
-    const amount = trigger.targetVolume - (0.66 * trigger.targetVolume);
+    const amount = trigger.amount - 2 * Math.floor(0.33 * trigger.amount);
 
     trade = {
       ...data.default.trigger,

@@ -15,7 +15,7 @@ export default describe("Take Profit Trigger tests", async function() {
 
     takeProfit.on("advice", data => {
       expect(data).to.deep.equal(
-        { advice: 'limit-buy', price: 1, amount: 0.24 })
+        { advice: 'limit-buy', price: 1, amount: 5 })
       done();
     });
 
@@ -30,7 +30,7 @@ export default describe("Take Profit Trigger tests", async function() {
 
     takeProfit.on("advice", data => {
       expect(data).to.deep.equal(
-        { advice: 'market-buy', price: 1, amount: 0.24 })
+        { advice: 'market-buy', price: 1, amount: 5 })
       done();
     });
 
@@ -47,7 +47,7 @@ export default describe("Take Profit Trigger tests", async function() {
 
     takeProfit.on("advice", data => {
       expect(data).to.deep.equal(
-        { advice: 'limit-sell', price: 1, amount: 0.24 })
+        { advice: 'limit-sell', price: 1, amount: 5 })
       done();
     });
 
@@ -64,7 +64,7 @@ export default describe("Take Profit Trigger tests", async function() {
 
     takeProfit.on("advice", data => {
       expect(data).to.deep.equal(
-        { advice: 'market-sell', price: 1, amount: 0.24 })
+        { advice: 'market-sell', price: 1, amount: 5 })
       done();
     });
 
