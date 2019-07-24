@@ -36,7 +36,7 @@ export default class TrailingStopTrigger extends BaseTrigger {
     this.previousPrice = price
 
     if (price <= this.trailingPoint) {
-      this.advice('close-position', price, this.triggerDB.targetVolume)
+      this.advice('close-position', price, this.triggerDB.amount)
       this.close()
     }
   }
