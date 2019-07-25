@@ -55,7 +55,7 @@ export default class TieredTakeProfitTrigger extends BaseTrigger {
     // price for the second tier or step
     const secondStep = createdAtPrice + (0.66 * priceDelta);
     // the profit amount for for the first & second tier or step
-    const amount = Math.floor(0.33 * this.triggerDB.amount);
+    const amount = 0.33 * this.triggerDB.amount;
     // the profit amount when target priced is achived
     const remainingAmount = this.triggerDB.amount - (2 * amount);
 
@@ -73,7 +73,7 @@ export default class TieredTakeProfitTrigger extends BaseTrigger {
     // trigger a maket or limit sell when price crosses the second tier
     // and this condition is achieved for the first time
     if (price >= secondStep && price < this.triggerDB.targetPrice
-      && this.params.executedSteps[2] !== true
+      && this.params.executedSteps[2] === false
       && this.params.executedSteps[1] === true) {
       if (this.type === "market") this.advice('market-sell', price, amount);
       if (this.type === "limit") this.advice('limit-sell', price, amount);
@@ -85,7 +85,7 @@ export default class TieredTakeProfitTrigger extends BaseTrigger {
     // trigger a maket or limit sell when target Price is achived
     // and this condition is achieved for the first time
     if (price >= this.triggerDB.targetPrice
-      && this.params.executedSteps[3] !== true
+      && this.params.executedSteps[3] === false
       && this.params.executedSteps[1] === true
       && this.params.executedSteps[2] === true) {
       if (this.type === "market") this.advice('market-sell', price, remainingAmount);

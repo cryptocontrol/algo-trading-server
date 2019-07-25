@@ -16,9 +16,6 @@ export default class Triggers extends Model<Triggers> {
   targetPrice: number
 
   @Column
-  targetVolume: number
-
-  @Column
   uid: string
 
   @Column

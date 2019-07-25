@@ -23,7 +23,7 @@ export default describe("Tiered Take Profit Tests", async function() {
     const priceDelta = targetPrice - createdAtPrice;
 
     const price = createdAtPrice + (0.34 * priceDelta);
-    const amount = Math.floor(0.33 * trigger.amount);
+    const amount = 0.33 * trigger.amount;
 
     trade = {
       ...data.default.trigger,
@@ -59,7 +59,7 @@ export default describe("Tiered Take Profit Tests", async function() {
     const priceDelta = targetPrice - createdAtPrice;
 
     const price = createdAtPrice + (0.34 * priceDelta);
-    const amount = Math.floor(0.33 * trigger.amount);
+    const amount = 0.33 * trigger.amount;
 
     trade = {
       ...data.default.trigger,
@@ -95,7 +95,7 @@ export default describe("Tiered Take Profit Tests", async function() {
     const priceDelta = targetPrice - createdAtPrice;
 
     const price = createdAtPrice + (0.68 * priceDelta);
-    const amount = Math.floor(0.33 * trigger.amount);
+    const amount = 0.33 * trigger.amount;
 
     trade = {
       ...data.default.trigger,
@@ -131,7 +131,7 @@ export default describe("Tiered Take Profit Tests", async function() {
     const priceDelta = targetPrice - createdAtPrice;
 
     const price = createdAtPrice + (0.68 * priceDelta);
-    const amount = Math.floor(0.33 * trigger.amount);
+    const amount = 0.33 * trigger.amount;
 
     trade = {
       ...data.default.trigger,
@@ -164,7 +164,7 @@ export default describe("Tiered Take Profit Tests", async function() {
         }) };
 
     const price = trigger.targetPrice;
-    const amount = trigger.amount - 2 * Math.floor(0.33 * trigger.amount);
+    const amount = trigger.amount - (2 * (0.33 * trigger.amount));
 
     trade = {
       ...data.default.trigger,
@@ -197,7 +197,7 @@ export default describe("Tiered Take Profit Tests", async function() {
         }) };
 
     const price = trigger.targetPrice;
-    const amount = trigger.amount - 2 * Math.floor(0.33 * trigger.amount);
+    const amount = trigger.amount - (2 * (0.33 * trigger.amount));
 
     trade = {
       ...data.default.trigger,
