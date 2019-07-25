@@ -8,7 +8,14 @@ import TriggerManger from 'src/managers/TriggerManager'
  * create a new trigger for a user
  */
 export const createTrigger = async (uid: string, exchange: string, symbol: string, kind: string, params: any) => {
-  const { price, volume, orderId, ...rest } = params
+  const {
+    price,
+    // volume,
+    orderId,
+    createdAtPrice,
+    amount,
+    ...rest } = params
+
   const trigger = new Triggers({
     uid,
     symbol,
@@ -16,8 +23,10 @@ export const createTrigger = async (uid: string, exchange: string, symbol: strin
     kind,
     orderId,
     isActive: true,
-    targetVolume: volume,
+    // targetVolume: volume,
     targetPrice: price,
+    createdAtPrice,
+    amount,
     params: JSON.stringify(rest)
   })
 

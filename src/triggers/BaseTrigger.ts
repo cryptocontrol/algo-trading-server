@@ -90,7 +90,7 @@ export default abstract class BaseTrigger extends EventEmitter {
     // mark the trigger as triggered
     trigger.hasTriggered = true
     trigger.lastTriggeredAt = new Date
-    // trigger.save()
+    trigger.save()
 
     this.emit('advice', { advice, price, amount })
   }
@@ -107,6 +107,6 @@ export default abstract class BaseTrigger extends EventEmitter {
     // mark the trigger as closed in the DB
     this.triggerDB.isActive = false
     this.triggerDB.closedAt = new Date
-    // this.triggerDB.save()
+    this.triggerDB.save()
   }
 }
