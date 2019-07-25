@@ -84,7 +84,7 @@ export default abstract class BaseTrigger extends EventEmitter {
     const trigger = this.triggerDB
     log.info(
       `${trigger.kind} trigger for user ${trigger.uid} on ${trigger.exchange} ${trigger.symbol} ` +
-      `adviced to ${advice} at ${price} for a volume of ${amount}`
+      `adviced to ${advice} at ${price} for an amount of ${amount}`
     )
 
     // mark the trigger as triggered

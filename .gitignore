@@ -24,6 +24,7 @@ logs
 node_modules/
 npm-debug.log*
 pids
+dist
 storage
 storage_prod
 typings/

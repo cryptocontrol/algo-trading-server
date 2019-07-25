@@ -35,11 +35,11 @@ export default class DynamicTieredTakeProfitTrigger extends BaseTrigger {
 
     const { price } = trade;
 
-    const targetVolume = this.triggerDB.targetVolume / this.steps;
+    const targetAmount = this.triggerDB.amount / this.steps;
 
     if (price >= this.triggerDB.targetPrice) {
-      if (this.type === "market") this.advice('market-sell', price, targetVolume);
-      if (this.type === "limit") this.advice('limit-sell', price, targetVolume);
+      if (this.type === "market") this.advice('market-sell', price, targetAmount);
+      if (this.type === "limit") this.advice('limit-sell', price, targetAmount);
       this.close();
     } else{
       // other conditions

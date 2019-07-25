@@ -10,7 +10,6 @@ import TriggerManger from 'src/managers/TriggerManager'
 export const createTrigger = async (uid: string, exchange: string, symbol: string, kind: string, params: any) => {
   const {
     price,
-    // volume,
     orderId,
     createdAtPrice,
     amount,
@@ -23,7 +22,6 @@ export const createTrigger = async (uid: string, exchange: string, symbol: strin
     kind,
     orderId,
     isActive: true,
-    // targetVolume: volume,
     targetPrice: price,
     createdAtPrice,
     amount,

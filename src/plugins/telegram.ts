@@ -40,7 +40,7 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
   onTriggerAdvice (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
     const message = `${trigger.name} triggered! and adviced to \`${advice}\` ` +
       `on \`${trigger.getExchange().toUpperCase()}\` \`${trigger.getSymbol()}\` with a ` +
-      `volume of \`${amount}\`! Current price is \`${price}\``
+      `amount of \`${amount}\`! Current price is \`${price}\``
 
     this.send(message)
   }
