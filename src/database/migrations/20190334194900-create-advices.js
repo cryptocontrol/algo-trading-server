@@ -28,9 +28,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DOUBLE
       },
-      volume: {
+      amount: {
         allowNull: false,
-        type: Sequelize.DOUBLE
+        type: Sequelize.DOUBLE,
+        defaultValue: false
       },
       mode: {
         allowNull: false,
@@ -47,6 +48,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
+      order_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        defaultValue: false
+      },
+      error_msg: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: false
+      }
     });
   },
   down: (queryInterface, Sequelize) => {

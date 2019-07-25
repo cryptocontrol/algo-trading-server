@@ -30,7 +30,7 @@ export default class AdviceManager {
       advice,
       price,
       mode: 'realtime',
-      volume: amount,
+      amount,
       trigger_id: t.getDBId()
     })
     await adviceDB.save()
@@ -42,23 +42,33 @@ export default class AdviceManager {
     await UserExchanges.findOne({ where: { uid: t.getUID(), exchange: t.getExchange() } })
     .then(async data => {
       // create the exchange instance
-      const exchange = new ccxt[t.getExchange()]({ apiKey: data.apiKey, secret: data.apiSecret, password: data.apiPassword })
+      const exchange: ccxt.Exchange = new ccxt[t.getExchange()]({ apiKey: data.apiKey, secret: data.apiSecret, password: data.apiPassword })
 
       /* execute the advice */
 
       try {
         // market buy
-        if (adviceDB.advice === 'market-buy') await exchange.createOrder(t.getSymbol(), 'market', 'buy', amount)
+        if (adviceDB.advice === 'market-buy') {
+          const res = await exchange.createOrder(t.getSymbol(), 'market', 'buy', amount)
+          console.log("In advice manager",res)
+        }
 
         // market sell
-        if (adviceDB.advice === 'market-sell') await exchange.createOrder(t.getSymbol(), 'market', 'sell', amount)
+        if (adviceDB.advice === 'market-sell') {
+          const res = await exchange.createOrder(t.getSymbol(), 'market', 'sell', amount)
+          console.log("In advice manager",res)
+        }
 
         // limit sell
         if (adviceDB.advice === 'limit-sell') await exchange.createOrder(t.getSymbol(), 'limit', 'sell', amount, price)
 
         // limit buy
         if (adviceDB.advice === 'limit-buy') await exchange.createOrder(t.getSymbol(), 'limit', 'buy', amount, price)
+
+        // cancel order
+        if (adviceDB.advice === 'cancel-order') await exchange.cancelOrder(t.getOrderId(), t.getSymbol())
       } catch (e) {
+        console.log('error', e)
         // TODO: if we encounter some kind of error; we notify the plugins about it
         PluginsManager.getInstance().onError(e, t, advice, price, amount)
       }

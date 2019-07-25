@@ -10,10 +10,10 @@ export default class Triggers extends Model<Triggers> {
   exchange: string
 
   @Column
-  targetPrice: number
+  createdAtPrice: number
 
   @Column
-  targetVolume: number
+  targetPrice: number
 
   @Column
   uid: string
@@ -38,4 +38,7 @@ export default class Triggers extends Model<Triggers> {
 
   @Column
   orderId: string
+
+  @Column
+  amount: number
 }
