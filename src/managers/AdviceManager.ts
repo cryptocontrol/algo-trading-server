@@ -47,28 +47,46 @@ export default class AdviceManager {
       /* execute the advice */
 
       try {
+        console.log("Out side condition check ", adviceDB.advice);
         // market buy
         if (adviceDB.advice === 'market-buy') {
-          const res = await exchange.createOrder(t.getSymbol(), 'market', 'buy', amount)
-          console.log("In advice manager",res)
+          const res = await exchange.createOrder(t.getSymbol(), 'market', 'buy', amount);
+
+          adviceDB.order_id = res.info.orderId;
+          adviceDB.save();
         }
 
         // market sell
         if (adviceDB.advice === 'market-sell') {
-          const res = await exchange.createOrder(t.getSymbol(), 'market', 'sell', amount)
-          console.log("In advice manager",res)
+          const res = await exchange.createOrder(t.getSymbol(), 'market', 'sell', amount);
+
+          adviceDB.order_id = res.info.orderId;
+          adviceDB.save();
         }
 
         // limit sell
-        if (adviceDB.advice === 'limit-sell') await exchange.createOrder(t.getSymbol(), 'limit', 'sell', amount, price)
+        if (adviceDB.advice === 'limit-sell') {
+          const res = await exchange.createOrder(t.getSymbol(), 'limit', 'sell', amount, price);
+
+          adviceDB.order_id = res.info.orderId;
+          adviceDB.save();
+        }
 
         // limit buy
-        if (adviceDB.advice === 'limit-buy') await exchange.createOrder(t.getSymbol(), 'limit', 'buy', amount, price)
+        if (adviceDB.advice === 'limit-buy') {
+          const res = await exchange.createOrder(t.getSymbol(), 'limit', 'buy', amount, price);
+
+          adviceDB.order_id = res.info.orderId;
+          adviceDB.save();
+        }
 
         // cancel order
-        if (adviceDB.advice === 'cancel-order') await exchange.cancelOrder(t.getOrderId(), t.getSymbol())
+        if (adviceDB.advice === 'cancel-order') {
+          const res = await exchange.cancelOrder(t.getOrderId(), t.getSymbol());
+        }
       } catch (e) {
-        console.log('error', e)
+        adviceDB.error_msg = e.message;
+        adviceDB.save();
         // TODO: if we encounter some kind of error; we notify the plugins about it
         PluginsManager.getInstance().onError(e, t, advice, price, amount)
       }
