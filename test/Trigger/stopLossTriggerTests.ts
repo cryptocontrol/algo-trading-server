@@ -45,10 +45,12 @@ export default describe("Stop Loss Trigger tests", async function() {
 
     it("check & validate for stop loss market sell advice", done => {
       trade = {
-        ...data.default.trade
+        ...data.default.trade,
+        price: 1
       };
       trigger = {
         ...data.default.trigger,
+        targetPrice: 2,
         params: '{ "action": "sell", "type": "market" }'
       };
 
@@ -65,10 +67,12 @@ export default describe("Stop Loss Trigger tests", async function() {
 
     it("check & validate stop loss limit sell advice", done => {
       trade = {
-        ...data.default.trade
+        ...data.default.trade,
+        price: 1
       };
       trigger = {
         ...data.default.trigger,
+        targetPrice: 2,
         params: '{ "action": "sell", "type": "limit" }'
       };
 
