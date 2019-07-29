@@ -40,7 +40,7 @@ export default class StopLossTrigger extends BaseTrigger {
 
     // if price reaches or goes above the stop loss price, then
     // we close the position with a sell order
-    if (this.action === 'sell' && price >= this.triggerDB.targetPrice) {
+    if (this.action === 'sell' && price <= this.triggerDB.targetPrice) {
       if (this.type === 'limit') this.advice('limit-sell', price, this.triggerDB.amount)
       if (this.type === 'market') this.advice('market-sell', price, this.triggerDB.amount)
       this.close()
