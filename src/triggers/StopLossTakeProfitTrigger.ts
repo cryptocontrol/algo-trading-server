@@ -45,7 +45,7 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
 
       // if price reaches or goes below the stop loss price, then
       // we close the position with a buy order
-      if (this.action === 'buy' && price >= this.stopLossPrice) {
+      if (price >= this.stopLossPrice) {
         if (this.type === 'limit') this.advice('limit-buy', price, this.triggerDB.amount)
         if (this.type === 'market') this.advice('market-buy', price, this.triggerDB.amount)
         this.close()
@@ -55,7 +55,7 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
 
       // if price reaches or goes below the take profit price, then
       // we close the position with a sell order
-      if (this.action === 'buy' && price <= this.takeProfitPrice) {
+      if (price <= this.takeProfitPrice) {
         if (this.type === 'limit') this.advice('limit-buy', price, this.triggerDB.amount)
         if (this.type === 'market') this.advice('market-buy', price, this.triggerDB.amount)
         this.close()
@@ -67,7 +67,7 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
 
       // if price reaches or goes above the stop loss price, then
       // we close the position with a sell order
-      if (this.action === 'sell' && price <= this.stopLossPrice) {
+      if (price <= this.stopLossPrice) {
         if (this.type === 'limit') this.advice('limit-sell', price, this.triggerDB.amount)
         if (this.type === 'market') this.advice('market-sell', price, this.triggerDB.amount)
         this.close()
@@ -77,7 +77,7 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
 
       // if price reaches or goes above the take profit price, then
       // we close the position with a sell order
-      if (this.action === 'sell' && price >= this.takeProfitPrice) {
+      if (price >= this.takeProfitPrice) {
         if (this.type === 'limit') this.advice('limit-sell', price, this.triggerDB.amount)
         if (this.type === 'market') this.advice('market-sell', price, this.triggerDB.amount)
         this.close()
