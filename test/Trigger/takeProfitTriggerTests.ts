@@ -6,9 +6,13 @@ export default describe("Take Profit Trigger tests", async function() {
   let trigger, trade
 
   it("check & validate for take profit limit buy advice", done => {
-    trade = { ...data.default.trade };
+    trade = {
+      ...data.default.trade,
+      price: 1
+    };
     trigger = {
       ...data.default.trigger,
+      targetPrice: 2,
       params: '{ "action": "buy", "type": "limit" }' };
 
     const takeProfit = new TakeProfitTrigger(trigger);
@@ -23,8 +27,14 @@ export default describe("Take Profit Trigger tests", async function() {
   })
 
   it("check & validate for take profit market buy advice", done => {
-    trade = { ...data.default.trade };
-    trigger = { ...data.default.trigger };
+    trade = {
+      ...data.default.trade,
+      price: 1
+    };
+    trigger = {
+      ...data.default.trigger,
+      targetPrice: 2
+    };
 
     const takeProfit = new TakeProfitTrigger(trigger);
 
@@ -72,8 +82,14 @@ export default describe("Take Profit Trigger tests", async function() {
   })
 
   it("check for take profit close", done => {
-    trade = { ...data.default.trade }
-    trigger = { ...data.default.trigger }
+    trade = {
+      ...data.default.trade,
+      price: 1
+    }
+    trigger = {
+      ...data.default.trigger,
+      targetPrice: 2
+    }
 
     const takeProfit = new TakeProfitTrigger(trigger);
 
