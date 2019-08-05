@@ -51,8 +51,9 @@ export default class DynamicTieredTakeProfitTrigger extends BaseTrigger {
     // Amount to be traded after reaching a tier
     const amount = this.triggerDB.amount / this.steps;
     // Amount left for the last tier
+    // TODO: What will be remaning amount
     const remainingAmount = this.triggerDB.amount - (
-      this.triggerDB.amount * this.steps)
+      amount * (this.steps - 1))
     // The amount between targer price and price at which trigger was created
     const priceDelta = this.triggerDB.targetPrice - this.triggerDB.createdAtPrice
     // Price for the first step or tier
@@ -66,7 +67,7 @@ export default class DynamicTieredTakeProfitTrigger extends BaseTrigger {
       this.close();
     } else {
       // other conditions
-      if (price >= firstStep && price < this.triggerDB.amount) {
+      if (price >= firstStep && price < this.triggerDB.targetPrice) {
         const priceDelta = price - this.triggerDB.createdAtPrice
         const currentStep = Math.floor(priceDelta / amount)
         // check if current step was previously executed
@@ -78,7 +79,7 @@ export default class DynamicTieredTakeProfitTrigger extends BaseTrigger {
         if (this.type === "market") this.advice('market-sell', price, amountToSell);
         if (this.type === "limit") this.advice('limit-sell', price, amountToSell);
 
-        // Update params on partial execution 
+        // Update params on partial execution
         this.onPartialExecution({ ...this.params.executedSteps, [currentStep]: true });
       }
     }
