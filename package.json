@@ -23,6 +23,7 @@
     "i": "^0.3.6",
     "jsonfile": "^5.0.0",
     "jsonwebtoken": "^8.5.0",
+    "morgan": "^1.9.1",
     "mysql2": "^1.6.5",
     "node-binance-api": "^0.9.0",
     "node-json-db": "^0.10.0",
