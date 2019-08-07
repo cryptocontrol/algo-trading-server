@@ -1,7 +1,6 @@
 {
-  "name": "algo-trading-bot",
-  "private": true,
-  "version": "1.0.0",
+  "name": "iguana-trading-bot",
+  "version": "2.0.0",
   "description": "Trading bot for advanced orders & strategies",
   "main": "index.js",
   "dependencies": {
