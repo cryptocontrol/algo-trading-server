@@ -1,7 +1,8 @@
-import BaseTrigger from "./BaseTrigger";
-import { Trade } from "ccxt";
-import Triggers from "../../src/database/models/triggers";
-import { ICandle } from "../../src/interfaces";
+import { Trade } from 'ccxt'
+
+import { ICandle } from '../interfaces'
+import BaseTrigger from './BaseTrigger'
+import Triggers from '../database/models/triggers'
 
 
 /**
@@ -18,7 +19,7 @@ export default class CancelOrderTrigger extends BaseTrigger {
 
 
   constructor(trigger: Triggers) {
-    super(trigger, "Cancel Order")
+    super(trigger, 'Cancel Order')
 
     const params = JSON.parse(trigger.params);
     this.action = params.action;
@@ -45,15 +46,15 @@ export default class CancelOrderTrigger extends BaseTrigger {
     // if the price satisfies the target price and condition pair then
     // trigger an cancel order request
     if (price <= this.triggerDB.targetPrice
-        && this.condition.toString() === "less-than-equal"
+        && this.condition.toString() === 'less-than-equal'
       || price < this.triggerDB.targetPrice
-        && this.condition.toString() === "less-than"
+        && this.condition.toString() === 'less-than'
       || price >= this.triggerDB.targetPrice
-        && this.condition.toString() === "greater-than-equal"
+        && this.condition.toString() === 'greater-than-equal'
       || price > this.triggerDB.targetPrice
-        && this.condition.toString() === "greater-than") {
+        && this.condition.toString() === 'greater-than') {
       // emitt a cancel order adivce for advice manager
-      this.advice("cancel-order", price, this.triggerDB.amount);
+      this.advice('cancel-order', price, this.triggerDB.amount);
       // emitt a close event for the trigger
       this.close();
     }

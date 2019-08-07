@@ -1,8 +1,8 @@
 import * as _ from 'underscore'
 import { EventEmitter } from 'events'
 
-import { die } from 'src/utils'
-import log from 'src/utils/log'
+import { die } from '../utils'
+import log from '../utils/log'
 
 
 /**

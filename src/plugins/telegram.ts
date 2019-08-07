@@ -1,10 +1,10 @@
 import * as _ from 'underscore'
 import * as Telegram from 'node-telegram-bot-api'
 
-import { IAdvice } from 'src/interfaces'
+import { IAdvice } from '../interfaces'
 import BasePlugin from './BasePlugin'
-import BaseTrigger from 'src/triggers/BaseTrigger'
-import Plugins from 'src/database/models/plugins'
+import BaseTrigger from '../triggers/BaseTrigger'
+import Plugins from '../database/models/plugins'
 
 
 interface ITelegramOptions {

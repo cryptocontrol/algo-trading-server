@@ -1,10 +1,10 @@
 import * as ccxt from 'ccxt'
 
-import { IAdvice } from 'src/interfaces'
-import Advices from 'src/database/models/advices'
-import BaseTrigger from 'src/triggers/BaseTrigger'
+import { IAdvice } from '../interfaces'
+import Advices from '../database/models/advices'
+import BaseTrigger from '../triggers/BaseTrigger'
 import PluginsManager from './PluginsManager'
-import UserExchanges from 'src/database/models/userexchanges'
+import UserExchanges from '../database/models/userexchanges'
 
 
 /**

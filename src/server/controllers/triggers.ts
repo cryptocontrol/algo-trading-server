@@ -1,7 +1,7 @@
 import * as _ from 'underscore'
 
-import Triggers from 'src/database/models/triggers'
-import TriggerManger from 'src/managers/TriggerManager'
+import Triggers from '../../database/models/triggers'
+import TriggerManger from '../../managers/TriggerManager'
 
 
 /**

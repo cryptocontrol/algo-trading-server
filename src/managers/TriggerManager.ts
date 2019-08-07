@@ -1,11 +1,11 @@
 import AdviceManager from './AdviceManager'
-import BaseTrigger from 'src/triggers/BaseTrigger'
+import BaseTrigger from '../triggers/BaseTrigger'
 import BudfoxManger from './BudfoxManager'
-import StopLossTrigger from 'src/triggers/StopLossTrigger'
-import TakeProfitTrigger from '../../src/triggers/TakeProfitTrigger'
-import Triggers from 'src/database/models/triggers'
-import CancelOrderTrigger from 'src/triggers/CancelOrderTrigger';
-import TieredTakeProfitTrigger from "../../src/triggers/TieredTakeProfitTrigger";
+import StopLossTrigger from '../triggers/StopLossTrigger'
+import TakeProfitTrigger from '../triggers/TakeProfitTrigger'
+import Triggers from '../database/models/triggers'
+import CancelOrderTrigger from '../triggers/CancelOrderTrigger'
+import TieredTakeProfitTrigger from '../triggers/TieredTakeProfitTrigger'
 
 
 interface IExchangeTriggers {

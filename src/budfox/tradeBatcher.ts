@@ -3,7 +3,7 @@ import * as moment from 'moment'
 import { EventEmitter } from 'events'
 import { Trade } from 'ccxt'
 
-import log from 'src/utils/log'
+import log from '../utils/log'
 
 
 export interface ITradesBatchEvent {

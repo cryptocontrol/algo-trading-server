@@ -3,9 +3,9 @@ import { EventEmitter } from 'events'
 import { Trade } from 'ccxt'
 
 import TradeBatcher, { ITradesBatchEvent } from './tradeBatcher'
-import BaseExchange from 'src/exchanges/core/BaseExchange'
+import BaseExchange from '../exchanges/core/BaseExchange'
 import Heart from './heart'
-import log from 'src/utils/log'
+import log from '../utils/log'
 
 
 /**

@@ -1,5 +1,5 @@
 import * as hat from 'hat'
-import BaseExchange from 'src/exchanges/core/BaseExchange'
+import BaseExchange from '../exchanges/core/BaseExchange'
 
 
 /**

@@ -1,8 +1,8 @@
 import * as ccxt from 'ccxt'
 
-import BaseExchange from 'src/exchanges/core/BaseExchange'
-import CCXTExchange from 'src/exchanges/core/CCXTExchange'
-import BinanceExchange from 'src/exchanges/BinanceExchange'
+import BaseExchange from '../exchanges/core/BaseExchange'
+import CCXTExchange from '../exchanges/core/CCXTExchange'
+import BinanceExchange from '../exchanges/BinanceExchange'
 
 
 interface IExchanges {

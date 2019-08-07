@@ -10,8 +10,8 @@ import * as jwt from 'jsonwebtoken'
 import * as morgan from 'morgan'
 
 import router from './routes'
-import { IAppRequest } from 'src/interfaces'
-import InvalidJWTError from 'src/errors/InvalidJWTError'
+import { IAppRequest } from '../interfaces'
+import InvalidJWTError from '../errors/InvalidJWTError'
 
 
 const app = express()

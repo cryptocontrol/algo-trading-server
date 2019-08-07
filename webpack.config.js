@@ -13,16 +13,38 @@ module.exports = {
     filename: '[name].bundle.js'
   },
 
-  context: path.resolve('./src'),
+  // context: path.resolve('./src'),
 
+  target: 'node',
   mode: 'production',
 
   module: {
     rules: [
       {
+        // enforce: 'pre',
+        test: /\.js$/,
+        use: 'babel-loader'
+    },
+    // {
+    //   test: /node_modules\/ccxt\/(.+)\.js$/,
+    //           loader: "babel-loader",
+    //           options: {
+    //             babelrc: false,
+    //             cacheDirectory: false,
+    //             presets: ["es2015"],
+    //             plugins: ["syntax-async-functions", "transform-regenerator"]
+    //           }
+    // },
+    // {
+    //     enforce: 'pre',
+    //     test: /\.ts$/,
+    //     exclude: /node_modules/,
+    //     use: 'tslint-loader'
+    // },
+      {
         test: /\.tsx?$/,
-        exclude: [/\/node_modules\//],
-        use: ['awesome-typescript-loader']
+        exclude: [ /node_modules/ ],
+        use: ['babel-loader', 'awesome-typescript-loader'],
       }
     ]
   },
@@ -30,7 +52,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.tsx', '.json'],
     modules: [
-      path.join(__dirname, 'app'),
+      path.join(__dirname, 'src'),
       // path.join(__dirname, 'app/node_modules'),
       'node_modules',
     ],
@@ -44,6 +66,4 @@ module.exports = {
       'process.env': { NODE_ENV: JSON.stringify('production') }
     })
   ],
-
-  target: 'node'
 }

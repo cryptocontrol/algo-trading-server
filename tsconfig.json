@@ -24,6 +24,7 @@
     "outDir": "dist"
   },
   "include": [
+    "node_modules/ccxt",
     "src"
   ],
   "exclude": [

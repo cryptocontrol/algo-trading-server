@@ -1,10 +1,10 @@
 import * as _ from 'underscore'
 
-import { IAdvice } from 'src/interfaces'
+import { IAdvice } from '../interfaces'
 import BasePlugin from './BasePlugin'
-import BaseTrigger from 'src/triggers/BaseTrigger'
+import BaseTrigger from '../triggers/BaseTrigger'
 import log from '../utils/log'
-import Plugins from 'src/database/models/plugins'
+import Plugins from '../database/models/plugins'
 
 const WebClient = require('@slack/client').WebClient
 

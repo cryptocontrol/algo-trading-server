@@ -1,6 +1,6 @@
 import * as _ from 'underscore'
 
-import Advices from 'src/database/models/advices'
+import Advices from '../../database/models/advices'
 
 
 

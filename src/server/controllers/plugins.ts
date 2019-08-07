@@ -1,7 +1,7 @@
 import * as _ from 'underscore'
 
-import PluginsManager from 'src/managers/PluginsManager'
-import Plugins from 'src/database/models/plugins'
+import PluginsManager from '../../managers/PluginsManager'
+import Plugins from '../../database/models/plugins'
 
 
 /**

@@ -1,11 +1,11 @@
 import * as _ from 'underscore'
 
-import { IAdvice } from 'src/interfaces'
-import BasePlugin from 'src/plugins/BasePlugin'
-import BaseTrigger from 'src/triggers/BaseTrigger'
-import Plugins from 'src/database/models/plugins'
-import SlackPlugin from 'src/plugins/slack'
-import TelegramPlugin from 'src/plugins/telegram'
+import { IAdvice } from '../interfaces'
+import BasePlugin from '../plugins/BasePlugin'
+import BaseTrigger from '../triggers/BaseTrigger'
+import Plugins from '../database/models/plugins'
+import SlackPlugin from '../plugins/slack'
+import TelegramPlugin from '../plugins/telegram'
 
 
 interface IPlugins {

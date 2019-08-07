@@ -1,8 +1,8 @@
 import { Trade } from 'ccxt'
 
-import { ICandle } from 'src/interfaces'
+import { ICandle } from '../interfaces'
 import BaseTrigger from './BaseTrigger'
-import Triggers from 'src/database/models/triggers'
+import Triggers from '../database/models/triggers'
 
 
 /**

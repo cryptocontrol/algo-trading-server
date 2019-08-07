@@ -2,7 +2,7 @@ import { Trade } from 'ccxt'
 import * as EventEmitter from 'events'
 
 import { ICandle, IAdvice } from 'src/interfaces'
-import Triggers from 'src/database/models/triggers'
+import Triggers from '../database/models/triggers'
 import log from '../utils/log'
 
 

@@ -2,7 +2,7 @@ import * as ccxt from 'ccxt'
 import * as _ from 'underscore'
 
 
-import UserExchanges from 'src/database/models/userexchanges'
+import UserExchanges from '../../database/models/userexchanges'
 
 
 /**
