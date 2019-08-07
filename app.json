@@ -1,7 +1,7 @@
 {
-  "name": "adv-trading-server",
+  "name": "iguana-trading-server",
   "description": "Trading Cloud for the CryptoControl Terminal",
-  "repository": "https://github.com/cryptocontrol/adv-trading-server",
+  "repository": "https://github.com/cryptocontrol/algo-trading-server",
   "logo": "https://node-js-sample.herokuapp.com/node.png",
   "keywords": ["node", "express", "static"],
   "env": {

@@ -1,10 +1,10 @@
 version: '3'
 services:
-  web:
+  iguana:
     build: .
     ports:
     - "8080:8080"
     environment:
-      - SERVER_SECRET=secret_keyboard_cat
+      - SERVER_SECRET=secret_keyboard_cat1
     volumes:
       - ./storage_prod:/app/storage
