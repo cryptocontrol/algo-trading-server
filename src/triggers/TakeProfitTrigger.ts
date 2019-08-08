@@ -3,7 +3,7 @@ import { Trade } from 'ccxt'
 import { ICandle } from '../interfaces'
 import BaseTrigger from './BaseTrigger'
 import Triggers from '../database/models/triggers'
-import { isNumber } from 'util';
+import { isNumber } from 'util'
 
 
 export default class TakeProfitTrigger extends BaseTrigger {

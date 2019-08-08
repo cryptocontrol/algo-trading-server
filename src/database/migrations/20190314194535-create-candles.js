@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Candles', {
@@ -56,7 +56,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    })
 
     await queryInterface.addIndex('Candles', ['symbol', 'exchange', 'start'], {
       type: 'unique',
@@ -65,6 +65,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Candles');
+    return queryInterface.dropTable('Candles')
   }
-};
+}

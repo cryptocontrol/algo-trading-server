@@ -102,8 +102,8 @@ export default class TriggerManger {
     // stop losses
     if (triggerDB.kind === 'stop-loss') return new StopLossTrigger(triggerDB)
     if (triggerDB.kind === 'take-profit') return new TakeProfitTrigger(triggerDB)
-    if (triggerDB.kind === 'cancel-order') return new CancelOrderTrigger(triggerDB);
-    if (triggerDB.kind === 'tiered-profit') return new TieredTakeProfitTrigger(triggerDB);
+    if (triggerDB.kind === 'cancel-order') return new CancelOrderTrigger(triggerDB)
+    if (triggerDB.kind === 'tiered-profit') return new TieredTakeProfitTrigger(triggerDB)
 
     // tiered take-profits etc.. etc..
   }
