@@ -42,6 +42,7 @@ export default class AdviceManager {
     await UserExchanges.findOne({ where: { uid: t.getUID(), exchange: t.getExchange() } })
     .then(async data => {
       // create the exchange instance
+      // todo: decrypt the keys
       const exchange: ccxt.Exchange = new ccxt[t.getExchange()]({ apiKey: data.apiKey, secret: data.apiSecret, password: data.apiPassword })
 
       /* execute the advice */

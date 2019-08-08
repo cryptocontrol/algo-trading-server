@@ -81,17 +81,19 @@ export default class BudFox extends EventEmitter {
     trades.forEach(t => {
       this.emit('trade', t)
 
-      const trade = new Trades({
-        exchange: this.exchange.id,
-        price: t.price,
-        symbol: this.symbol,
-        tradedAt: new Date(t.timestamp),
-        side: t.side,
-        tradeId: String(t.id),
-        volume: t.amount
-      })
+      // disable saving trades
 
-      trade.save().catch(_.noop)
+      // const trade = new Trades({
+      //   exchange: this.exchange.id,
+      //   price: t.price,
+      //   symbol: this.symbol,
+      //   tradedAt: new Date(t.timestamp),
+      //   side: t.side,
+      //   tradeId: String(t.id),
+      //   volume: t.amount
+      // })
+
+      // trade.save().catch(_.noop)
     })
   }
 

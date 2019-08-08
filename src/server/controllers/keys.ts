@@ -11,7 +11,7 @@ import UserExchanges from '../../database/models/userexchanges'
 export const setAPIKey = async (uid: string, exchange: string, data: any) => {
   // first authenticate with the exchange and see if the API key works
   const ccxtExchange = new ccxt[exchange]({
-    apiKey: data.key,
+    apiKey: data.apiKey,
     secret: data.secret,
     password: data.password,
     useServerTime: true,
@@ -26,17 +26,19 @@ export const setAPIKey = async (uid: string, exchange: string, data: any) => {
   const found = await UserExchanges.findOne({ where: { uid, exchange } })
 
   if (found) {
-    found.apiKey = data.key
+    // todo: encrypt the keys
+    found.apiKey = data.apiKey
     found.apiSecret = data.secret
     found.apiPassword = data.password
     await found.save()
     return found
   }
 
+  // todo: encrypt the keys
   const row = new UserExchanges({
     uid,
     exchange,
-    apiKey: data.key,
+    apiKey: data.apiKey,
     apiSecret: data.secret,
     apiPassword: data.password
   })
