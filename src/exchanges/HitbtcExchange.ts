@@ -33,7 +33,7 @@ export default class HitbtcExchange extends CCXTExchange {
 
     this.clientws.on('open', () => {
       console.log('ws opened')
-      this.clientws.send(`{ "method":"subscribeTrades","params": { "symbol": "${wsSymbol}" }, "id":123 }`)
+      this.clientws.send(`{ 'method':'subscribeTrades','params': { 'symbol': '${wsSymbol}' }, 'id':123 }`)
     })
 
     this.clientws.on('message', (trade: any) => {
@@ -75,7 +75,7 @@ export default class HitbtcExchange extends CCXTExchange {
 
     this.clientws.on('open', () => {
       console.log('ws opened')
-      this.clientws.send(`{"method": "subscribeOrderbook","params": {  "symbol": "${wsSymbol}"},  "id": 123}`)
+      this.clientws.send(`{'method': 'subscribeOrderbook','params': {  'symbol': '${wsSymbol}'},  'id': 123}`)
     })
 
     this.clientws.on('message', (orders: any) => {

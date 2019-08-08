@@ -1,4 +1,4 @@
-import BaseStrategy from "./BaseStrategy"
+import BaseStrategy from './BaseStrategy'
 
 
 export default class StopLossStrategy extends BaseStrategy {

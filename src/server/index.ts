@@ -66,4 +66,10 @@ app.use((req: IAppRequest, _res, next) => {
 app.use(router)
 
 
+// error handler
+app.use((error: any, _req, res, _next) => {
+  res.status(error.status || 500)
+  res.json({ error: error.message })
+})
+
 export default app

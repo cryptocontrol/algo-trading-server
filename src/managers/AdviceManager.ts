@@ -47,7 +47,7 @@ export default class AdviceManager {
       /* execute the advice */
 
       try {
-        console.log("Out side condition check ", adviceDB.advice)
+        console.log('Out side condition check ', adviceDB.advice)
         // market buy
         if (adviceDB.advice === 'market-buy') {
           const res = await exchange.createOrder(t.getSymbol(), 'market', 'buy', amount)

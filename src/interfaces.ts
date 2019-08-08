@@ -1,5 +1,5 @@
-import { Request } from "express"
-import { Moment } from "moment"
+import { Request } from 'express'
+import { Moment } from 'moment'
 
 
 export interface ICandle {
