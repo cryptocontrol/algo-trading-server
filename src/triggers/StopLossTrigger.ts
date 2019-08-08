@@ -3,6 +3,7 @@ import { Trade } from 'ccxt'
 import { ICandle } from '../interfaces'
 import BaseTrigger from './BaseTrigger'
 import Triggers from '../database/models/triggers'
+import { isNumber } from 'util'
 
 
 /**
@@ -10,8 +11,9 @@ import Triggers from '../database/models/triggers'
  * certain point.
  */
 export default class StopLossTrigger extends BaseTrigger {
-  action: 'buy' | 'sell'
-  type: 'market' | 'limit'
+  private readonly action: 'market-buy' | 'market-sell' | 'limit-buy' | 'limit-sell'
+  private readonly amount: number
+  private readonly price: number
 
 
   constructor (trigger: Triggers) {
@@ -19,10 +21,14 @@ export default class StopLossTrigger extends BaseTrigger {
 
     const params = JSON.parse(trigger.params)
     this.action = params.action
-    this.type = params.type
+    this.amount = params.amount
+    this.price = params.price
 
-    if (params.action !== 'buy' && params.action !== 'sell') throw new Error('bad/missing action')
-    if (params.type !== 'market' && params.type !== 'limit') throw new Error('bad/missing type')
+    if (this.action !== 'market-buy' && this.action !== 'market-sell' &&
+      this.action !== 'limit-buy' && this.action !== 'limit-sell')
+      throw new Error('bad/missing action')
+    if (this.price && !isNumber(this.price)) throw new Error('bad price')
+    if (!this.amount || !isNumber(this.amount)) throw new Error('bad/missing amount')
   }
 
 
@@ -32,17 +38,15 @@ export default class StopLossTrigger extends BaseTrigger {
 
     // if price reaches or goes below the stop loss price, then
     // we close the position with a buy order
-    if (this.action === 'buy' && price >= this.triggerDB.targetPrice) {
-      if (this.type === 'limit') this.advice('limit-buy', price, this.triggerDB.amount)
-      if (this.type === 'market') this.advice('market-buy', price, this.triggerDB.amount)
+    if (this.action.endsWith('buy') && price >= this.price) {
+      this.advice(this.action, { price, amount: this.amount })
       this.close()
     }
 
     // if price reaches or goes above the stop loss price, then
     // we close the position with a sell order
-    if (this.action === 'sell' && price <= this.triggerDB.targetPrice) {
-      if (this.type === 'limit') this.advice('limit-sell', price, this.triggerDB.amount)
-      if (this.type === 'market') this.advice('market-sell', price, this.triggerDB.amount)
+    if (this.action.endsWith('sell') && price <= this.price) {
+      this.advice(this.action, { price, amount: this.amount })
       this.close()
     }
   }

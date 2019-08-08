@@ -10,27 +10,26 @@ import Triggers from '../database/models/triggers'
  * certain point.
  */
 export default class StopLossTakeProfitTrigger extends BaseTrigger {
-  action: 'buy' | 'sell'
-  type: 'market' | 'limit'
-  stopLossPrice: number
-  takeProfitPrice: number
+  private readonly action: 'market-buy' | 'market-sell' | 'limit-buy' | 'limit-sell'
+  private readonly amount: number
+  private readonly stopLossPrice: number
+  private readonly takeProfitPrice: number
 
 
   constructor (trigger: Triggers) {
-    super(trigger, 'Stop Loss')
+    super(trigger, 'Stop Loss & Take Proft')
 
     const params = JSON.parse(trigger.params)
     this.action = params.action
-    this.type = params.type
-    // target price to achive stop loss
-    this.stopLossPrice = params.stopLossPrice
-    // target price to achive take profit
-    this.takeProfitPrice = params.takeProfitPrice
+    this.amount = params.amount
+    this.stopLossPrice = params.stopPrice
+    this.takeProfitPrice = params.takePrice
 
-    if (params.action !== 'buy' && params.action !== 'sell') throw new Error('bad/missing action')
-    if (params.type !== 'market' && params.type !== 'limit') throw new Error('bad/missing type')
-    if (!params.stopLossPrice) throw new Error('bad/missing stoploss price')
-    if (!params.takeProfitPrice) throw new Error('bad/missing take profit price')
+    if (this.action !== 'market-buy' && this.action !== 'market-sell' &&
+      this.action !== 'limit-buy' && this.action !== 'limit-sell')
+      throw new Error('bad/missing action')
+    if (!this.stopLossPrice) throw new Error('bad/missing stoploss price')
+    if (!this.takeProfitPrice) throw new Error('bad/missing take profit price')
   }
 
 
@@ -38,7 +37,7 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
     if (!this.isLive()) return
     const { price } = trade
 
-    if (this.action === 'buy') {
+    if (this.action.endsWith('buy')) {
       // if we go short, then we place buy orders to close our position
 
       // buy for stoploss
@@ -46,8 +45,7 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
       // if price reaches or goes below the stop loss price, then
       // we close the position with a buy order
       if (price >= this.stopLossPrice) {
-        if (this.type === 'limit') this.advice('limit-buy', price, this.triggerDB.amount)
-        if (this.type === 'market') this.advice('market-buy', price, this.triggerDB.amount)
+        this.advice(this.action, { price, amount: this.amount })
         this.close()
       }
 
@@ -56,11 +54,10 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
       // if price reaches or goes below the take profit price, then
       // we close the position with a sell order
       if (price <= this.takeProfitPrice) {
-        if (this.type === 'limit') this.advice('limit-buy', price, this.triggerDB.amount)
-        if (this.type === 'market') this.advice('market-buy', price, this.triggerDB.amount)
+        this.advice(this.action, { price, amount: this.amount })
         this.close()
       }
-    } else if (this.action === 'sell') {
+    } else if (this.action.endsWith('sell')) {
       // if we go long, then we place sell orders to close our position
 
       // sell for stoploss
@@ -68,8 +65,7 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
       // if price reaches or goes above the stop loss price, then
       // we close the position with a sell order
       if (price <= this.stopLossPrice) {
-        if (this.type === 'limit') this.advice('limit-sell', price, this.triggerDB.amount)
-        if (this.type === 'market') this.advice('market-sell', price, this.triggerDB.amount)
+        this.advice(this.action, { price, amount: this.amount })
         this.close()
       }
 
@@ -78,13 +74,10 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
       // if price reaches or goes above the take profit price, then
       // we close the position with a sell order
       if (price >= this.takeProfitPrice) {
-        if (this.type === 'limit') this.advice('limit-sell', price, this.triggerDB.amount)
-        if (this.type === 'market') this.advice('market-sell', price, this.triggerDB.amount)
+        this.advice(this.action, { price, amount: this.amount })
         this.close()
       }
     }
-
-
   }
 
 

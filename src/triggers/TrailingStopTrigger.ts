@@ -5,9 +5,9 @@ import { Trade } from 'ccxt'
 
 
 export default class TrailingStopTrigger extends BaseTrigger {
-  previousPrice: number
-  trail: number
-  trailingPoint: number
+  private readonly amount: number
+  private readonly trail: number
+  private trailingPoint: number
 
 
   /**
@@ -22,21 +22,19 @@ export default class TrailingStopTrigger extends BaseTrigger {
 
     const params = JSON.parse(trigger.params)
     this.trail = params.trail
-    this.previousPrice = params.initialPrice
+    this.amount = params.amount
     this.trailingPoint = params.initialPrice - this.trail
   }
 
 
   onTrade (trade: Trade) {
-    const { price } = trade
+    if (!this.isLive()) return
 
-    if (!this.isLive) return
+    const { price } = trade
     if (price > this.trailingPoint + this.trail) this.trailingPoint = price - this.trail
 
-    this.previousPrice = price
-
     if (price <= this.trailingPoint) {
-      this.advice('close-position', price, this.triggerDB.amount)
+      this.advice('close-position', { price, amount: this.amount })
       this.close()
     }
   }

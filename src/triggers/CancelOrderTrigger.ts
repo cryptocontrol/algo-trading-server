@@ -16,6 +16,7 @@ export default class CancelOrderTrigger extends BaseTrigger {
   private readonly condition: 'greater-than'| 'greater-than-equal' | 'less-than' | 'less-than-equal'
   private readonly targetPrice: number
 
+
   constructor(trigger: Triggers) {
     super(trigger, 'Cancel Order')
 
@@ -24,13 +25,13 @@ export default class CancelOrderTrigger extends BaseTrigger {
     this.condition = params.condition
     this.targetPrice = params.price
 
+
     // check for missing condition
     if (['greater-than', 'greater-than-equal', 'less-than', 'less-than-equal'].indexOf(this.condition) === -1)
       throw new Error('bad/missing condition')
 
     if (!this.orderId) throw new Error('bad/missing order id')
-    if (!this.targetPrice || isNumber(this.targetPrice)) throw new Error('bad/missing price')
-
+    if (!this.targetPrice || !isNumber(this.targetPrice)) throw new Error('bad/missing price')
   }
 
 

@@ -1,102 +1,100 @@
-import { Trade } from "ccxt";
-import { ICandle } from "../interfaces";
-import BaseTrigger from "./BaseTrigger";
-import Triggers from "../database/models/triggers";
+import { Trade } from 'ccxt'
+import { ICandle } from '../interfaces'
+import BaseTrigger from './BaseTrigger'
+import Triggers from '../database/models/triggers'
 
 /**
  * Tiered take profit trigger enables the user to create triggers to sell on
  * profit at multiple tiers at 33 % steps
  */
-
-interface Params {
-  action: string,
-  type: string,
-  steps: number,
-  executedSteps: {
-    [key: string]: boolean } };
-
 export default class TieredTakeProfitTrigger extends BaseTrigger {
-  private readonly action: "sell";
-  private readonly type: "market" | "limit";
-  private readonly params: Params;
+  private readonly action: 'market-buy' | 'market-sell' | 'limit-buy' | 'limit-sell'
+  private executedSteps: { [key: string]: boolean } = {}
+
+  private readonly amount: number
+  private readonly createdAtPrice: number
+  private readonly targetPrice: number
+
 
   constructor(trigger: Triggers) {
-    super(trigger, "Tiered Profits");
+    super(trigger, 'Tiered Profits')
 
-    const params = JSON.parse(trigger.params);
+    const params = JSON.parse(trigger.params)
 
-    this.action = params.action;
-    this.type = params.type;
-    this.params = params;
+    this.action = params.action
+    this.amount = params.amount
+    this.createdAtPrice = params.createdAtPrice
+    this.targetPrice = params.targetPrice
 
-    if (this.action !== "sell") throw new Error('bad/missing action');
-    if (this.type !== "market" && this.type !== "limit")
-      throw new Error('bad/missing type');
+    if (this.action !== 'market-buy' && this.action !== 'market-sell' &&
+    this.action !== 'limit-buy' && this.action !== 'limit-sell')
+      throw new Error('bad/missing action')
   }
+
 
   onPartialExecution(data) {
     this.triggerDB.params = JSON.stringify({
-      ...this.params,
+      ...JSON.parse(this.triggerDB.params),
       executedSteps: {
+        ...this.executedSteps,
         ...data
       }
-    });
+    })
+
+    this.triggerDB.save()
+
+    this.executedSteps = {
+      ...this.executedSteps,
+      ...data
+    }
   }
 
-  onTrade(trade: Trade) {
-    if (!this.isLive()) return;
 
-    const { price } = trade;
-    const { createdAtPrice, targetPrice } = this.triggerDB
+  onTrade(trade: Trade) {
+    if (!this.isLive()) return
+
+    const { price } = trade
+    const { createdAtPrice, targetPrice, executedSteps, action } = this
     const priceDelta = targetPrice - createdAtPrice
 
     // price for the first tier or step
-    const firstStep = createdAtPrice + (0.33 * priceDelta);
+    const firstStep = createdAtPrice + (0.33 * priceDelta)
+
     // price for the second tier or step
-    const secondStep = createdAtPrice + (0.66 * priceDelta);
+    const secondStep = createdAtPrice + (0.66 * priceDelta)
+
     // the profit amount for for the first & second tier or step
-    const amount = 0.33 * this.triggerDB.amount;
+    const amount = 0.33 * this.amount
+
     // the profit amount when target priced is achived
-    const remainingAmount = this.triggerDB.amount - (2 * amount);
+    const remainingAmount = this.amount - (2 * amount)
 
     // trigger a maket or limit sell when price crosses the first tier
     // and this condition is achieved for the first time
-    if (price >= firstStep && price < secondStep
-      && this.params.executedSteps[1] === false) {
-      if (this.type === "market") this.advice('market-sell', price, amount);
-      if (this.type === "limit") this.advice('limit-sell', price, amount);
-      // TODO: add fields to check weather the trigger was partiall executed
-
-      this.onPartialExecution({ ...this.params.executedSteps, 1: true });
+    if (price >= firstStep && price < secondStep && !executedSteps[1]) {
+      // TODO: add fields to check weather the trigger was partially executed
+      this.advice(action, { price, amount })
+      this.onPartialExecution({ 1: true })
     }
 
     // trigger a maket or limit sell when price crosses the second tier
     // and this condition is achieved for the first time
-    if (price >= secondStep && price < this.triggerDB.targetPrice
-      && this.params.executedSteps[2] === false
-      && this.params.executedSteps[1] === true) {
-      if (this.type === "market") this.advice('market-sell', price, amount);
-      if (this.type === "limit") this.advice('limit-sell', price, amount);
-      // TODO: add fields to check weather the trigger was partiall executed
-
-      this.onPartialExecution({ ...this.params.executedSteps, 2: true })
+    if (price >= secondStep && price < targetPrice && executedSteps[1] && !executedSteps[2]) {
+      this.advice(action, { price, amount })
+      this.onPartialExecution({ 2: true })
     }
 
     // trigger a maket or limit sell when target Price is achived
     // and this condition is achieved for the first time
-    if (price >= this.triggerDB.targetPrice
-      && this.params.executedSteps[3] === false
-      && this.params.executedSteps[1] === true
-      && this.params.executedSteps[2] === true) {
-      if (this.type === "market") this.advice('market-sell', price, remainingAmount);
-      if (this.type === "limit") this.advice('limit-sell', price, remainingAmount);
-
-      this.onPartialExecution({ ...this.params.executedSteps, 3: true })
-
-      this.close();
+    if (price >= targetPrice && executedSteps[1] && executedSteps[2] && !executedSteps[3]) {
+      this.advice(action, { price, amount: remainingAmount })
+      this.onPartialExecution({ 3: true })
+      this.close()
     }
   }
 
+
   onCandle(_candle: ICandle) {
+    // do nothing
   }
 }
