@@ -33,11 +33,6 @@ app.get('/balance/:exchange', (req: IAppRequest, res, next) => {
     secret: 'ikT1GLusBcOYgqHJO9fgyyuKDuEhVuHrxQXO0LCpspSAFHKCvoQO2Bb67PoYkwuQ'
   })
 
-  const bitfinex = new ccxt.bitfinex({
-    // apiKey: 'LgbBdOWwDXSOmu28JOJp64qJA6zJXph6uBmG1snlffGCzCHQMmK1uXKPUTDPY1Uc',
-    // secret: 'ikT1GLusBcOYgqHJO9fgyyuKDuEhVuHrxQXO0LCpspSAFHKCvoQO2Bb67PoYkwuQ'
-  })
-
   if (cache[exchange]) return res.json(cache[exchange])
 
   binance.fetchBalance()

@@ -72,19 +72,15 @@ export default abstract class BaseTrigger extends EventEmitter {
     return this.triggerDB.isActive
   }
 
-  public getOrderId() {
-    return this.triggerDB.orderId;
-  }
 
-
-  protected advice (advice: IAdvice, price: number, amount: number) {
+  protected advice (advice: IAdvice, params?: { price?: number, amount?: number, orderId?: string }) {
     if (!this.isLive()) return
 
     // do nothing
     const trigger = this.triggerDB
     log.info(
       `${trigger.kind} trigger for user ${trigger.uid} on ${trigger.exchange} ${trigger.symbol} ` +
-      `adviced to ${advice} at ${price} for an amount of ${amount}`
+      `adviced to ${advice} at ${params.price} for an amount of ${params.amount}`
     )
 
     // mark the trigger as triggered
@@ -92,7 +88,7 @@ export default abstract class BaseTrigger extends EventEmitter {
     trigger.lastTriggeredAt = new Date
     trigger.save()
 
-    this.emit('advice', { advice, price, amount })
+    this.emit('advice', { advice, ...params })
   }
 
 
