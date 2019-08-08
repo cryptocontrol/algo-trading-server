@@ -115,6 +115,7 @@
     "db:up": "sequelize db:migrate --config src/database/config.js --migrations-path src/database/migrations",
     "db:down": "sequelize db:migrate:undo --config src/database/config.js --migrations-path src/database/migrations",
     "db:down:all": "sequelize db:migrate:undo:all --config src/database/config.js --migrations-path src/database/migrations",
+    "deploy": "npm run build; npm run build-docker; docker push cryptocontrol/iguana",
     "test": "./node_modules/mocha/bin/mocha -r ts-node/register  test/test.ts",
     "build": "rimraf dist; tsc",
     "build-docker": "docker build -t cryptocontrol/iguana .",
