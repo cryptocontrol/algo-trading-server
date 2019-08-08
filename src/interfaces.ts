@@ -27,11 +27,12 @@ export type IAdvanceOrderTypes = 'stop-loss' | 'take-profit' | 'trailing-stop' |
 
 
 export interface IOrderRequest {
-  action: 'buy' | 'sell'
-  kind: 'market' | 'limit' | 'stop'
+  side: 'buy' | 'sell'
+  kind: 'market' | 'limit' | 'stop' | 'advanced'
   exchange: 'spot' | 'margin' | 'paper'
-  quantity: number
-  limitPrice?: number
+  amount: number
+  price?: number
+  // symbol: string
 
   takeProfitEnabled: boolean
   takeProfitPrice?: number

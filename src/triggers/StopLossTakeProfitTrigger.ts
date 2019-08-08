@@ -34,8 +34,9 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
 
 
   onTrade (trade: Trade) {
-    if (!this.isLive()) return
     const { price } = trade
+    console.log(price, this.action)
+    if (!this.isLive()) return
 
     if (this.action.endsWith('buy')) {
       // if we go short, then we place buy orders to close our position
@@ -60,6 +61,7 @@ export default class StopLossTakeProfitTrigger extends BaseTrigger {
     } else if (this.action.endsWith('sell')) {
       // if we go long, then we place sell orders to close our position
 
+      console.log(price, 'stop', price <= this.stopLossPrice, this.stopLossPrice, 'take', price >= this.takeProfitPrice, this.takeProfitPrice)
       // sell for stoploss
 
       // if price reaches or goes above the stop loss price, then

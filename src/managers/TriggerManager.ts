@@ -1,11 +1,12 @@
 import AdviceManager from './AdviceManager'
 import BaseTrigger from '../triggers/BaseTrigger'
 import BudfoxManger from './BudfoxManager'
+import CancelOrderTrigger from '../triggers/CancelOrderTrigger'
+import StopLossTakeProfitTrigger from '../triggers/StopLossTakeProfitTrigger'
 import StopLossTrigger from '../triggers/StopLossTrigger'
 import TakeProfitTrigger from '../triggers/TakeProfitTrigger'
-import Triggers from '../database/models/triggers'
-import CancelOrderTrigger from '../triggers/CancelOrderTrigger'
 import TieredTakeProfitTrigger from '../triggers/TieredTakeProfitTrigger'
+import Triggers from '../database/models/triggers'
 
 
 interface IExchangeTriggers {
@@ -104,6 +105,7 @@ export default class TriggerManger {
     if (triggerDB.kind === 'take-profit') return new TakeProfitTrigger(triggerDB)
     if (triggerDB.kind === 'cancel-order') return new CancelOrderTrigger(triggerDB)
     if (triggerDB.kind === 'tiered-profit') return new TieredTakeProfitTrigger(triggerDB)
+    if (triggerDB.kind === 'stop-loss-take-profit') return new StopLossTakeProfitTrigger(triggerDB)
 
     // tiered take-profits etc.. etc..
   }

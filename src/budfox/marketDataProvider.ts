@@ -34,9 +34,6 @@ export default class MarketDataProvider extends EventEmitter {
     this.heart = new Heart
     this.batcher = new TradeBatcher
 
-    // connect the heart to the fetch fn
-    this.heart.on('tick', this.fetch)
-
     // relay newly fetched trades
     this.batcher.on('new batch', this.relayTrades)
   }
@@ -44,28 +41,20 @@ export default class MarketDataProvider extends EventEmitter {
 
   public start () {
     // first fetch the first set of trades
-    this.fetch()
+    // this.fetch() // don't do this;
 
-    // check if the exchange has streaming capabilities
-    if (this.exchange.canStreamTrades(this.symbol)) {
-      // then we start streaming trades in real-time
-      this.exchange.on('trade', (trade: Trade) => {
-        if (trade.symbol === this.symbol) this.processTrades([trade])
-      })
+    // then we start streaming trades in real-time
+    this.exchange.on('trade', (trade: Trade) => {
+      if (trade.symbol === this.symbol) this.processTrades([trade])
+    })
 
-      log.debug('Streaming', this.symbol, 'trades from', this.exchange.id, '...')
-      this.exchange.streamTrades(this.symbol)
-
-      return
-    }
-
-    // else we poll the exchange; (by starting the heart!)
-    this.heart.pump()
+    log.debug('Streaming', this.symbol, 'trades from', this.exchange.id, '...')
+    this.exchange.streamTrades(this.symbol)
   }
 
 
   public stop () {
-    this.heart.attack()
+    this.exchange.stopStreamingTrades(this.symbol)
   }
 
 
@@ -83,26 +72,6 @@ export default class MarketDataProvider extends EventEmitter {
   }
 
 
-  fetch = async () => {
-    let since
-
-    // if (this.firstFetch) {
-    //   since = this.firstSince
-    //   this.firstFetch = false
-    // }
-
-    // this.tries = 0
-    log.debug('Requested', this.symbol, 'trade data from', this.exchange.id, '...')
-
-    const trades = await this.exchange.getTrades(this.symbol, since, false)
-    this.processTrades(trades)
-    // .catch(e => {
-    //   log.warn(this.exchange.name, 'returned an error while fetching trades:', e)
-    //   log.debug('refetching...')
-    // })
-  }
-
-
   private processTrades (trades: Trade[]) {
     if (_.isEmpty(trades)) {
       log.debug('trade fetch came back empty, refetching...')
@@ -110,6 +79,7 @@ export default class MarketDataProvider extends EventEmitter {
       return
     }
 
+    console.log(trades)
     this.batcher.write(trades)
   }
 }

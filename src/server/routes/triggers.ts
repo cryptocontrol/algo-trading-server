@@ -13,7 +13,7 @@ const router = Router()
 router.post('/:kind', async (req: IAppRequest, res) => {
   const uid = req.uid
 
-  const { symbol, exchange, kind: _kind, ...params } = req.body
+  const { symbol, exchange, params } = req.body
   const kind = req.params.kind
 
   const trigger = await Controllers.createTrigger(uid, exchange, symbol, kind, params)
