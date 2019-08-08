@@ -60,8 +60,8 @@ export default class TriggerManger {
     budfox.on('trade', trade => trigger.onTrade(trade))
 
     // whenever a trigger executes
-    trigger.on('advice', ({ advice, price, amount }) => {
-      AdviceManager.getInstance().addAdvice(trigger, advice, price, amount)
+    trigger.on('advice', ({ advice, price, amount, ...extras }) => {
+      AdviceManager.getInstance().addAdvice(trigger, advice, price, amount, extras)
     })
 
     // once a trigger has finished

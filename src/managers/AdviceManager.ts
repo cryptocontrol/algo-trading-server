@@ -21,7 +21,7 @@ export default class AdviceManager {
   private static readonly instance = new AdviceManager()
 
 
-  public async addAdvice (t: BaseTrigger, advice: IAdvice, price: number, amount: number) {
+  public async addAdvice (t: BaseTrigger, advice: IAdvice, price: number, amount: number, extras: any) {
     // create and save the advice into the DB
     const adviceDB = new Advices({
       uid: t.getUID(),
@@ -47,47 +47,49 @@ export default class AdviceManager {
       /* execute the advice */
 
       try {
-        console.log("Out side condition check ", adviceDB.advice);
+        console.log("Out side condition check ", adviceDB.advice)
         // market buy
         if (adviceDB.advice === 'market-buy') {
-          const res = await exchange.createOrder(t.getSymbol(), 'market', 'buy', amount);
+          const res = await exchange.createOrder(t.getSymbol(), 'market', 'buy', amount)
 
-          adviceDB.order_id = res.info.orderId;
-          adviceDB.save();
+          adviceDB.order_id = res.info.orderId
+          adviceDB.save()
         }
 
         // market sell
         if (adviceDB.advice === 'market-sell') {
-          const res = await exchange.createOrder(t.getSymbol(), 'market', 'sell', amount);
+          const res = await exchange.createOrder(t.getSymbol(), 'market', 'sell', amount)
 
-          adviceDB.order_id = res.info.orderId;
-          adviceDB.save();
+          adviceDB.order_id = res.info.orderId
+          adviceDB.save()
         }
 
         // limit sell
         if (adviceDB.advice === 'limit-sell') {
-          const res = await exchange.createOrder(t.getSymbol(), 'limit', 'sell', amount, price);
+          const res = await exchange.createOrder(t.getSymbol(), 'limit', 'sell', amount, price)
 
-          adviceDB.order_id = res.info.orderId;
-          adviceDB.save();
+          adviceDB.order_id = res.info.orderId
+          adviceDB.save()
         }
 
         // limit buy
         if (adviceDB.advice === 'limit-buy') {
-          const res = await exchange.createOrder(t.getSymbol(), 'limit', 'buy', amount, price);
+          const res = await exchange.createOrder(t.getSymbol(), 'limit', 'buy', amount, price)
 
-          adviceDB.order_id = res.info.orderId;
-          adviceDB.save();
+          adviceDB.order_id = res.info.orderId
+          adviceDB.save()
         }
 
         // cancel order
         if (adviceDB.advice === 'cancel-order') {
-          const res = await exchange.cancelOrder(t.getOrderId(), t.getSymbol());
+          await exchange.cancelOrder(extras.orderId, t.getSymbol())
+          adviceDB.order_id = extras.orderId
+          adviceDB.save()
         }
       } catch (e) {
-        adviceDB.error_msg = e.message;
-        adviceDB.save();
-        // TODO: if we encounter some kind of error; we notify the plugins about it
+        adviceDB.error_msg = e.message
+        adviceDB.save()
+        // TODO: if we encounter some kind of error we notify the plugins about it
         PluginsManager.getInstance().onError(e, t, advice, price, amount)
       }
     })
