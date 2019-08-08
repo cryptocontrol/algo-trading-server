@@ -8,24 +8,13 @@ import TriggerManger from '../../managers/TriggerManager'
  * create a new trigger for a user
  */
 export const createTrigger = async (uid: string, exchange: string, symbol: string, kind: string, params: any) => {
-  const {
-    price,
-    orderId,
-    createdAtPrice,
-    amount,
-    ...rest } = params
-
   const trigger = new Triggers({
     uid,
     symbol,
     exchange,
     kind,
-    orderId,
     isActive: true,
-    targetPrice: price,
-    createdAtPrice,
-    amount,
-    params: JSON.stringify(rest)
+    params: JSON.stringify(params)
   })
 
   await trigger.save()

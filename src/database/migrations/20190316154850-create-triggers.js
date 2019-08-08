@@ -20,9 +20,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      orderId: {
-        type: Sequelize.STRING
-      },
       kind: {
         allowNull: false,
         type: Sequelize.STRING
@@ -37,20 +34,9 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-      amount: {
-        allowNull: false,
-        type: Sequelize.DOUBLE,
-        defaultValue: false
-      },
-      createdAtPrice: {
-        allowNull: false,
-        type: Sequelize.DOUBLE,
-        defaultValue: false
-      },
       closedAt: { type: Sequelize.DATE },
       lastTriggeredAt: { type: Sequelize.DATE },
       params: { type: Sequelize.STRING, },
-      targetPrice: { type: Sequelize.DOUBLE },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
