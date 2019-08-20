@@ -19,8 +19,8 @@ export default class DynamicTieredTakeProfitTrigger extends BaseTrigger {
     super(trigger, "Dynamic tiered Trigger");
 
     const params = JSON.parse(trigger.params);
-
     this.action = params.action;
+
     this.type = params.type;
     // tiers for take profit
     this.steps = params.steps;
