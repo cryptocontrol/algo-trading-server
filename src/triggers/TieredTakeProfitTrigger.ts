@@ -45,7 +45,7 @@ export default class TieredTakeProfitTrigger extends BaseTrigger {
 
   onTrade(trade: Trade) {
     if (!this.isLive()) return;
-
+    
     const { price } = trade;
     const { createdAtPrice, targetPrice } = this.triggerDB
     const priceDelta = targetPrice - createdAtPrice
