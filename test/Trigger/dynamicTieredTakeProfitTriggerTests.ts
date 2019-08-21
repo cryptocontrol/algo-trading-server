@@ -11,13 +11,16 @@ export default describe("Dynamic Tiered Take Profit Trigger Tests", async functi
       ...data.default.trigger,
       params: '{ "action": "sell", "type": "market", "steps": 5 }' };
 
-    const price = 0.4 * trigger.targetPrice;
-    const amount = 0.2 * trigger.targetVolume;
+    const priceDelta = trigger.targetPrice - trigger.createdAtPrice
+
+    const price = trigger.createdAtPrice + (2 * (priceDelta / 5))
+    const amount = 0.2 * trigger.amount;
 
     trade = {
       ...data.default.trade,
       price
     }
+    console.log(trigger.createdAtPrice, trade.price, priceDelta)
 
     const tieredTakeProfit = new DynamicTieredTakeProfitTrigger(trigger);
 
@@ -68,7 +71,7 @@ export default describe("Dynamic Tiered Take Profit Trigger Tests", async functi
     const remainingAmount = trigger.amount - (amount * (steps - 1))
 
     trade = {
-      ...data.default.trigger,
+      ...data.default.trade,
       price };
 
     const tieredTakeProfit = new DynamicTieredTakeProfitTrigger(trigger);
@@ -95,7 +98,7 @@ export default describe("Dynamic Tiered Take Profit Trigger Tests", async functi
     const remainingAmount = trigger.amount - (amount * (steps - 1))
 
     trade = {
-      ...data.default.trigger,
+      ...data.default.trade,
       price };
 
     const tieredTakeProfit = new DynamicTieredTakeProfitTrigger(trigger);

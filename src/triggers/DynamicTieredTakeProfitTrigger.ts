@@ -67,7 +67,7 @@ export default class DynamicTieredTakeProfitTrigger extends BaseTrigger {
       this.close();
     } else {
       // other conditions
-      if (price >= firstStep && price < (this.triggerDB.targetPrice - firstStep)) {
+      if (price >= firstStep && price < (this.triggerDB.targetPrice - (priceDelta / this.steps))) {
         const priceDelta = price - this.triggerDB.createdAtPrice
         const currentStep = Math.floor(priceDelta / amount)
         // check if current step was previously executed
