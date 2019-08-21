@@ -5,30 +5,30 @@ import DynamicTieredTakeProfitTrigger from "../../src/triggers/DynamicTieredTake
 export default describe("Dynamic Tiered Take Profit Trigger Tests", async function() {
   let trigger, trade;
 
-  // it(`Should check & validate dynamic tiered take profit trigger
-  //   when price is 1/nth of target price for sell market order`, done => {
-  //   trigger = {
-  //     ...data.default.trigger,
-  //     params: '{ "action": "sell", "type": "market" }' };
+  it(`Should check & validate dynamic tiered take profit trigger
+    when price is 1/nth of target price for sell market order`, done => {
+    trigger = {
+      ...data.default.trigger,
+      params: '{ "action": "sell", "type": "market", "steps": 5 }' };
 
-  //   const price = 0.2 * trigger.targetPrice;
-  //   const amount = 0.2 * trigger.targetVolume;
+    const price = 0.4 * trigger.targetPrice;
+    const amount = 0.2 * trigger.targetVolume;
 
-  //   trade = {
-  //     ...data.default.trigger,
-  //     price
-  //   }
+    trade = {
+      ...data.default.trade,
+      price
+    }
 
-  //   const tieredTakeProfit = new DynamicTieredTakeProfitTrigger(trigger);
+    const tieredTakeProfit = new DynamicTieredTakeProfitTrigger(trigger);
 
-  //   tieredTakeProfit.on("advice", data => {
-  //     expect(data).to.deep.equal(
-  //       { advice: "market-sell", price, amount })
-  //       done();
-  //   })
+    tieredTakeProfit.on("advice", data => {
+      expect(data).to.deep.equal(
+        { advice: "market-sell", price, amount })
+        done();
+    })
 
-  //   tieredTakeProfit.onTrade(trade);
-  // })
+    tieredTakeProfit.onTrade(trade);
+  })
 
   // it(`Should check & validate dynamic tiered take profit trigger
   //   when price is greater than target price for sell market order`, done => {
@@ -65,7 +65,7 @@ export default describe("Dynamic Tiered Take Profit Trigger Tests", async functi
     const steps = JSON.parse(trigger.params).steps;
     const amount = trigger.amount / steps
 
-    const remainingAmount = amount - (amount * steps)
+    const remainingAmount = trigger.amount - (amount * (steps - 1))
 
     trade = {
       ...data.default.trigger,
@@ -90,8 +90,9 @@ export default describe("Dynamic Tiered Take Profit Trigger Tests", async functi
 
     const price = trigger.targetPrice;
     const steps = JSON.parse(trigger.params).steps;
+    const amount = trigger.amount / steps
 
-    const remainingVolume = trigger.targetVolume / steps;
+    const remainingAmount = trigger.amount - (amount * (steps - 1))
 
     trade = {
       ...data.default.trigger,
@@ -101,7 +102,7 @@ export default describe("Dynamic Tiered Take Profit Trigger Tests", async functi
 
     tieredTakeProfit.on("advice", data => {
       expect(data).to.deep.equal(
-        { advice: "market-sell", price, amount: remainingVolume })
+        { advice: "market-sell", price, amount: remainingAmount })
         done();
     })
 

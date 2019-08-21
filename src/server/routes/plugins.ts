@@ -39,5 +39,6 @@ router.put('/:id', async (req: IAppRequest, res) => {
   res.json({ success: true })
 })
 
+router.post('/enabelDisable', async (req: IAppRequest, res) => res.json(await Controllers.enableDisablePlugin(req.uid, req.body.action)))
 
 export default router
