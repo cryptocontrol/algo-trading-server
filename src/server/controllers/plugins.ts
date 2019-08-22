@@ -76,15 +76,21 @@ export const enableDisablePlugin = async (
  * To set telegram params
  */
 
-// export const setTelegramParams = async (
-//   uid: string, chatId: string) => {
-//   const plugin = await Plugins.findOne({
-//      where: { uid, kind: "telegram", isActive: true } })
+export const setTelegramParams = async (
+  uid: string, chatId: string) => {
+  const plugin = await Plugins.findOne({
+     where: { uid, kind: "telegram", isActive: true } })
 
-//   if (!plugin) return // TODO: code on failure
+  if (!plugin) return // TODO: code on failure
 
+  const config = JSON.parse(plugin.config)
 
-//   const tPlugin = new TelegramPlugin(plugin);
+  plugin.config = JSON.stringify({
+    ...config,
+    chatId
+  })
 
-//   // what to do
-// }
+  plugin.save();
+
+  return plugin
+}
