@@ -74,10 +74,8 @@ export default class DynamicTieredTakeProfitTrigger extends BaseTrigger {
 
         if (this.params.executedSteps[currentStep]) return
 
-        const amountToSell = currentStep * amount
-
-        if (this.type === "market") this.advice('market-sell', price, amountToSell);
-        if (this.type === "limit") this.advice('limit-sell', price, amountToSell);
+        if (this.type === "market") this.advice('market-sell', price, amount);
+        if (this.type === "limit") this.advice('limit-sell', price, amount);
 
         // Update params on partial execution
         this.onPartialExecution({ ...this.params.executedSteps, [currentStep]: true });
