@@ -32,6 +32,8 @@ export default class FutureOrderTrigger extends BaseTrigger {
     if (this.type !== "market" && this.type !== "limit")
       throw new Error('bad/missing type');
 
+    if (!this.condition || !(this.condition.length > 0))
+      throw new Error('bad/missing condition')
 
     // check type
     const typeCheck = this.condition.map(
