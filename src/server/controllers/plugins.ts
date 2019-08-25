@@ -1,8 +1,8 @@
+
 import * as _ from 'underscore'
-
-import PluginsManager from '../../managers/PluginsManager'
-import Plugins from '../../database/models/plugins'
-
+import PluginsManager from 'src/managers/PluginsManager'
+import Plugins from 'src/database/models/plugins'
+import TelegramPlugin from 'src/plugins/telegram';
 
 /**
  * create a new plugin for a user
@@ -50,4 +50,47 @@ export const getPlugins = async (uid: string) => {
 export const deleteplugin = async (uid: string, id: number) => {
   const plugin = await Plugins.findOne({ where: { uid, id } })
   if (plugin) plugin.destroy()
+}
+
+/**
+ * Enable / Disable a plugin
+ */
+export const enableDisablePlugin = async (
+  uid: string, action: 'enable' | 'disable') => {
+  const plugin = await Plugins.findOne({ where: { uid } })
+
+  if (!plugin) return // TODO: code on failure
+
+  if (!action) throw new Error("Missing action in req body")
+
+  if (action === 'enable') plugin.isActive = true
+
+  if (action === 'disable') plugin.isActive = false
+
+  plugin.save()
+
+  return plugin;
+}
+
+/**
+ * To set telegram params
+ */
+
+export const setTelegramParams = async (
+  uid: string, chatId: string) => {
+  const plugin = await Plugins.findOne({
+     where: { uid, kind: "telegram", isActive: true } })
+
+  if (!plugin) return // TODO: code on failure
+
+  const config = JSON.parse(plugin.config)
+
+  plugin.config = JSON.stringify({
+    ...config,
+    chatId
+  })
+
+  plugin.save();
+
+  return plugin
 }

@@ -39,5 +39,7 @@ router.put('/:id', async (req: IAppRequest, res) => {
   res.json({ success: true })
 })
 
+router.post('/enabelDisable', async (req: IAppRequest, res) => res.json(await Controllers.enableDisablePlugin(req.uid, req.body.action)))
+router.post('/setParams', async (req: IAppRequest, res) => res.json(await Controllers.setTelegramParams(req.uid, req.body.chatId)))
 
 export default router

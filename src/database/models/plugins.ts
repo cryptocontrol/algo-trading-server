@@ -14,4 +14,7 @@ export default class Plugins extends Model<Plugins> {
 
   @Column
   isActive: boolean
+
+  @Column
+  params: string
 }
