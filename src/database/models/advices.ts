@@ -29,6 +29,9 @@ export default class Advices extends Model<Advices> {
   trigger_id?: number
 
   @Column
+  strategy_id?: number
+
+  @Column
   order_id: number
 
   @Column

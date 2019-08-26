@@ -5,6 +5,7 @@ import { IAdvice } from '../interfaces'
 import BasePlugin from './BasePlugin'
 import BaseTrigger from '../triggers/BaseTrigger'
 import Plugins from '../database/models/plugins'
+import BaseStrategy from 'src/strategies/BaseStrategy';
 
 
 interface ITelegramOptions {
@@ -46,6 +47,15 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
   }
 
 
+  onStrategyAdvice (strategy: BaseStrategy<{}>, advice: IAdvice, price?: number, amount?: number) {
+    const message = `${strategy.name} triggered! and adviced to \`${advice}\` ` +
+      `on \`${strategy.getExchange().toUpperCase()}\` \`${strategy.getSymbol()}\` with a ` +
+      `amount of \`${amount}\`! Current price is \`${price}\``
+
+    this.send(message)
+  }
+
+
   onError (error: Error) {
     this.send(`Error: ` + error)
   }
@@ -65,14 +75,15 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
       case '/start':
         this.send(
           `Hello! your chat id is: \`${chatId}\`. Enter the chat id in the CryptoControl ` +
-          `terminal to recieve all kinds of trading notifications.`, chatId
+          `terminal to receive all kinds of trading notifications from Iguana.`, chatId
         )
         return
 
       case '/help':
         this.send(
           `Your chat id is: \`${chatId}\`. \n\nCurrently this bot does support commands :( ` +
-          `\n\nEnter the chat id in the CryptoControl terminal to recieve all kinds of trading notifications.`,
+          `\n\nEnter the chat id in the CryptoControl terminal to recieve all kinds of trading ` +
+          `notifications from Iguana.`,
           chatId
         )
         return

@@ -40,6 +40,9 @@ module.exports = {
       trigger_id: {
         type: Sequelize.INTEGER
       },
+      strategy_id: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

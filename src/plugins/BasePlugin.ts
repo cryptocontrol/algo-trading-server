@@ -1,6 +1,7 @@
 import { IAdvice } from '../interfaces'
 import BaseTrigger from '../triggers/BaseTrigger'
 import Plugins from '../database/models/plugins'
+import BaseStrategy from '../strategies/BaseStrategy'
 
 
 /**
@@ -38,6 +39,18 @@ export default abstract class BasePlugin<T> {
    * @param amount    The amount adviced by the trigger
    */
   abstract onTriggerAdvice (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number): void
+
+
+
+  /**
+   * This fn. is called whenever a strategy has given an advice
+   *
+   * @param strategy  The strategy object
+   * @param advice    The advice given by the strategy
+   * @param price     The price at which it was triggered
+   * @param amount    The amount adviced by the strategy
+   */
+  abstract onStrategyAdvice (strategy: BaseStrategy<{}>, advice: IAdvice, price?: number, amount?: number): void
 
 
   /**

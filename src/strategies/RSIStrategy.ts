@@ -1,22 +1,35 @@
+import { Trade } from 'ccxt'
+
+import { ICandle } from '../interfaces'
 import BaseStrategy from './BaseStrategy'
-import RSI from '../indicators/RSI'
 import log from '../utils/log'
+import RSI from '../indicators/RSI'
+import Strategies from '../database/models/strategies'
 
 
 interface ITrend {
-  direction: 'none' | 'high' | 'low',
+  direction: 'none' | 'high' | 'low'
   duration: number
   persisted: boolean
   adviced: boolean
 }
 
 
-export default class RSIStrategy extends BaseStrategy {
+interface IRSIStrategyParams {
+  days: number
+  thresholdHigh: number
+  thresholdLow: number
+  persistence: number
+}
+
+
+export default class RSIStrategy extends BaseStrategy<IRSIStrategyParams> {
   private readonly rsi: RSI
 
-  private readonly thresholdHigh: number = 70
-  private readonly thresholdLow: number = 20
+  private readonly thresholdHigh: number
+  private readonly thresholdLow: number
   private readonly persistence: number = 0
+  private readonly requiredHistory: number = 30 // 30 days by default
 
   private trend: ITrend = {
     direction: 'none',
@@ -25,20 +38,19 @@ export default class RSIStrategy extends BaseStrategy {
     adviced: false
   }
 
-  private constructor (id: string, trigger: any) {
-    super('RSI')
 
-    this.rsi = new RSI(15)
+  private constructor (strategy: Strategies) {
+    super('RSI', strategy)
+
+    this.rsi = new RSI(this.params.days || 14)
+    this.thresholdHigh = this.params.thresholdHigh || 70
+    this.thresholdLow = this.params.thresholdLow || 20
+    this.persistence = this.params.persistence || 0
 
     // this.requiredHistory = this.tradingAdvisor.historySize
 
     // // define the indicators we need
     // this.addIndicator('rsi', 'RSI', this.settings)
-  }
-
-
-  static create (id: string, trigger: any) {
-    return new RSIStrategy(id, trigger)
   }
 
 
@@ -54,14 +66,14 @@ export default class RSIStrategy extends BaseStrategy {
   }
 
 
-  process (lastprice: number) {
-
+  onTrade (trade: Trade) {
+    // do nothing
   }
 
 
-  check () {
-    const rsi = this.rsi
-    const rsiVal = rsi.result
+  onCandle (candle: ICandle) {
+    this.rsi.update(candle)
+    const rsiVal = this.rsi.result
 
     if (rsiVal > this.thresholdHigh) {
       // new trend detected
@@ -81,7 +93,7 @@ export default class RSIStrategy extends BaseStrategy {
       if (this.trend.persisted && !this.trend.adviced) {
         this.trend.adviced = true
         this.advice('short')
-      } else this.advice('do-nothing')
+      } // else this.advice('do-nothing')
 
     } else if (rsiVal < this.thresholdLow) {
       // new trend detected
@@ -101,7 +113,7 @@ export default class RSIStrategy extends BaseStrategy {
       if (this.trend.persisted && !this.trend.adviced) {
         this.trend.adviced = true
         this.advice('long')
-      } else this.advice('do-nothing')
+      } // else this.advice('do-nothing')
     } else {
       log.debug('in no trend')
       this.advice('do-nothing')

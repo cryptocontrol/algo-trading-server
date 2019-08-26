@@ -5,6 +5,7 @@ import Advices from '../database/models/advices'
 import BaseTrigger from '../triggers/BaseTrigger'
 import PluginsManager from './PluginsManager'
 import UserExchanges from '../database/models/userexchanges'
+import BaseStrategy from '../strategies/BaseStrategy'
 
 
 /**
@@ -36,7 +37,7 @@ export default class AdviceManager {
     await adviceDB.save()
 
     // notify all the plugins about the advice made...
-    PluginsManager.getInstance().onAdvice(t, advice, price, amount)
+    PluginsManager.getInstance().onAdviceFromTrigger(t, advice, price, amount)
 
     // find the user's credentials and execute the advice...
     await UserExchanges.findOne({ where: { uid: t.getUID(), exchange: t.getExchange() } })
@@ -91,7 +92,82 @@ export default class AdviceManager {
         adviceDB.error_msg = e.message
         adviceDB.save()
         // TODO: if we encounter some kind of error we notify the plugins about it
-        PluginsManager.getInstance().onError(e, t, advice, price, amount)
+        PluginsManager.getInstance().onErrorFromTrigger(e, t, advice, price, amount)
+      }
+    })
+  }
+
+  public async addAdviceFromStrategy (s: BaseStrategy<any>, advice: IAdvice, price: number, amount: number, extras: any) {
+    // create and save the advice into the DB
+    const adviceDB = new Advices({
+      uid: s.getUID(),
+      symbol: s.getSymbol(),
+      exchange: s.getExchange(),
+      advice,
+      price,
+      mode: 'realtime',
+      amount,
+      strategy_id: s.getDBId()
+    })
+    await adviceDB.save()
+
+    // notify all the plugins about the advice made...
+    PluginsManager.getInstance().onAdviceFromStrategy(s, advice, price, amount)
+
+    // find the user's credentials and execute the advice...
+    await UserExchanges.findOne({ where: { uid: s.getUID(), exchange: s.getExchange() } })
+    .then(async data => {
+      // create the exchange instance
+      // todo: decrypt the keys
+      const exchange: ccxt.Exchange = new ccxt[s.getExchange()]({ apiKey: data.apiKey, secret: data.apiSecret, password: data.apiPassword })
+
+      /* execute the advice */
+
+      try {
+        console.log('Out side condition check ', adviceDB.advice)
+        // market buy
+        if (adviceDB.advice === 'market-buy') {
+          const res = await exchange.createOrder(s.getSymbol(), 'market', 'buy', amount)
+
+          adviceDB.order_id = res.info.orderId
+          adviceDB.save()
+        }
+
+        // market sell
+        if (adviceDB.advice === 'market-sell') {
+          const res = await exchange.createOrder(s.getSymbol(), 'market', 'sell', amount)
+
+          adviceDB.order_id = res.info.orderId
+          adviceDB.save()
+        }
+
+        // limit sell
+        if (adviceDB.advice === 'limit-sell') {
+          const res = await exchange.createOrder(s.getSymbol(), 'limit', 'sell', amount, price)
+
+          adviceDB.order_id = res.info.orderId
+          adviceDB.save()
+        }
+
+        // limit buy
+        if (adviceDB.advice === 'limit-buy') {
+          const res = await exchange.createOrder(s.getSymbol(), 'limit', 'buy', amount, price)
+
+          adviceDB.order_id = res.info.orderId
+          adviceDB.save()
+        }
+
+        // cancel order
+        if (adviceDB.advice === 'cancel-order') {
+          await exchange.cancelOrder(extras.orderId, s.getSymbol())
+          adviceDB.order_id = extras.orderId
+          adviceDB.save()
+        }
+      } catch (e) {
+        adviceDB.error_msg = e.message
+        adviceDB.save()
+        // TODO: if we encounter some kind of error we notify the plugins about it
+        PluginsManager.getInstance().onErrorFromStrategy(e, s, advice, price, amount)
       }
     })
   }

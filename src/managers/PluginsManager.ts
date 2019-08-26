@@ -6,6 +6,7 @@ import BaseTrigger from '../triggers/BaseTrigger'
 import Plugins from '../database/models/plugins'
 import SlackPlugin from '../plugins/slack'
 import TelegramPlugin from '../plugins/telegram'
+import BaseStrategy from 'src/strategies/BaseStrategy';
 
 
 interface IPlugins {
@@ -26,19 +27,35 @@ export default class PluginsManager {
   }
 
 
-  public onAdvice (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
+  public onAdviceFromTrigger (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
     const plugins = this.plugins[trigger.getUID()] || []
 
     const pluginKeys = _.keys(plugins)
-    pluginKeys.forEach(key => plugins[key].onTriggered(trigger, advice, price, amount))
+    pluginKeys.forEach(key => plugins[key].onTriggerAdvice(trigger, advice, price, amount))
+  }
+
+  public onAdviceFromStrategy (s: BaseStrategy<any>, advice: IAdvice, price?: number, amount?: number) {
+    const plugins = this.plugins[s.getUID()] || []
+
+    const pluginKeys = _.keys(plugins)
+    pluginKeys.forEach(key => plugins[key].onStrategyAdvice(s, advice, price, amount))
   }
 
 
-  public onError (error: Error, trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
+
+  public onErrorFromTrigger (error: Error, trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
     const plugins = this.plugins[trigger.getUID()] || []
 
     const pluginKeys = _.keys(plugins)
     pluginKeys.forEach(key => plugins[key].onError(error, trigger, advice, price, amount))
+  }
+
+
+  public onErrorFromStrategy (error: Error, strategy: BaseStrategy<any>, advice: IAdvice, price?: number, amount?: number) {
+    const plugins = this.plugins[strategy.getUID()] || []
+
+    const pluginKeys = _.keys(plugins)
+    pluginKeys.forEach(key => plugins[key].onError(error, strategy, advice, price, amount))
   }
 
 
