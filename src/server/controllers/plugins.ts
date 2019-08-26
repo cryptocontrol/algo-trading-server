@@ -69,6 +69,8 @@ export const enableDisablePlugin = async (
 
   plugin.save()
 
+  PluginsManager.getInstance().registerPlugin(plugin)
+
   return plugin;
 }
 
@@ -91,6 +93,8 @@ export const setTelegramParams = async (
   })
 
   plugin.save();
+
+  PluginsManager.getInstance().registerPlugin(plugin)
 
   return plugin
 }
