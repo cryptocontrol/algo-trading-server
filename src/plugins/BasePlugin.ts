@@ -2,14 +2,13 @@ import { IAdvice } from '../interfaces'
 import BaseTrigger from '../triggers/BaseTrigger'
 import Plugins from '../database/models/plugins'
 import BaseStrategy from '../strategies/BaseStrategy'
+import Advices from 'src/database/models/advices';
 
 
 /**
- * A plugin is something that integrates with the trader; It can't be used
- * to influence the decision of a trade, but it can be used to trigger 3rd
- * party applications.
- *
- * For code that is used to influnce the decision of a trade; see Strategies.
+ * A plugin is a 3rd-party application that integrates with the trader; It can't be used
+ * to influence the decision of a trade (for that look at creating your own custom strategies); but
+ * it receives all advices emitted out by any of the strategies/triggers.
  */
 export default abstract class BasePlugin<T> {
   public readonly name: string
@@ -31,37 +30,23 @@ export default abstract class BasePlugin<T> {
 
 
   /**
-   * This fn. is called whenever a trigger has given an advice
+   * This fn. is called whenever a strategy/trigger has given an advice
    *
-   * @param trigger   The trigger object
-   * @param advice    The advice given by the trigger
-   * @param price     The price at which it was triggered
-   * @param amount    The amount adviced by the trigger
-   */
-  abstract onTriggerAdvice (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number): void
-
-
-
-  /**
-   * This fn. is called whenever a strategy has given an advice
-   *
-   * @param strategy  The strategy object
+   * @param from      An identiier recognising the strategy or the trigger
    * @param advice    The advice given by the strategy
-   * @param price     The price at which it was triggered
-   * @param amount    The amount adviced by the strategy
    */
-  abstract onStrategyAdvice (strategy: BaseStrategy<{}>, advice: IAdvice, price?: number, amount?: number): void
+  abstract onAdvice (from: string, advice: Advices): void
+
 
 
   /**
    * This fn. is called whenever an advice encounters an error
    *
-   * @param trigger   The trigger object
-   * @param advice    The advice given by the trigger
-   * @param price     The price at which it was triggered
-   * @param amount    The amount adviced by the trigger
+   * @param error     The error event
+   * @param from      An identiier recognising the strategy or the trigger
+   * @param advice    The advice given by the strategy
    */
-  abstract onError (error: Error, trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number): void
+  abstract onError (error: Error, from: string, advice: Advices): void
 
 
   /**
@@ -77,5 +62,10 @@ export default abstract class BasePlugin<T> {
 
   public getConfig (): T {
     return JSON.parse(this.pluginDB.config)
+  }
+
+
+  public toString () {
+    return `Plugin ${this.name} id: ${this.pluginDB.id}`
   }
 }

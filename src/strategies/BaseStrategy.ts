@@ -16,10 +16,11 @@ import log from '../utils/log'
  */
 export default abstract class BaseStrategy<T> extends EventEmitter {
   protected readonly strategyDB: Strategies
-  public readonly exchange: BaseExchange
-  public readonly name: string
-  public readonly symbol: string
-  public readonly uid: string
+  protected readonly exchange: BaseExchange
+  protected readonly name: string
+  protected readonly symbol: string
+  protected readonly uid: string
+  protected readonly requiredHistory: number // todo: use this
 
   protected params: T
 
@@ -79,6 +80,17 @@ export default abstract class BaseStrategy<T> extends EventEmitter {
 
   public isLive () {
     return this.strategyDB.isActive
+  }
+
+
+  public getName () {
+    return this.name
+  }
+
+
+  public toString () {
+    const exchangeSymbol = `${this.getExchange().toUpperCase()}:${this.getSymbol().toUpperCase()}`
+    return `Strategy ${this.name} id:${this.strategyDB.id} ${exchangeSymbol}`
   }
 
 

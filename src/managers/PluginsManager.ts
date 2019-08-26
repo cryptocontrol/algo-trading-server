@@ -2,11 +2,12 @@ import * as _ from 'underscore'
 
 import { IAdvice } from '../interfaces'
 import BasePlugin from '../plugins/BasePlugin'
+import BaseStrategy from 'src/strategies/BaseStrategy'
 import BaseTrigger from '../triggers/BaseTrigger'
 import Plugins from '../database/models/plugins'
-import SlackPlugin from '../plugins/slack'
-import TelegramPlugin from '../plugins/telegram'
-import BaseStrategy from 'src/strategies/BaseStrategy';
+import SlackPlugin from '../plugins/SlackPlugin'
+import TelegramPlugin from '../plugins/TelegramPlugin'
+import Advices from 'src/database/models/advices';
 
 
 interface IPlugins {
@@ -27,38 +28,11 @@ export default class PluginsManager {
   }
 
 
-  public onAdviceFromTrigger (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
-    const plugins = this.plugins[trigger.getUID()] || []
-
-    const pluginKeys = _.keys(plugins)
-    pluginKeys.forEach(key => plugins[key].onTriggerAdvice(trigger, advice, price, amount))
-  }
-
-  public onAdviceFromStrategy (s: BaseStrategy<any>, advice: IAdvice, price?: number, amount?: number) {
-    const plugins = this.plugins[s.getUID()] || []
-
-    const pluginKeys = _.keys(plugins)
-    pluginKeys.forEach(key => plugins[key].onStrategyAdvice(s, advice, price, amount))
-  }
-
-
-
-  public onErrorFromTrigger (error: Error, trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
-    const plugins = this.plugins[trigger.getUID()] || []
-
-    const pluginKeys = _.keys(plugins)
-    pluginKeys.forEach(key => plugins[key].onError(error, trigger, advice, price, amount))
-  }
-
-
-  public onErrorFromStrategy (error: Error, strategy: BaseStrategy<any>, advice: IAdvice, price?: number, amount?: number) {
-    const plugins = this.plugins[strategy.getUID()] || []
-
-    const pluginKeys = _.keys(plugins)
-    pluginKeys.forEach(key => plugins[key].onError(error, strategy, advice, price, amount))
-  }
-
-
+  /**
+   * Registers a plugin.
+   *
+   * @param p
+   */
   public registerPlugin (p: Plugins) {
     const plugin = this.getPlugin(p)
     if (!plugin) return
@@ -80,6 +54,27 @@ export default class PluginsManager {
   private getPlugin (plugin: Plugins) {
     if (plugin.kind === 'slack') return new SlackPlugin(plugin)
     if (plugin.kind === 'telegram') return new TelegramPlugin(plugin)
+  }
+
+
+  public onAdvice (from: string, advice: Advices) {
+    this.getUserPlugins(advice.uid).forEach(p => p.onAdvice(from, advice))
+  }
+
+
+  public onError (error: Error, from: string, advice: Advices) {
+    this.getUserPlugins(advice.uid).forEach(p => p.onError(error, from, advice))
+  }
+
+
+  /**
+   * Helper function to get all the plugins for a given user
+   *
+   * @param uid the user id
+   */
+  private getUserPlugins (uid: string): BasePlugin<any>[] {
+    const plugins = this.plugins[uid] || []
+    return _.keys(plugins).map(key => plugins[key])
   }
 
 

@@ -1,6 +1,5 @@
 import AdviceManager from './AdviceManager'
 import BudfoxManger from './BudfoxManager'
-import Triggers from '../database/models/triggers'
 import BaseStrategy from '../strategies/BaseStrategy'
 import Strategies from 'src/database/models/strategies'
 
@@ -11,28 +10,23 @@ interface IExchangeStrategies {
 
 
 /**
- * The triggers manager is a speical class that handles all the triggers in one place. This
- * class listens to all the new candles emitted by the Budfox managers and sends each candle
- * to the trigger. Once a trigger has been executed, the class removes it completely and marks
- * it as executed.
- *
- * Whenever a trigger gives an advice, the class also informs the AdviceManager of the advice.
+ * ...
  *
  * This class is a singleton.
  */
-export default class TriggerManger {
+export default class StrategyManger {
   private readonly strategies: IExchangeStrategies = {}
   private readonly manager = BudfoxManger.getInstance()
 
-  private static readonly instance = new TriggerManger()
+  private static readonly instance = new StrategyManger()
 
 
   /**
-   * Loads any tirggers which exist in the DB onto the server.
+   * Loads any strategies which exist in the DB onto the server.
    */
-  async loadTriggers () {
-    const activeTriggers = await Triggers.findAll({ where: { isActive: true }})
-    activeTriggers.forEach(t => this.addStrategy(t))
+  async loadStrategies () {
+    const activeStrategies = await Strategies.findAll({ where: { isActive: true }})
+    activeStrategies.forEach(t => this.addStrategy(t))
   }
 
 
@@ -45,33 +39,36 @@ export default class TriggerManger {
     const strategy = this._getStrategy(s)
     if (!strategy) return
 
+    // load up budox
     const exchangeSymbol = this._getExchangeSymbol(s)
     const budfox = this.manager.getBudfox(s.exchange, s.symbol)
 
     // add the strategy into our array of strategies
-    const exchangeSymbolTriggers = this.strategies[exchangeSymbol] || []
-    // exchangeSymbolTriggers.push(trigger)
-    this.strategies[exchangeSymbol] = exchangeSymbolTriggers
+    const exchangeSymbolStrategies = this.strategies[exchangeSymbol] || []
+    exchangeSymbolStrategies.push(strategy)
+    this.strategies[exchangeSymbol] = exchangeSymbolStrategies
 
+    // anytime a new trade/candle/partial-orderbook is emitted, we pass that on to
+    // the strategy
     budfox.on('candle', candle => strategy.onCandle(candle))
     budfox.on('trade', trade => strategy.onTrade(trade))
 
-    // whenever a trigger executes
+    // whenever a strategy executes an advice, we pass on the advice to the advice manager
     strategy.on('advice', ({ advice, price, amount, ...extras }) => {
       AdviceManager.getInstance().addAdviceFromStrategy(strategy, advice, price, amount, extras)
     })
 
-    // // once a trigger has finished
-    // trigger.on('close', () => {
-    //   // we remove the trigger from the array of triggers
-    //   const exchangeSymbolTriggers = this.triggers[exchangeSymbol] || []
-    //   const index = exchangeSymbolTriggers.indexOf(trigger)
-    //   if (index === -1) return
-    //   this.triggers[exchangeSymbol].splice(index, 1)
+    // once a strategy has finished
+    strategy.on('close', () => {
+      // we remove the trigger from the array of triggers
+      const exchangeSymbolStrategies = this.strategies[exchangeSymbol] || []
+      const index = exchangeSymbolStrategies.indexOf(strategy)
+      if (index === -1) return
+      this.strategies[exchangeSymbol].splice(index, 1)
 
-    //   // and remove budfox if there are no more triggers left for this symbol
-    //   if (this.triggers[exchangeSymbol].length === 0) this.manager.removeBudfox(budfox)
-    // })
+      // and remove budfox if there are no more triggers left for this symbol
+      if (this.strategies[exchangeSymbol].length === 0) this.manager.removeBudfox(budfox)
+    })
   }
 
 
@@ -117,6 +114,6 @@ export default class TriggerManger {
    * Returns the current active instance of this class.
    */
   static getInstance () {
-    return TriggerManger.instance
+    return StrategyManger.instance
   }
 }

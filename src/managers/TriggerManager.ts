@@ -15,7 +15,7 @@ interface IExchangeTriggers {
 
 
 /**
- * The triggers manager is a speical class that handles all the triggers in one place. This
+ * The triggers manager is a special class that handles all the triggers in one place. This
  * class listens to all the new candles emitted by the Budfox managers and sends each candle
  * to the trigger. Once a trigger has been executed, the class removes it completely and marks
  * it as executed.
@@ -32,7 +32,7 @@ export default class TriggerManger {
 
 
   /**
-   * Loads any tirggers which exist in the DB onto the server.
+   * Loads any triggers which exist in the DB onto the server.
    */
   async loadTriggers () {
     const activeTriggers = await Triggers.findAll({ where: { isActive: true }})
@@ -62,7 +62,7 @@ export default class TriggerManger {
 
     // whenever a trigger executes
     trigger.on('advice', ({ advice, price, amount, ...extras }) => {
-      AdviceManager.getInstance().addAdvice(trigger, advice, price, amount, extras)
+      AdviceManager.getInstance().addAdviceFromTrigger(trigger, advice, price, amount, extras)
     })
 
     // once a trigger has finished

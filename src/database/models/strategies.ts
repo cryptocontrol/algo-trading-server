@@ -23,4 +23,7 @@ export default class Strategies extends Model<Strategies> {
 
   @Column
   isActive: boolean
+
+  @Column
+  isDeleted: boolean
 }

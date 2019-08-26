@@ -22,112 +22,59 @@ export default class AdviceManager {
   private static readonly instance = new AdviceManager()
 
 
-  public async addAdvice (t: BaseTrigger, advice: IAdvice, price: number, amount: number, extras: any) {
+  public async addAdviceFromTrigger (t: BaseTrigger, advice: IAdvice, price: number, amount: number, extras: any) {
     // create and save the advice into the DB
     const adviceDB = new Advices({
-      uid: t.getUID(),
-      symbol: t.getSymbol(),
-      exchange: t.getExchange(),
       advice,
-      price,
-      mode: 'realtime',
       amount,
-      trigger_id: t.getDBId()
+      exchange: t.getExchange(),
+      mode: 'realtime',
+      price,
+      symbol: t.getSymbol(),
+      trigger_id: t.getDBId(),
+      uid: t.getUID()
     })
     await adviceDB.save()
 
-    // notify all the plugins about the advice made...
-    PluginsManager.getInstance().onAdviceFromTrigger(t, advice, price, amount)
-
-    // find the user's credentials and execute the advice...
-    await UserExchanges.findOne({ where: { uid: t.getUID(), exchange: t.getExchange() } })
-    .then(async data => {
-      // create the exchange instance
-      // todo: decrypt the keys
-      const exchange: ccxt.Exchange = new ccxt[t.getExchange()]({ apiKey: data.apiKey, secret: data.apiSecret, password: data.apiPassword })
-
-      /* execute the advice */
-
-      try {
-        console.log('Out side condition check ', adviceDB.advice)
-        // market buy
-        if (adviceDB.advice === 'market-buy') {
-          const res = await exchange.createOrder(t.getSymbol(), 'market', 'buy', amount)
-
-          adviceDB.order_id = res.info.orderId
-          adviceDB.save()
-        }
-
-        // market sell
-        if (adviceDB.advice === 'market-sell') {
-          const res = await exchange.createOrder(t.getSymbol(), 'market', 'sell', amount)
-
-          adviceDB.order_id = res.info.orderId
-          adviceDB.save()
-        }
-
-        // limit sell
-        if (adviceDB.advice === 'limit-sell') {
-          const res = await exchange.createOrder(t.getSymbol(), 'limit', 'sell', amount, price)
-
-          adviceDB.order_id = res.info.orderId
-          adviceDB.save()
-        }
-
-        // limit buy
-        if (adviceDB.advice === 'limit-buy') {
-          const res = await exchange.createOrder(t.getSymbol(), 'limit', 'buy', amount, price)
-
-          adviceDB.order_id = res.info.orderId
-          adviceDB.save()
-        }
-
-        // cancel order
-        if (adviceDB.advice === 'cancel-order') {
-          await exchange.cancelOrder(extras.orderId, t.getSymbol())
-          adviceDB.order_id = extras.orderId
-          adviceDB.save()
-        }
-      } catch (e) {
-        adviceDB.error_msg = e.message
-        adviceDB.save()
-        // TODO: if we encounter some kind of error we notify the plugins about it
-        PluginsManager.getInstance().onErrorFromTrigger(e, t, advice, price, amount)
-      }
-    })
+    this.executeAdvice(t.toString(), adviceDB, extras)
   }
 
-  public async addAdviceFromStrategy (s: BaseStrategy<any>, advice: IAdvice, price: number, amount: number, extras: any) {
+
+  public async addAdviceFromStrategy (s: BaseStrategy<any>, advice: IAdvice, price: number, volume: number, extras: any) {
     // create and save the advice into the DB
     const adviceDB = new Advices({
-      uid: s.getUID(),
-      symbol: s.getSymbol(),
-      exchange: s.getExchange(),
       advice,
-      price,
+      exchange: s.getExchange(),
       mode: 'realtime',
-      amount,
-      strategy_id: s.getDBId()
+      price,
+      strategy_id: s.getDBId(),
+      symbol: s.getSymbol(),
+      uid: s.getUID(),
+      volume
     })
     await adviceDB.save()
 
+    this.executeAdvice(s.toString(), adviceDB, extras)
+  }
+
+
+  private async executeAdvice (from: string, adviceDB: Advices, extras?: any) {
     // notify all the plugins about the advice made...
-    PluginsManager.getInstance().onAdviceFromStrategy(s, advice, price, amount)
+    PluginsManager.getInstance().onAdvice(from, adviceDB)
 
     // find the user's credentials and execute the advice...
-    await UserExchanges.findOne({ where: { uid: s.getUID(), exchange: s.getExchange() } })
+    await UserExchanges.findOne({ where: { uid: adviceDB.uid, exchange: adviceDB.exchange } })
     .then(async data => {
       // create the exchange instance
       // todo: decrypt the keys
-      const exchange: ccxt.Exchange = new ccxt[s.getExchange()]({ apiKey: data.apiKey, secret: data.apiSecret, password: data.apiPassword })
+      const exchange: ccxt.Exchange = new ccxt[adviceDB.exchange]({ apiKey: data.apiKey, secret: data.apiSecret, password: data.apiPassword })
 
       /* execute the advice */
 
       try {
-        console.log('Out side condition check ', adviceDB.advice)
         // market buy
         if (adviceDB.advice === 'market-buy') {
-          const res = await exchange.createOrder(s.getSymbol(), 'market', 'buy', amount)
+          const res = await exchange.createOrder(adviceDB.symbol, 'market', 'buy', adviceDB.volume)
 
           adviceDB.order_id = res.info.orderId
           adviceDB.save()
@@ -135,7 +82,7 @@ export default class AdviceManager {
 
         // market sell
         if (adviceDB.advice === 'market-sell') {
-          const res = await exchange.createOrder(s.getSymbol(), 'market', 'sell', amount)
+          const res = await exchange.createOrder(adviceDB.symbol, 'market', 'sell', adviceDB.volume)
 
           adviceDB.order_id = res.info.orderId
           adviceDB.save()
@@ -143,7 +90,7 @@ export default class AdviceManager {
 
         // limit sell
         if (adviceDB.advice === 'limit-sell') {
-          const res = await exchange.createOrder(s.getSymbol(), 'limit', 'sell', amount, price)
+          const res = await exchange.createOrder(adviceDB.symbol, 'limit', 'sell', adviceDB.volume, adviceDB.price)
 
           adviceDB.order_id = res.info.orderId
           adviceDB.save()
@@ -151,7 +98,7 @@ export default class AdviceManager {
 
         // limit buy
         if (adviceDB.advice === 'limit-buy') {
-          const res = await exchange.createOrder(s.getSymbol(), 'limit', 'buy', amount, price)
+          const res = await exchange.createOrder(adviceDB.symbol, 'limit', 'buy', adviceDB.volume, adviceDB.price)
 
           adviceDB.order_id = res.info.orderId
           adviceDB.save()
@@ -159,7 +106,7 @@ export default class AdviceManager {
 
         // cancel order
         if (adviceDB.advice === 'cancel-order') {
-          await exchange.cancelOrder(extras.orderId, s.getSymbol())
+          await exchange.cancelOrder(extras.orderId, adviceDB.symbol)
           adviceDB.order_id = extras.orderId
           adviceDB.save()
         }
@@ -167,7 +114,7 @@ export default class AdviceManager {
         adviceDB.error_msg = e.message
         adviceDB.save()
         // TODO: if we encounter some kind of error we notify the plugins about it
-        PluginsManager.getInstance().onErrorFromStrategy(e, s, advice, price, amount)
+        PluginsManager.getInstance().onError(e, from, adviceDB)
       }
     })
   }

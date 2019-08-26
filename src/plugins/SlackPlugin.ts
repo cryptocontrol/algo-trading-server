@@ -5,6 +5,8 @@ import BasePlugin from './BasePlugin'
 import BaseTrigger from '../triggers/BaseTrigger'
 import log from '../utils/log'
 import Plugins from '../database/models/plugins'
+import BaseStrategy from 'src/strategies/BaseStrategy';
+import Advices from 'src/database/models/advices';
 
 const WebClient = require('@slack/client').WebClient
 
@@ -41,26 +43,26 @@ export default class SlackPlugin extends BasePlugin<ISlackOptions> {
   }
 
 
-  onTriggerAdvice (trigger: BaseTrigger, advice: IAdvice, price?: number) {
-    if (advice == 'soft' && this.options.muteSoft) return
 
-    const color = advice === 'long' ? 'good' :
-      advice === 'short' ? 'danger' :
-      'warning'
+  onAdvice (from: string, adviceDB: Advices) {
+    // if (tjos.advice. == 'soft' && this.options.muteSoft) return
+
+    const color = adviceDB.advice === 'long' ? 'good' :
+      adviceDB.advice === 'short' ? 'danger' : 'warning'
 
     const body = this._createResponse(
       color,
-      `There is a new trend! The advice is to go ${advice}! Current price is ${price}`
+      `${from} adviced to ${adviceDB.advice}! Current price is ${adviceDB.price}`
     )
 
     this._send(body)
   }
 
 
-  onError (error: Error) {
+  onError (error: Error, from: string) {
     const body = this._createResponse(
       'danger',
-      `Error: ` + error
+      `Error: ${from}` + error
     )
 
     this._send(body)

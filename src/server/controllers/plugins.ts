@@ -2,17 +2,18 @@
 import * as _ from 'underscore'
 import PluginsManager from 'src/managers/PluginsManager'
 import Plugins from 'src/database/models/plugins'
-import TelegramPlugin from 'src/plugins/telegram';
+import TelegramPlugin from 'src/plugins/TelegramPlugin';
 
 /**
  * create a new plugin for a user
  */
-export const regsiterPlugin = async (uid: string, kind: string, config: any) => {
+export const register = async (uid: string, kind: string, config: any) => {
   const plugin = new Plugins({
     uid,
     kind,
     config: JSON.stringify(config),
-    isActive: true
+    isActive: true,
+    isDeleted: false,
   })
 
   await plugin.save()
@@ -24,73 +25,61 @@ export const regsiterPlugin = async (uid: string, kind: string, config: any) => 
 }
 
 
-export const updatePlugin = async (uid: string, id: string, config: any) => {
+export const update = async (uid: string, id: string, config: any) => {
   const plugin = await Plugins.findOne({ where: { uid, id } })
-  if (plugin) {
-    plugin.config = JSON.stringify(config)
-    plugin.save()
+  if (!plugin) throw new Error('plugin not found')
 
-    PluginsManager.getInstance().registerPlugin(plugin)
-  }
+  plugin.config = JSON.stringify(config)
+  plugin.save()
+
+  PluginsManager.getInstance().registerPlugin(plugin)
+
+  return plugin
 }
 
 
 /**
  * get all existing plugins for a user
  */
-export const getPlugins = async (uid: string) => {
-  const plugins = await Plugins.findAll({ where: { uid } })
-  return plugins
-}
+export const fetchAll = async (uid: string) => await Plugins.findAll({ where: { uid, isDeleted: false } })
 
 
 /**
  * Delete a specific plugin
  */
-export const deleteplugin = async (uid: string, id: number) => {
+export const remove = async (uid: string, id: number) => {
   const plugin = await Plugins.findOne({ where: { uid, id } })
   if (plugin) plugin.destroy()
+
+  // todo set the delete flag as true
 }
+
 
 /**
  * Enable / Disable a plugin
  */
-export const enableDisablePlugin = async (
-  uid: string, action: 'enable' | 'disable') => {
-  const plugin = await Plugins.findOne({ where: { uid } })
-
-  if (!plugin) return // TODO: code on failure
-
-  if (!action) throw new Error("Missing action in req body")
+export const enableDisable = async (uid: string, id: number, action: 'enable' | 'disable') => {
+  const plugin = await Plugins.findOne({ where: { uid, id } })
+  if (!plugin) throw new Error('plugin not found')
+  if (!action) throw new Error('missing action')
 
   if (action === 'enable') plugin.isActive = true
-
   if (action === 'disable') plugin.isActive = false
 
   plugin.save()
-
-  return plugin;
+  return plugin
 }
+
 
 /**
  * To set telegram params
  */
+export const setConfig = async (uid: string, id: string, config: object) => {
+  const plugin = await Plugins.findOne({ where: { uid, id, isActive: true } })
+  if (!plugin) throw new Error('plugin not found')
 
-export const setTelegramParams = async (
-  uid: string, chatId: string) => {
-  const plugin = await Plugins.findOne({
-     where: { uid, kind: "telegram", isActive: true } })
-
-  if (!plugin) return // TODO: code on failure
-
-  const config = JSON.parse(plugin.config)
-
-  plugin.config = JSON.stringify({
-    ...config,
-    chatId
-  })
-
-  plugin.save();
+  plugin.config = JSON.stringify(config)
+  plugin.save()
 
   return plugin
 }

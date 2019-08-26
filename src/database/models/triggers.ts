@@ -29,4 +29,7 @@ export default class Triggers extends Model<Triggers> {
 
   @Column
   isActive: boolean
+
+  @Column
+  isDeleted: boolean
 }

@@ -6,6 +6,7 @@ import BasePlugin from './BasePlugin'
 import BaseTrigger from '../triggers/BaseTrigger'
 import Plugins from '../database/models/plugins'
 import BaseStrategy from 'src/strategies/BaseStrategy';
+import Advices from 'src/database/models/advices';
 
 
 interface ITelegramOptions {
@@ -38,26 +39,16 @@ export default class TelegramPlugin extends BasePlugin<ITelegramOptions> {
   }
 
 
-  onTriggerAdvice (trigger: BaseTrigger, advice: IAdvice, price?: number, amount?: number) {
-    const message = `${trigger.name} triggered! and adviced to \`${advice}\` ` +
-      `on \`${trigger.getExchange().toUpperCase()}\` \`${trigger.getSymbol()}\` with a ` +
-      `amount of \`${amount}\`! Current price is \`${price}\``
+  onAdvice (from: string, adviceDB: Advices) {
+    const message = `${from} adviced to \`${adviceDB.advice}\` ` +
+      `with a volume of \`${adviceDB.volume}\` at price is \`${adviceDB.price}\``
 
     this.send(message)
   }
 
 
-  onStrategyAdvice (strategy: BaseStrategy<{}>, advice: IAdvice, price?: number, amount?: number) {
-    const message = `${strategy.name} triggered! and adviced to \`${advice}\` ` +
-      `on \`${strategy.getExchange().toUpperCase()}\` \`${strategy.getSymbol()}\` with a ` +
-      `amount of \`${amount}\`! Current price is \`${price}\``
-
-    this.send(message)
-  }
-
-
-  onError (error: Error) {
-    this.send(`Error: ` + error)
+  onError (error: Error, from: string) {
+    this.send(`Error (${from}): ${error.message}`)
   }
 
 
