@@ -8,47 +8,38 @@ const router = Router()
 
 
 // get all plugins
-router.get('/', async (req: IAppRequest, res) => res.json(await Controllers.fetchAll(req.uid)))
+router.get('/', async (req: IAppRequest, res) => res.json(await Controllers.getPlugins(req.uid)))
 
 
 // register a plugin
-router.post('/:kind', (req: IAppRequest, res, next) => {
+router.post('/:kind', async (req: IAppRequest, res) => {
+  const uid = req.uid
   const kind = req.params.kind
   const params = req.body
 
-  Controllers.register(req.uid, kind, params)
-    .then(data => res.json(data))
-    .catch(next)
+  const plugin = await Controllers.regsiterPlugin(uid, kind, params)
+  res.json({ plugin, success: true })
 })
 
 
-router.delete('/:id', (req: IAppRequest, res, next) => {
-  Controllers.remove(req.uid, req.params.id)
-    .then(data => res.json(data))
-    .catch(next)
+router.delete('/:id', async (req: IAppRequest, res) => {
+  const uid = req.uid
+  const id = Number(req.params.id)
+
+  await Controllers.deleteplugin(uid, id)
+  res.json({ success: true })
 })
 
 
-router.put('/:id', (req: IAppRequest, res, next) => {
-  Controllers.update(req.uid, req.params.id, req.body)
-    .then(data => res.json(data))
-    .catch(next)
-})
-
-
-router.post('/:id/enableDisable', (req: IAppRequest, res, next) => {
+router.put('/:id', async (req: IAppRequest, res) => {
+  const uid = req.uid
   const id = req.params.id
 
-  Controllers.enableDisable(req.uid, req.params.id, req.body.action)
-    .then(data => res.json(data))
-    .catch(next)
+  await Controllers.updatePlugin(uid, id, req.body)
+  res.json({ success: true })
 })
 
-
-router.post('/:id/setParams', async (req: IAppRequest, res, next) => {
-  Controllers.setConfig(req.uid, req.params.id, req.body)
-    .then(data => res.json(data))
-    .catch(next)
-})
+router.post('/enableDisable', async (req: IAppRequest, res) => res.json(await Controllers.enableDisablePlugin(req.uid, req.body.action)))
+router.post('/setParams', async (req: IAppRequest, res) => res.json(await Controllers.setTelegramParams(req.uid, req.body.chatId)))
 
 export default router
