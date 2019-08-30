@@ -10,7 +10,6 @@ const router = Router()
 // get all plugins
 router.get('/', async (req: IAppRequest, res) => res.json(await Controllers.getPlugins(req.uid)))
 
-
 // register a plugin
 router.post('/:kind', async (req: IAppRequest, res) => {
   const uid = req.uid
@@ -39,7 +38,12 @@ router.put('/:id', async (req: IAppRequest, res) => {
   res.json({ success: true })
 })
 
-router.post('/enableDisable', async (req: IAppRequest, res) => res.json(await Controllers.enableDisablePlugin(req.uid, req.body.action)))
+router.post('/enableDisable/:id', async (req: IAppRequest, res) => {
+  const id = req.params.id
+
+  res.json(await Controllers.enableDisablePlugin(req.uid, id, req.body.action))
+})
+
 router.post('/setParams', async (req: IAppRequest, res) => res.json(await Controllers.setTelegramParams(req.uid, req.body.chatId)))
 
 export default router

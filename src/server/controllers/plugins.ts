@@ -56,8 +56,8 @@ export const deleteplugin = async (uid: string, id: number) => {
  * Enable / Disable a plugin
  */
 export const enableDisablePlugin = async (
-  uid: string, action: 'enable' | 'disable') => {
-  const plugin = await Plugins.findOne({ where: { uid } })
+  uid: string, id: string, action: 'enable' | 'disable') => {
+  const plugin = await Plugins.findOne({ where: { uid, id } })
 
   if (!plugin) return // TODO: code on failure
 
@@ -77,7 +77,6 @@ export const enableDisablePlugin = async (
 /**
  * To set telegram params
  */
-
 export const setTelegramParams = async (
   uid: string, chatId: string) => {
   const plugin = await Plugins.findOne({
