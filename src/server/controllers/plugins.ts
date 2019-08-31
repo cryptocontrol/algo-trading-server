@@ -2,7 +2,7 @@
 import * as _ from 'underscore'
 import PluginsManager from 'src/managers/PluginsManager'
 import Plugins from 'src/database/models/plugins'
-import TelegramPlugin from 'src/plugins/telegram';
+// import TelegramPlugin from 'src/plugins/telegram';
 
 /**
  * create a new plugin for a user

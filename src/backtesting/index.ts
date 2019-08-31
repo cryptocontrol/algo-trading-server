@@ -20,7 +20,7 @@ export default class BackTesting extends EventEmitter {
     this.timeframe = timeframe
     this.since = since
     // add strategy from db
-    this.strategy = new RSIStrategy()
+    // this.strategy = new RSIStrategy()
   }
 
   async fetch() {
@@ -38,7 +38,10 @@ export default class BackTesting extends EventEmitter {
 
     data.forEach(c => {
       this.emit("candle", c)
-      this.strategy.onCandle(c)
+      // this.strategy.onCandle(c)
     })
+  }
+
+  async onTrade() {
   }
 }

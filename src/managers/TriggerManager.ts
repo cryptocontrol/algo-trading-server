@@ -5,7 +5,7 @@ import CancelOrderTrigger from '../triggers/CancelOrderTrigger'
 import StopLossTakeProfitTrigger from '../triggers/StopLossTakeProfitTrigger'
 import StopLossTrigger from '../triggers/StopLossTrigger'
 import TakeProfitTrigger from '../triggers/TakeProfitTrigger'
-import TieredTakeProfitTrigger from '../triggers/TieredTakeProfitTrigger'
+// import TieredTakeProfitTrigger from '../triggers/TieredTakeProfitTrigger'
 import Triggers from '../database/models/triggers'
 
 
@@ -104,7 +104,7 @@ export default class TriggerManger {
     if (triggerDB.kind === 'stop-loss') return new StopLossTrigger(triggerDB)
     if (triggerDB.kind === 'take-profit') return new TakeProfitTrigger(triggerDB)
     if (triggerDB.kind === 'cancel-order') return new CancelOrderTrigger(triggerDB)
-    if (triggerDB.kind === 'tiered-profit') return new TieredTakeProfitTrigger(triggerDB)
+    // if (triggerDB.kind === 'tiered-profit') return new TieredTakeProfitTrigger(triggerDB)
     if (triggerDB.kind === 'stop-loss-take-profit') return new StopLossTakeProfitTrigger(triggerDB)
 
     // tiered take-profits etc.. etc..
