@@ -3,6 +3,7 @@ import { ICandle } from "../interfaces";
 import BaseTrigger from "./BaseTrigger";
 import Triggers from "../database/models/triggers";
 import TrailingStopTrigger from "./TrailingStopTrigger";
+import { isNumber } from "util"
 
 /**
  * Tiered take profit trigger enables the user to create triggers to sell on
@@ -10,27 +11,33 @@ import TrailingStopTrigger from "./TrailingStopTrigger";
  */
 
 export default class DynamicTieredTakeProfitTrigger extends BaseTrigger {
-  private readonly action: "sell";
-  private readonly type: "limit" | "market";
+  private readonly action: "market-sell" | "limit-sell";
   private readonly steps: number;
   private readonly params: any;
+  private readonly amount: number;
+  private readonly price: number;
+  private readonly createdAtPrice: number;
 
   constructor(trigger: Triggers) {
     super(trigger, "Dynamic tiered Trigger");
 
     const params = JSON.parse(trigger.params);
     this.action = params.action;
-
-    this.type = params.type;
     // tiers for take profit
     this.steps = params.steps;
     this.params = params;
+    this.amount = params.amount;
+    this.price = params.price;
+    this.createdAtPrice = params.createdAtPrice;
 
-    if (this.action !== "sell") throw new Error('bad/missing action');
-    if (this.type !== "market" && this.type !== "limit")
-      throw new Error('bad/missing type');
+    if (this.action !== 'market-sell' && this.action !== 'limit-sell')
+      throw new Error('bad/missing action')
+
     if (!this.steps && typeof this.steps !== "number")
-      throw new Error('bad/missing steps or invalid type');
+      throw new Error('bad/missing steps or invalid type')
+
+    if (this.price && !isNumber(this.price)) throw new Error('bad price')
+    if (!this.amount || !isNumber(this.amount)) throw new Error('bad/missing amount')
   }
 
   // Update params after partial execution is achived
@@ -49,33 +56,32 @@ export default class DynamicTieredTakeProfitTrigger extends BaseTrigger {
     const { price } = trade;
 
     // Amount to be traded after reaching a tier
-    const amount = this.triggerDB.amount / this.steps;
+    const amount = this.amount / this.steps;
     // Amount left for the last tier
     // TODO: What will be remaning amount
-    const remainingAmount = this.triggerDB.amount - (
+    const remainingAmount = this.amount - (
       amount * (this.steps - 1))
     // The amount between targer price and price at which trigger was created
-    const priceDelta = this.triggerDB.targetPrice - this.triggerDB.createdAtPrice
+    const priceDelta = this.price - this.createdAtPrice
     // Price for the first step or tier
-    const firstStep = this.triggerDB.createdAtPrice + (priceDelta / this.steps)
+    const firstStep = this.createdAtPrice + (priceDelta / this.steps)
 
     // trigger a maket or limit sell when price crosses the first tier
     // and this condition is achieved for the first time
-    if (price >= this.triggerDB.targetPrice) {
-      if (this.type === "market") this.advice('market-sell', price, remainingAmount);
-      if (this.type === "limit") this.advice('limit-sell', price, remainingAmount);
+    if (this.action.endsWith("sell") && price >= this.price) {
+      this.advice(this.action, { price, amount: remainingAmount });
       this.close();
     } else {
       // other conditions
-      if (price >= firstStep && price < (this.triggerDB.targetPrice - (priceDelta / this.steps))) {
-        const priceDelta = price - this.triggerDB.createdAtPrice
+      if (price >= firstStep && price < (this.price - (priceDelta / this.steps))) {
+        const priceDelta = price - this.createdAtPrice
         const currentStep = Math.floor(priceDelta / amount)
         // check if current step was previously executed
 
         if (this.params.executedSteps[currentStep]) return
 
-        if (this.type === "market") this.advice('market-sell', price, amount);
-        if (this.type === "limit") this.advice('limit-sell', price, amount);
+        if (this.action.endsWith("sell"))
+          this.advice(this.action, { price, amount });
 
         // Update params on partial execution
         this.onPartialExecution({ ...this.params.executedSteps, [currentStep]: true });
