@@ -10,7 +10,9 @@ import * as _ from "underscore";
  */
 
 export default class FutureOrderTrigger extends BaseTrigger {
-  private readonly action: "buy" | "sell";
+  // private readonly action: "buy" | "sell";
+  private readonly action: 'market-buy' | 'market-sell' |
+    'limit-buy' | 'limit-sell'
   private readonly type: "market" | "limit";
   private readonly condition: [{
     [s: string]: number | string,
@@ -26,11 +28,9 @@ export default class FutureOrderTrigger extends BaseTrigger {
     this.type = params.type;
     this.condition = params.condition;
 
-    if (this.action !== "sell" && this.action !== "buy")
-      throw new Error('bad/missing action');
-
-    if (this.type !== "market" && this.type !== "limit")
-      throw new Error('bad/missing type');
+    if (this.action !== 'market-buy' && this.action !== 'market-sell' &&
+      this.action !== 'limit-buy' && this.action !== 'limit-sell')
+    throw new Error('bad/missing action')
 
     if (!this.condition || !(this.condition.length > 0))
       throw new Error('bad/missing condition')

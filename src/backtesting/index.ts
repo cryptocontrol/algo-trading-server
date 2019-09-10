@@ -21,16 +21,19 @@ export default class BackTesting extends EventEmitter {
     this.timeframe = timeframe
     this.since = since
     // add strategy from db
-    // this.strategy = new RSIStrategy({
-    //   symbol: this.pair,
-    //   exchange: this.exchangeId,
-    //   uid,
-    //   kind,
-    //   lastTriggeredAt,
-    //   params,
-    //   isActive,
-    //   isDeleted,
-    // })
+    // @ts-ignore
+    this.strategy = new RSIStrategy({
+      "symbol": 'BTC/USDT',
+      exchange: 'binance',
+      uid: '123456789',
+      kind: 'rsi',
+      params: '{}',
+      isActive: true,
+      isDeleted: false,
+    })
+
+
+
   }
 
   async fetch() {
@@ -61,8 +64,7 @@ export default class BackTesting extends EventEmitter {
         // trades:
       }
       this.emit("candle", c)
-      // this.strategy.onCandle(advice)
-
+      this.strategy.onCandle(advice)
     })
   }
 
