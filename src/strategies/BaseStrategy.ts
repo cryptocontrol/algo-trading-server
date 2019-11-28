@@ -7,6 +7,13 @@ import Strategies from '../database/models/strategies'
 import { ICandle, IAdvice } from 'src/interfaces'
 import log from '../utils/log'
 
+export interface IAccount {
+  exchange: BaseExchange
+  apiKey: string
+  secretKey: string
+  password: string
+}
+
 
 /**
  * A strategy is a trading logic that keeps executing trades based on certain conditions. Unlike triggers,
@@ -23,15 +30,16 @@ export default abstract class BaseStrategy<T> extends EventEmitter {
   protected readonly requiredHistory: number // todo: use this
 
   protected params: T
+  protected accounts: IAccount[]
 
-
-  constructor (name: string, strategyDB: Strategies) {
+  constructor (name: string, strategyDB: Strategies, accounts: IAccount[]) {
     super()
 
     this.strategyDB = strategyDB
     this.uid = hat()
     this.name = name
     this.params = JSON.parse(this.strategyDB.params)
+    this.accounts = accounts
   }
 
 
@@ -94,7 +102,7 @@ export default abstract class BaseStrategy<T> extends EventEmitter {
   }
 
 
-  protected advice (advice: IAdvice, params?: { price?: number, amount?: number, orderId?: string }) {
+  protected advice (advice: IAdvice, account: IAccount, params?: { price?: number, amount?: number, orderId?: string }) {
     if (!this.isLive()) return
 
     // do nothing
@@ -109,6 +117,6 @@ export default abstract class BaseStrategy<T> extends EventEmitter {
     strat.lastTriggeredAt = new Date
     strat.save()
 
-    this.emit('advice', { advice, ...params })
+    this.emit('advice', account, { advice, ...params })
   }
 }

@@ -54,8 +54,8 @@ export default class StrategyManger {
     budfox.on('trade', trade => strategy.onTrade(trade))
 
     // whenever a strategy executes an advice, we pass on the advice to the advice manager
-    strategy.on('advice', ({ advice, price, amount, ...extras }) => {
-      AdviceManager.getInstance().addAdviceFromStrategy(strategy, advice, price, amount, extras)
+    strategy.on('advice', ({ advice, account, price, amount, ...extras }) => {
+      AdviceManager.getInstance().addAdviceFromStrategy(strategy, account, advice, price, amount, extras)
     })
 
     // once a strategy has finished

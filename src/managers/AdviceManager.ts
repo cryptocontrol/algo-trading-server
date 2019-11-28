@@ -5,7 +5,7 @@ import Advices from '../database/models/advices'
 import BaseTrigger from '../triggers/BaseTrigger'
 import PluginsManager from './PluginsManager'
 import UserExchanges from '../database/models/userexchanges'
-import BaseStrategy from '../strategies/BaseStrategy'
+import BaseStrategy, { IAccount } from '../strategies/BaseStrategy'
 
 
 /**
@@ -40,11 +40,12 @@ export default class AdviceManager {
   }
 
 
-  public async addAdviceFromStrategy (s: BaseStrategy<any>, advice: IAdvice, price: number, volume: number, extras: any) {
+  public async addAdviceFromStrategy (s: BaseStrategy<any>, account: IAccount, advice: IAdvice, price: number, volume: number, extras: any) {
     // create and save the advice into the DB
     const adviceDB = new Advices({
       advice,
-      exchange: s.getExchange(),
+      // exchange: s.getExchange(),
+      exchange: account.exchange,
       mode: 'realtime',
       price,
       strategy_id: s.getDBId(),
@@ -110,6 +111,8 @@ export default class AdviceManager {
           adviceDB.order_id = extras.orderId
           adviceDB.save()
         }
+
+        //TODO: Add short & long
       } catch (e) {
         adviceDB.error_msg = e.message
         adviceDB.save()
